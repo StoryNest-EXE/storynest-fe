@@ -8,12 +8,22 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    username: string;
-    role: string; // Ví dụ: 'user' | 'admin'
-  };
+  username: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  fullName: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface RegisterResponse {
+  status: number;
+  message: string;
 }
 
 export interface User {

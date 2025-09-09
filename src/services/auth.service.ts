@@ -4,10 +4,19 @@ import {
   LoginRequest,
   LoginResponse,
   ProfileResponse,
+  RegisterRequest,
+  RegisterResponse,
 } from "@/types/auth.type";
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   const response = await https.post("/api/Auth/login", data);
+  return response.data;
+};
+
+export const register = async (
+  data: RegisterRequest
+): Promise<RegisterResponse> => {
+  const response = await https.post("/api/Auth/register", data);
   return response.data;
 };
 

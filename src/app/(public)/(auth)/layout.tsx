@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const slides = [
@@ -45,17 +45,24 @@ export default function AuthLayout({
     <main className="flex min-h-screen max-w-screen items-center justify-center bg-black text-white">
       {/* Left Section */}
       <section className="flex h-full w-full flex-col items-center justify-center">
-        <div className="h-[500px] w-full">
-          <AnimatePresence mode="wait">
+        <div className="relative h-[500px] w-full">
+          {slides.map((slide, index) => (
             <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
+              key={index}
+              initial={false}
+              animate={{
+                opacity: currentSlide === index ? 1 : 0,
+                x: currentSlide === index ? 0 : -50,
+              }}
+              transition={{ duration: 0.6 }}
+              className={`absolute top-0 left-0 w-full h-full ${
+                currentSlide === index
+                  ? "pointer-events-auto"
+                  : "pointer-events-none"
+              }`}
             >
               <DotLottieReact
-                src={slides[currentSlide].animationSrc}
+                src={slide.animationSrc}
                 loop
                 autoplay
                 style={{ width: "100%", height: "500px" }}
@@ -65,7 +72,7 @@ export default function AuthLayout({
                 }}
               />
             </motion.div>
-          </AnimatePresence>
+          ))}
         </div>
 
         <motion.div
@@ -102,7 +109,7 @@ export default function AuthLayout({
           <img src="/kuslvault.svg" alt="Logo" width="100" height="100" />
           {children}
         </div>
-        <div className="mt-auto flex w-full items-center justify-between text-sm text-white-500">
+        <div className="mt-auto flex w-full items-center justify-between text-sm text-gray-400">
           <p>© 2025 - Kusl Vault All Rights Reserved</p>
           <p>Privacy Policy • Term & Condition</p>
         </div>

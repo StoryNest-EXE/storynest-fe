@@ -1,10 +1,11 @@
 // src/queries/auth.queries.ts
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { login, getProfile, logout } from "@/services/auth.service";
+import { login, getProfile, logout, register } from "@/services/auth.service";
 import {
   LoginRequest,
   LoginResponse,
   ProfileResponse,
+  RegisterRequest,
 } from "@/types/auth.type";
 import Cookies from "js-cookie";
 
@@ -17,6 +18,18 @@ export const useLoginMutation = () => {
     },
     onError: (error) => {
       console.error("Login failed:", error);
+    },
+  });
+};
+
+export const useRegisterMutation = () => {
+  return useMutation({
+    mutationFn: (data: RegisterRequest) => register(data),
+    onSuccess: (data) => {
+      console.log("Register success:", data);
+    },
+    onError: (error) => {
+      console.error("Register failed:", error);
     },
   });
 };
