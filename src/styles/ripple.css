@@ -1,0 +1,15 @@
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(196, 196, 196, 0.5);
+  animation: ripple-animation 1.5s linear;
+  pointer-events: none;
+  transform: scale(0);
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

@@ -9,7 +9,7 @@ import {
 } from "react";
 import { decodeToken } from "@/lib/jwt";
 import {
-  getAccessTokenFormLocalStorage,
+  getAccessTokenFromLocalStorage,
   setAccessTokenToLocalStorage,
   removeTokenFormLocalStorage,
 } from "@/lib/localStorage";
@@ -34,17 +34,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Khi reload page -> check localStorage
   useEffect(() => {
-    const accessToken = getAccessTokenFormLocalStorage();
+    const accessToken = getAccessTokenFromLocalStorage();
     if (accessToken) {
       const payload = decodeToken(accessToken);
-      setRole(payload.role);
+      // setRole(payload.role);
     }
   }, []);
 
   const login = useCallback((accessToken: string) => {
+    console.log("login auth context", accessToken);
     setAccessTokenToLocalStorage(accessToken);
     const payload = decodeToken(accessToken);
-    setRole(payload.role);
+    // setRole(payload.role);
   }, []);
 
   const logout = useCallback(() => {

@@ -1,6 +1,6 @@
 const isBrowser = typeof window !== "undefined";
 
-export const getAccessTokenFormLocalStorage = () =>
+export const getAccessTokenFromLocalStorage = () =>
   isBrowser ? localStorage.getItem("accessToken") : null;
 export const getRefreshTokenFormLocalStorage = () =>
   isBrowser ? localStorage.getItem("refreshToken") : null;
