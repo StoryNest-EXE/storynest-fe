@@ -6,12 +6,14 @@ import {
   logout,
   register,
   forgotPassword,
+  refreshToken,
 } from "@/services/auth.service";
 import {
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
   ProfileResponse,
+  RefreshTokenRequest,
   RegisterRequest,
 } from "@/types/auth.type";
 import Cookies from "js-cookie";
@@ -25,6 +27,15 @@ export const useLoginMutation = () => {
     },
     onError: (error) => {
       console.error("Login failed:", error);
+    },
+  });
+};
+
+export const useRefreshTokenMutation = () => {
+  return useMutation({
+    mutationFn: (data: RefreshTokenRequest) => refreshToken(data),
+    onSuccess: (data) => {
+      console.log("Refresh token success:", data);
     },
   });
 };
