@@ -8,10 +8,16 @@ export interface LoginRequest {
   userAgent?: string | null;
 }
 
-export interface LoginResponse {
+export interface LoginData {
   username: string;
   accessToken: string;
   refreshToken: string;
+}
+
+export interface LoginResponse {
+  status: number;
+  message: string;
+  data: LoginData;
 }
 
 export interface RefreshTokenRequest {
