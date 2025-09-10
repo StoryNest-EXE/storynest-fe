@@ -223,7 +223,7 @@ const LoginPage = () => {
         </div>
 
         <div className="mt-2 text-center text-sm text-shadow-white">
-          Don't have an account?{" "}
+          Do&apos;t have an account?{" "}
           <Link
             href="/register"
             className="text-[#4C3CC6] underline underline-offset-4 hover:text-[#5756bb]"
