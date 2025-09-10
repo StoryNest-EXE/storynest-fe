@@ -2,9 +2,10 @@
 export interface LoginRequest {
   usernameOrEmail: string;
   password: string;
-  deviceId: string;
-  ipAddress: string;
-  userAgent: string;
+  remember?: boolean;
+  deviceId?: string | null;
+  ipAddress?: string | null;
+  userAgent?: string | null;
 }
 
 export interface LoginResponse {

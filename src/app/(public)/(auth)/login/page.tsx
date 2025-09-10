@@ -62,9 +62,9 @@ const LoginPage = () => {
     try {
       const payload = {
         ...values,
-        deviceId: null,
-        ipAddress: null,
-        userAgent: null,
+        deviceId: "",
+        ipAddress: "",
+        userAgent: "",
       };
       const response = await loginMutation(payload);
       login(response.data.accessToken);
