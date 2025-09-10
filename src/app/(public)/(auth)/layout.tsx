@@ -33,12 +33,17 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [dpr, setDpr] = useState(2);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 8000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setDpr(window.devicePixelRatio || 2);
   }, []);
 
   return (
@@ -66,10 +71,7 @@ export default function AuthLayout({
                 loop
                 autoplay
                 style={{ width: "100%", height: "500px" }}
-                renderConfig={{
-                  devicePixelRatio:
-                    typeof window !== "undefined" ? window.devicePixelRatio : 2,
-                }}
+                renderConfig={{ devicePixelRatio: dpr }}
               />
             </motion.div>
           ))}

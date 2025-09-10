@@ -1,7 +1,12 @@
 // src/lib/axios.ts
 import axios from "axios";
 import Cookies from "js-cookie";
-import { getAccessTokenFromLocalStorage } from "@/lib/localStorage";
+import {
+  getAccessTokenFromLocalStorage,
+  setAccessTokenToLocalStorage,
+} from "@/lib/localStorage";
+import { refreshToken } from "@/services/auth.service";
+import Router from "next/router";
 
 const https = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // Lấy từ .env
@@ -11,7 +16,7 @@ const https = axios.create({
   },
 });
 
-// Interceptor để thêm Bearer token từ cookies
+// Interceptor để Thêm accessToken vào header
 https.interceptors.request.use(
   (config) => {
     const token = getAccessTokenFromLocalStorage();
@@ -23,14 +28,32 @@ https.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor xử lý lỗi (ví dụ: 401 -> xóa token)
+// Xử lý 401
 https.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      Cookies.remove("token");
-      console.error("Unauthorized, token removed");
-      // TODO: Redirect to login nếu cần (sẽ xử lý sau ở middleware)
+      try {
+        const oldAccessToken = getAccessTokenFromLocalStorage();
+        if (!oldAccessToken) throw new Error("No access token");
+
+        // Gọi API refresh
+        const newToken = await refreshToken({ accessToken: oldAccessToken });
+
+        // Lưu lại token mới
+        setAccessTokenToLocalStorage(newToken.accessToken);
+
+        // Gắn lại header Authorization cho request cũ
+        error.config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+
+        Router.push("/reset-password");
+
+        // Retry request cũ
+        return https(error.config);
+      } catch (err) {
+        console.error("Refresh failed → Redirect to login");
+        // TODO: redirect login
+      }
     }
     return Promise.reject(error);
   }

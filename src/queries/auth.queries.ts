@@ -1,7 +1,14 @@
 // src/queries/auth.queries.ts
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { login, getProfile, logout, register } from "@/services/auth.service";
 import {
+  login,
+  getProfile,
+  logout,
+  register,
+  forgotPassword,
+} from "@/services/auth.service";
+import {
+  ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
   ProfileResponse,
@@ -30,6 +37,15 @@ export const useRegisterMutation = () => {
     },
     onError: (error) => {
       console.error("Register failed:", error);
+    },
+  });
+};
+
+export const useForgotPasswordMutation = () => {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordRequest) => forgotPassword(data),
+    onSuccess: (data) => {
+      console.log("Forgot password success:", data);
     },
   });
 };

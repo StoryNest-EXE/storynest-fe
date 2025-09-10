@@ -1,9 +1,13 @@
 // src/services/auth.service.ts
 import https from "@/lib/axios";
 import {
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
   LoginRequest,
   LoginResponse,
   ProfileResponse,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
   RegisterRequest,
   RegisterResponse,
 } from "@/types/auth.type";
@@ -13,10 +17,24 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   return response.data;
 };
 
+export const refreshToken = async (
+  data: RefreshTokenRequest
+): Promise<RefreshTokenResponse> => {
+  const response = await https.post("/api/Auth/refresh", data);
+  return response.data;
+};
+
 export const register = async (
   data: RegisterRequest
 ): Promise<RegisterResponse> => {
   const response = await https.post("/api/Auth/register", data);
+  return response.data;
+};
+
+export const forgotPassword = async (
+  data: ForgotPasswordRequest
+): Promise<ForgotPasswordResponse> => {
+  const response = await https.post("/api/Auth/forgot-password", data);
   return response.data;
 };
 

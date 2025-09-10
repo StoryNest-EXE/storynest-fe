@@ -13,6 +13,15 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
+export interface RefreshTokenRequest {
+  accessToken: string;
+}
+
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface RegisterRequest {
   username: string;
   email: string;
@@ -22,6 +31,15 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
+  status: number;
+  message: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
   status: number;
   message: string;
 }
