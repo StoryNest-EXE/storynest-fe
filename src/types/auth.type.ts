@@ -2,6 +2,7 @@
 export interface LoginRequest {
   usernameOrEmail: string;
   password: string;
+  remember?: boolean;
   deviceId?: string | null;
   ipAddress?: string | null;
   userAgent?: string | null;

@@ -54,6 +54,7 @@ const LoginPage = () => {
     defaultValues: {
       usernameOrEmail: "",
       password: "",
+      remember: false,
     },
   });
 
