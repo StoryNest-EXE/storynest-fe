@@ -38,7 +38,7 @@ const formSchema = z
     message: "Passwords do not match",
   });
 
-export default function RegisterForm() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
