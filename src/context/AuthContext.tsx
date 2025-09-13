@@ -51,9 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(newPayload);
           }
         }
-      } else {
-        // Không có token -> về trang login
-        window.location.href = "/login";
       }
     };
     initAuth();

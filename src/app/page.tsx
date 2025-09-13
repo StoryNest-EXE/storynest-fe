@@ -1,14 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { useRefreshTokenMutation } from "@/queries/auth.queries";
+import { useRefreshToken } from "@/lib/useRefreshToken";
 import Image from "next/image";
 
 export default function Home() {
   const toekPayload = useAuth();
-  const refresh = useRefreshTokenMutation();
   const handleRefresh = () => {
-    refresh.mutate({ accessToken: toekPayload?.token?.accessToken });
+    useRefreshToken();
     console.log("refresh nè");
   };
   return (
