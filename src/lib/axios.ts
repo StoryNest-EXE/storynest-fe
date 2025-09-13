@@ -1,58 +1,60 @@
-// src/lib/axios.ts
 import axios from "axios";
-import Cookies from "js-cookie";
 import {
   getAccessTokenFromLocalStorage,
+  removeTokenFormLocalStorage,
   setAccessTokenToLocalStorage,
-} from "@/lib/localStorage";
-import { refreshToken } from "@/services/auth.service";
-import Router from "next/router";
+} from "./localStorage";
 
 const https = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL, // Lấy từ .env
-  withCredentials: true, // để gửi cookie kèm theo request nếu BE cần
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Interceptor để Thêm accessToken vào header
-https.interceptors.request.use(
-  (config) => {
+const isClient = typeof window !== "undefined";
+// Request interceptor
+https.interceptors.request.use((config) => {
+  if (isClient) {
     const token = getAccessTokenFromLocalStorage();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  }
+  return config;
+});
 
-// Xử lý 401
+// Response interceptor (xử lý refresh token)
 https.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    if (isClient && error.response?.status === 401 && !error.config._retry) {
+      error.config._retry = true;
+
       try {
         const oldAccessToken = getAccessTokenFromLocalStorage();
         if (!oldAccessToken) throw new Error("No access token");
 
-        // Gọi API refresh
-        const newToken = await refreshToken({ accessToken: oldAccessToken });
+        // Gọi API refresh token
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/Auth/refresh`,
+          { accessToken: oldAccessToken },
+          { withCredentials: true }
+        );
 
-        // Lưu lại token mới
-        setAccessTokenToLocalStorage(newToken.accessToken);
+        const newAccessToken = res.data.accessToken;
 
-        // Gắn lại header Authorization cho request cũ
-        error.config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+        // Lưu token mới
+        setAccessTokenToLocalStorage(newAccessToken);
 
-        Router.push("/reset-password");
+        // Gắn token mới vào header của request cũ
+        error.config.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        // Retry request cũ
-        return https(error.config);
+        return https(error.config); // retry request cũ
       } catch (err) {
-        console.error("Refresh failed → Redirect to login");
-        // TODO: redirect login
+        removeTokenFormLocalStorage();
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);
