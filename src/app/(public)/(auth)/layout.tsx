@@ -108,7 +108,7 @@ export default function AuthLayout({
       {/* Right Section */}
       <section className="flex min-h-screen w-full flex-col items-center space-y-10 overflow-auto rounded-2xl border border-neutral-700 bg-neutral-900 p-8 shadow-md">
         <div className="flex w-[360px] flex-1 flex-col items-center justify-center">
-          <img src="/kuslvault.svg" alt="Logo" width="100" height="100" />
+          <img src="/StoryNest_logo.svg" alt="Logo" width="100" height="100" />
           {children}
         </div>
         <div className="mt-auto flex w-full items-center justify-between text-sm text-gray-400">
