@@ -17,6 +17,7 @@ export function useRefreshToken() {
     try {
       const res = await https.post("/api/Auth/refresh", { accessToken });
       const newAccessToken = res.data.accessToken;
+      console.log("[useRefreshToken] refresh response:", res?.data);
 
       setAccessTokenToLocalStorage(newAccessToken);
       return newAccessToken;
