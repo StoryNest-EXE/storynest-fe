@@ -22,7 +22,7 @@ export function useRefreshToken() {
       setAccessTokenToLocalStorage(newAccessToken);
       return newAccessToken;
     } catch (err) {
-      console.error("Refresh failed123123123", err);
+      console.error("Refresh failed", err);
       removeTokenFormLocalStorage();
       window.location.href = "/login";
       return null;
