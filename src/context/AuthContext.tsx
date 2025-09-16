@@ -14,15 +14,16 @@ import {
   removeTokenFormLocalStorage,
 } from "@/lib/localStorage";
 import { TokenPayload } from "@/types/jwt.type";
+import { useRefreshToken } from "@/lib/useRefreshToken";
 
 type AuthContextType = {
-  role: TokenPayload | undefined;
+  token: TokenPayload | undefined;
   login: (accessToken: string) => void;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  role: undefined,
+  token: undefined,
   login: () => {},
   logout: () => {},
 });
@@ -30,31 +31,44 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [role, setRole] = useState<TokenPayload | undefined>(undefined);
+  const [token, setToken] = useState<TokenPayload | undefined>(undefined);
+  const refresh = useRefreshToken();
 
-  // Khi reload page -> check localStorage
+  // Khi reload page -> check localStorage + refresh nếu cần
   useEffect(() => {
-    const accessToken = getAccessTokenFromLocalStorage();
-    if (accessToken) {
-      const payload = decodeToken(accessToken);
-      // setRole(payload.role);
-    }
-  }, []);
+    const initAuth = async () => {
+      const accessToken = getAccessTokenFromLocalStorage();
+      if (accessToken) {
+        const payload = decodeToken(accessToken);
+        setToken(payload);
+
+        // Check nếu sắp hết hạn thì refresh
+        const now = Math.floor(Date.now() / 1000);
+        if (payload.exp && payload.exp - now < 60) {
+          const newAccessToken = await refresh();
+          if (newAccessToken) {
+            const newPayload = decodeToken(newAccessToken);
+            setToken(newPayload);
+          }
+        }
+      }
+    };
+    initAuth();
+  }, [refresh]);
 
   const login = useCallback((accessToken: string) => {
-    console.log("login auth context", accessToken);
     setAccessTokenToLocalStorage(accessToken);
     const payload = decodeToken(accessToken);
-    // setRole(payload.role);
+    setToken(payload);
   }, []);
 
   const logout = useCallback(() => {
     removeTokenFormLocalStorage();
-    setRole(undefined);
+    setToken(undefined);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ role, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

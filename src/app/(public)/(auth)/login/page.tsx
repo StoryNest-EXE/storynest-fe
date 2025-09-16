@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import GoogleButton from "@/components/GoogleButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { GrFormView } from "react-icons/gr";
@@ -37,7 +36,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const page = () => {
+const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -63,9 +62,9 @@ const page = () => {
     try {
       const payload = {
         ...values,
-        deviceId: null,
-        ipAddress: null,
-        userAgent: null,
+        deviceId: "",
+        ipAddress: "",
+        userAgent: "",
       };
       const response = await loginMutation(payload);
       login(response.data.accessToken);
@@ -223,7 +222,7 @@ const page = () => {
         </div>
 
         <div className="mt-2 text-center text-sm text-shadow-white">
-          Don't have an account?{" "}
+          Do&apos;t have an account?{" "}
           <Link
             href="/register"
             className="text-[#4C3CC6] underline underline-offset-4 hover:text-[#5756bb]"
@@ -236,4 +235,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LoginPage;

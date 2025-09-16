@@ -27,8 +27,8 @@ const formSchema = z
     username: z.string().min(6).max(50),
     email: z.string().email("Invalid email address."),
     fullName: z.string().min(3).max(50),
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
+    password: z.string().min(6),
+    confirmPassword: z.string().min(6),
     termsAgreement: z.boolean().refine((val) => val === true, {
       message: "You must accept the Terms of Service and Privacy Policy.",
     }),
@@ -38,7 +38,7 @@ const formSchema = z
     message: "Passwords do not match",
   });
 
-export default function RegisterForm() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export default function RegisterForm() {
       onSuccess: () => {
         router.push("/login");
       },
-      onError: (err: any) => {
+      onError: (err) => {
         setError(
           err?.message || "Something went wrong. Please try again later."
         );

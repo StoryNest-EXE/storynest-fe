@@ -1,10 +1,19 @@
 // src/queries/auth.queries.ts
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { login, getProfile, logout, register } from "@/services/auth.service";
 import {
+  login,
+  getProfile,
+  logout,
+  register,
+  forgotPassword,
+  refreshToken,
+} from "@/services/auth.service";
+import {
+  ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
   ProfileResponse,
+  RefreshTokenRequest,
   RegisterRequest,
 } from "@/types/auth.type";
 import Cookies from "js-cookie";
@@ -22,6 +31,15 @@ export const useLoginMutation = () => {
   });
 };
 
+export const useRefreshTokenMutation = () => {
+  return useMutation({
+    mutationFn: (data: RefreshTokenRequest) => refreshToken(data),
+    onSuccess: (data) => {
+      console.log("Refresh token success:", data);
+    },
+  });
+};
+
 export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: (data: RegisterRequest) => register(data),
@@ -30,6 +48,15 @@ export const useRegisterMutation = () => {
     },
     onError: (error) => {
       console.error("Register failed:", error);
+    },
+  });
+};
+
+export const useForgotPasswordMutation = () => {
+  return useMutation({
+    mutationFn: (data: ForgotPasswordRequest) => forgotPassword(data),
+    onSuccess: (data) => {
+      console.log("Forgot password success:", data);
     },
   });
 };

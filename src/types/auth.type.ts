@@ -2,13 +2,29 @@
 export interface LoginRequest {
   usernameOrEmail: string;
   password: string;
-  deviceId: string;
-  ipAddress: string;
-  userAgent: string;
+  remember?: boolean;
+  deviceId?: string | null;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}
+
+export interface LoginData {
+  username: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface LoginResponse {
-  username: string;
+  status: number;
+  message: string;
+  data: LoginData;
+}
+
+export interface RefreshTokenRequest {
+  accessToken: string;
+}
+
+export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken: string;
 }
@@ -22,6 +38,15 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
+  status: number;
+  message: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
   status: number;
   message: string;
 }
