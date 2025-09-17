@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback((accessToken: string) => {
     setAccessTokenToLocalStorage(accessToken);
     const payload = decodeToken(accessToken);
+    console.log("Role", payload.type);
     setToken(payload);
   }, []);
 
