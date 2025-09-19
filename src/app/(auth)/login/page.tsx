@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { useAuth } from "@/context/AuthContext";
 import { useLoginMutation } from "@/queries/auth.queries";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   usernameOrEmail: z.string().min(6, {
@@ -91,7 +92,7 @@ const LoginPage = () => {
             render={({ field }) => (
               <FormItem className="relative">
                 <FormControl>
-                  <input
+                  <Input
                     type="text"
                     autoComplete="username"
                     disabled={isLoading}

@@ -14,11 +14,11 @@ export default function PublicLayout({
     <div className="flex">
       <SidebarProvider>
         <UserSidebar />
-        <SidebarInset>
+        <SidebarInset className="">
           {/* Header hoặc đặt trigger ở đây */}
-          <header className="flex items-center h-16 px-4 border-b">
+          <header className="sticky top-0 z-50 not-even:flex items-center h-16 px-4 border-b">
             <SidebarTrigger />
-            <h1 className="ml-4 font-semibold">My App</h1>
+            <h1 className="flex-1 text-center font-semibold">For you</h1>
           </header>
           <main className="flex-1 p-6">{children}</main>
         </SidebarInset>
