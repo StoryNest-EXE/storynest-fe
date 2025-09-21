@@ -35,7 +35,7 @@ function CreateStory() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const presignUploadMutation = usePresignUploadMutation();
   const createStoryMutation = useCreateStoryMutation();
-  const [mediaUrls, setMediaUrls] = useState<string[]>([]);
+  const [mediaKey, setMediaKey] = useState<string[]>([]);
   const router = useRouter();
 
   // init editor
@@ -113,7 +113,7 @@ function CreateStory() {
     );
 
     // B3: Lưu lại mediaUrls vào state để khi submit gửi đi
-    setMediaUrls((prev) => [...prev, ...uploads.map((u) => u.mediaUrl)]);
+    setMediaKey((prev) => [...prev, ...uploads.map((u) => u.key)]);
 
     // B4: chèn ảnh vào editor
     uploads.forEach((u) => {
@@ -149,7 +149,7 @@ function CreateStory() {
       tags: tags,
       privacyStatus: 0,
       storyStatus: 1,
-      mediaUrls: mediaUrls, // truyền mảng mediaUrls
+      mediaUrls: mediaKey, // truyền mảng mediaUrls
     };
 
     try {
