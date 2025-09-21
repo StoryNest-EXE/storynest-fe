@@ -35,11 +35,10 @@ const SPARKLES: Spark[] = [
 
 function cssVars(s: Spark): React.CSSProperties {
   // tạo object CSS custom properties như { '--width': 2, '--deg': 25, ... }
-  // và cast về React.CSSProperties để TS không complain
   return {
-    ["--width" as any]: s.w,
-    ["--deg" as any]: s.deg,
-    ["--duration" as any]: s.dur,
+    "--width": s.w,
+    "--deg": s.deg,
+    "--duration": s.dur,
   } as React.CSSProperties;
 }
 

@@ -13,7 +13,9 @@ function CreateStory() {
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <span className="opacity-40 ml-4 flex items-center">What's new</span>
+        <span className="opacity-40 ml-4 flex items-center">
+          What&apos;s new
+        </span>
         <div className="flex-1 flex justify-end mr-5">
           <Button
             onClick={() => {
