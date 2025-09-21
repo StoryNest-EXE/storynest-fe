@@ -2,12 +2,12 @@ import https from "@/lib/axios";
 import {
   ConfirmUploadRequest,
   ConfirmUploadResponse,
-  UploadImageRequest,
-  UploadImageResponse,
+  PresignUploadRequest,
+  PresignUploadResponse,
 } from "@/types/media.type";
 
-export const postUploadIamge = async (req: UploadImageRequest) => {
-  const response = await https.post<UploadImageResponse>(
+export const postPresignUpload = async (req: PresignUploadRequest) => {
+  const response = await https.post<PresignUploadResponse>(
     "/api/Upload/presign-upload",
     req
   );

@@ -1,11 +1,11 @@
-import { postConfirmImage, postUploadIamge } from "@/services/media.service";
-import { ConfirmUploadRequest, UploadImageRequest } from "@/types/media.type";
+import { postConfirmImage, postPresignUpload } from "@/services/media.service";
+import { ConfirmUploadRequest, PresignUploadRequest } from "@/types/media.type";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useImageUploadMutation = () => {
+export const usePresignUploadMutation = () => {
   return useMutation({
-    mutationFn: (data: UploadImageRequest) => postUploadIamge(data),
+    mutationFn: (data: PresignUploadRequest) => postPresignUpload(data),
     onSuccess: (data) => {
       console.log("Upload image success", data);
       toast.success("Đăng Story thành công");

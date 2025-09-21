@@ -4,16 +4,15 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface UploadImageRequest {
+export interface PresignUploadRequest {
   resourceType: string;
-  resourceId: number;
   files: {
     contentType: string;
     fileSize: number;
   }[];
 }
 
-export type UploadImageResponse = ApiResponse<{
+export type PresignUploadResponse = ApiResponse<{
   uploads: {
     s3Url: string;
     key: string;

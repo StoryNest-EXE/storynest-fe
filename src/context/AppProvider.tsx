@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./AuthContext";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +28,7 @@ export default function AppProviders({ children }: { children: ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster richColors position="top-right" />
           {children}
         </ThemeProvider>
       </AuthProvider>

@@ -20,14 +20,12 @@ import Underline from "@tiptap/extension-underline";
 import Strike from "@tiptap/extension-strike";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import {
-  useConfirmUploadMutation,
-  useImageUploadMutation,
-} from "@/queries/media.queries";
-import { UploadImageRequest } from "@/types/media.type";
+import { usePresignUploadMutation } from "@/queries/media.queries";
 import { toast } from "sonner";
 import { CreateStoryRequest } from "@/types/story.type";
 import { useCreateStoryMutation } from "@/queries/story.queries";
+import { PresignUploadRequest } from "@/types/media.type";
+import { useRouter } from "next/navigation";
 
 function CreateStory() {
   const [title, setTitle] = useState("");
@@ -35,9 +33,10 @@ function CreateStory() {
   const [tags, setTags] = useState<string[]>([]);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true); // Mặc định disable
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const uploadImageMutation = useImageUploadMutation();
-  const confirmUploadMutation = useConfirmUploadMutation();
+  const presignUploadMutation = usePresignUploadMutation();
   const createStoryMutation = useCreateStoryMutation();
+  const [mediaUrls, setMediaUrls] = useState<string[]>([]);
+  const router = useRouter();
 
   // init editor
   const editor = useEditor({
@@ -87,15 +86,16 @@ function CreateStory() {
 
   // --- Upload ảnh (chèn vào editor hoặc set cover) ---
   const handleUploadImages = async (files: File[]) => {
-    const uploadReq: UploadImageRequest = {
+    const uploadReq: PresignUploadRequest = {
       resourceType: "story",
-      resourceId: 34,
       files: files.map((f) => ({
         contentType: f.type,
         fileSize: f.size,
       })),
     };
-    const uploadRes = await uploadImageMutation.mutateAsync(uploadReq);
+
+    // call presign
+    const uploadRes = await presignUploadMutation.mutateAsync(uploadReq);
 
     const uploads = uploadRes.data.uploads;
 
@@ -112,14 +112,10 @@ function CreateStory() {
       )
     );
 
-    // B3: confirm bằng mutation hook
-    await confirmUploadMutation.mutateAsync({
-      resourceType: "story",
-      resourceId: 34,
-      fileKeys: uploads.map((u) => u.key),
-    });
+    // B3: Lưu lại mediaUrls vào state để khi submit gửi đi
+    setMediaUrls((prev) => [...prev, ...uploads.map((u) => u.mediaUrl)]);
 
-    // B4: chèn tất cả ảnh vào editor
+    // B4: chèn ảnh vào editor
     uploads.forEach((u) => {
       editor?.chain().focus().setImage({ src: u.mediaUrl }).run();
     });
@@ -134,13 +130,13 @@ function CreateStory() {
     e.target.value = ""; // reset input để lần sau chọn lại cùng file vẫn trigger
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title.trim()) {
       toast.error("Title không được để trống");
       return;
     }
 
-    const content = editor.getHTML(); // lấy HTML từ tiptap
+    const content = editor.getHTML();
     if (!content || content === "<p></p>") {
       toast.error("Content không được để trống");
       return;
@@ -152,10 +148,15 @@ function CreateStory() {
       coverImageUrl: "",
       tags: tags,
       privacyStatus: 0,
-      storyStatus: 0,
+      storyStatus: 1,
+      mediaUrls: mediaUrls, // truyền mảng mediaUrls
     };
-    const res = createStoryMutation.mutateAsync(storyReq);
-    console.log("res", res);
+
+    try {
+      const res = await createStoryMutation.mutateAsync(storyReq);
+      console.log("res", res);
+      router.push("/");
+    } catch (err) {}
   };
   return (
     <div>
@@ -248,7 +249,7 @@ function CreateStory() {
               </Button>
 
               {/* nút image */}
-              {/* <Button
+              <Button
                 size="sm"
                 variant="ghost"
                 className="h-8 w-8 p-0 hover:bg-slate-700"
@@ -263,7 +264,7 @@ function CreateStory() {
                 className="hidden"
                 ref={fileInputRef}
                 onChange={onFileChange}
-              /> */}
+              />
             </div>
 
             {/* Editor content */}

@@ -39,8 +39,13 @@ https.interceptors.response.use(
         // Gọi API refresh token
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/Auth/refresh`,
-          { accessToken: oldAccessToken },
-          { withCredentials: true }
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${oldAccessToken}`,
+            },
+          }
         );
 
         const newAccessToken = res.data.accessToken;
