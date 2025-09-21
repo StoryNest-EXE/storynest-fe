@@ -2,12 +2,10 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
@@ -38,10 +36,10 @@ export function UserSidebar() {
       <SidebarContent className="flex  justify-center">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-7 items-start group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
+            <SidebarMenu className="gap-10 items-start group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} className="w-full ">
-                  <SidebarMenuButton asChild className="w-full h-full">
+                  <SidebarMenuButton asChild className="w-full">
                     <a
                       href={item.url}
                       className="flex items-center gap-2 w-full px-2 py-2 rounded-md justify-start 
