@@ -1,7 +1,8 @@
 "use client";
 
-import { PostCard } from "@/components/post-card";
-import { useStoriesQuery } from "@/queries/story.quries";
+import CreateStory from "@/components/home/create-story";
+import { PostCard } from "@/components/home/post-card";
+import { useStoriesQuery } from "@/queries/story.queries";
 import { useEffect, useRef } from "react";
 
 export default function HomePage() {
@@ -50,6 +51,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        <CreateStory />
         {data?.pages.flatMap((page) =>
           page.data.items.map((story) => (
             <PostCard key={story.id} story={story} />

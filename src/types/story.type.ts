@@ -54,3 +54,17 @@ export interface StoryTag {
   iconUrl: string;
   createdAt: string; // ISO string
 }
+
+export interface CreateStoryRequest {
+  title: string;
+  content: string;
+  coverImageUrl: string;
+  tags: string[];
+  privacyStatus: number;
+  storyStatus: number;
+}
+
+// Response
+export interface CreateStoryResponse {
+  storyId: number;
+}

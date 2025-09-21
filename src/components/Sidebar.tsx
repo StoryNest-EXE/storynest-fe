@@ -22,9 +22,9 @@ import {
 } from "lucide-react";
 
 const items = [
-  { title: "Home", url: "#", icon: Home },
+  { title: "Home", url: "/", icon: Home },
   { title: "Inbox", url: "#", icon: Inbox },
-  { title: "Create Story", url: "#", icon: Plus },
+  { title: "Create Story", url: "/create-story", icon: Plus },
   { title: "Create Story with AI", url: "#", icon: Sparkles },
   { title: "Search", url: "#", icon: Search },
   { title: "Notifications", url: "#", icon: Bell },
