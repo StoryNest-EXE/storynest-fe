@@ -20,6 +20,12 @@ export interface LoginResponse {
   data: LoginData;
 }
 
+export interface LogoutResponse {
+  status: number;
+  message: string;
+  data: string;
+}
+
 export interface RefreshTokenRequest {
   accessToken: string;
 }

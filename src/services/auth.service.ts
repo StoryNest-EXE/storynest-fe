@@ -5,6 +5,7 @@ import {
   ForgotPasswordResponse,
   LoginRequest,
   LoginResponse,
+  LogoutResponse,
   ProfileResponse,
   RefreshTokenRequest,
   RefreshTokenResponse,
@@ -43,7 +44,7 @@ export const getProfile = async (): Promise<ProfileResponse> => {
   return response.data;
 };
 
-// Logout (nếu BE có endpoint, nếu không thì chỉ cần xóa token ở client)
-export const logout = async (): Promise<void> => {
-  await https.post("/auth/logout");
+export const getLogout = async (): Promise<LogoutResponse> => {
+  const response = await https.get("api/Auth/logout");
+  return response.data;
 };

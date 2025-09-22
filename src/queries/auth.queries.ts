@@ -7,6 +7,7 @@ import {
   register,
   forgotPassword,
   refreshToken,
+  getLogout,
 } from "@/services/auth.service";
 import {
   ForgotPasswordRequest,
@@ -52,6 +53,13 @@ export const useRegisterMutation = () => {
   });
 };
 
+export const useLogoutQuery = () => {
+  return useQuery({
+    queryKey: ["logout"],
+    queryFn: getLogout,
+  });
+};
+
 export const useForgotPasswordMutation = () => {
   return useMutation({
     mutationFn: (data: ForgotPasswordRequest) => forgotPassword(data),
@@ -66,15 +74,5 @@ export const useProfileQuery = () => {
     queryKey: ["profile"],
     queryFn: getProfile,
     enabled: !!Cookies.get("token"), // Chỉ chạy nếu có token
-  });
-};
-
-export const useLogoutMutation = () => {
-  return useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      // TODO: Xóa token và redirect (sẽ xử lý sau)
-      console.log("Logout success");
-    },
   });
 };

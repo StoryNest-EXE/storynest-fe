@@ -5,9 +5,9 @@ export function middleware(req: NextRequest) {
   const refreshToken = req.cookies.get("refreshToken")?.value;
 
   // Chưa login → bắt về /login
-  if (!refreshToken) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  // if (!refreshToken) {
+  //   return NextResponse.redirect(new URL("/login", req.url));
+  // }
 
   return NextResponse.next();
 }

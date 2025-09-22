@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useState } from "react";
 import { UserSidebar } from "@/components/Sidebar";
 import {
   SidebarInset,
@@ -10,9 +13,34 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem("sidebar_open");
+      if (saved !== null) {
+        setSidebarOpen(saved === "true");
+      }
+    } catch (err) {
+      // ignore localStorage errors
+    }
+  }, []);
+
+  const handleSidebarOpenChange = React.useCallback((open: boolean) => {
+    setSidebarOpen(open);
+    try {
+      localStorage.setItem("sidebar_open", String(open));
+    } catch (err) {
+      // ignore localStorage errors
+    }
+  }, []);
+
   return (
     <div className="flex">
-      <SidebarProvider>
+      <SidebarProvider
+        open={sidebarOpen}
+        onOpenChange={handleSidebarOpenChange}
+      >
         <UserSidebar />
         <SidebarInset className="">
           {/* Header hoặc đặt trigger ở đây */}
