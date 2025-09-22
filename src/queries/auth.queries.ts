@@ -3,7 +3,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   login,
   getProfile,
-  logout,
   register,
   forgotPassword,
   refreshToken,
@@ -12,8 +11,6 @@ import {
 import {
   ForgotPasswordRequest,
   LoginRequest,
-  LoginResponse,
-  ProfileResponse,
   RefreshTokenRequest,
   RegisterRequest,
 } from "@/types/auth.type";
