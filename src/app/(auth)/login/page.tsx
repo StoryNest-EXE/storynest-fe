@@ -178,9 +178,9 @@ const LoginPage = () => {
           </div>
 
           {/* Error message */}
-          {error && (
+          {form.formState.errors.root?.message && (
             <FormDescription className="text-left text-sm text-red-500">
-              {error}
+              {String(form.formState.errors.root.message)}
             </FormDescription>
           )}
 

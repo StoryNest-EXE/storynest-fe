@@ -92,15 +92,11 @@ export default function RegisterPage() {
                   autoComplete="username"
                   disabled={isPending}
                   {...field}
-                  className="peer block w-full border-b-2 border-gray-600 bg-transparent py-3 text-sm text-white focus:border-violet-400 focus:outline-none"
+                  className="peer block w-full appearance-none border-0 border-b-2 border-black/20 bg-transparent px-0 py-3 text-sm focus:border-violet-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:focus:border-blue-500"
                   placeholder=" "
                 />
               </FormControl>
-              <FormLabel
-                className="absolute top-3 text-sm text-gray-400 transform duration-300 
-                            peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 
-                            peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-400"
-              >
+              <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
                 Username
               </FormLabel>
               <FormMessage />
@@ -124,11 +120,7 @@ export default function RegisterPage() {
                   placeholder=" "
                 />
               </FormControl>
-              <FormLabel
-                className="absolute top-3 text-sm text-gray-400 transform duration-300 
-                            peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 
-                            peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-400"
-              >
+              <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
                 Email
               </FormLabel>
               <FormMessage />
@@ -148,13 +140,10 @@ export default function RegisterPage() {
                   disabled={isPending}
                   {...field}
                   className="peer block w-full border-b-2 border-gray-600 bg-transparent py-3 text-sm text-white focus:border-violet-400 focus:outline-none"
+                  placeholder=""
                 />
               </FormControl>
-              <FormLabel
-                className="absolute top-3 text-sm text-gray-400 transform duration-300 
-                            peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 
-                            peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-400"
-              >
+              <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
                 Full Name
               </FormLabel>
               <FormMessage />
@@ -175,14 +164,10 @@ export default function RegisterPage() {
                     autoComplete="new-password"
                     disabled={isPending}
                     {...field}
-                    className="peer block w-full border-b-2 border-gray-600 bg-transparent py-3 text-sm text-white focus:border-violet-400 focus:outline-none"
+                    className="peer block w-full appearance-none border-0 border-b-2 border-black/20 bg-transparent px-0 py-3 text-sm focus:border-violet-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:focus:border-blue-500"
                     placeholder=" "
                   />
-                  <FormLabel
-                    className="absolute top-3 text-sm text-gray-400 transform duration-300 
-                            peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 
-                            peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-400"
-                  >
+                  <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
                     Password
                   </FormLabel>
                   <button
@@ -220,11 +205,7 @@ export default function RegisterPage() {
                     className="peer block w-full border-b-2 border-gray-600 bg-transparent py-3 text-sm text-white focus:border-violet-400 focus:outline-none"
                     placeholder=" "
                   />
-                  <FormLabel
-                    className="absolute top-3 text-sm text-gray-400 transform duration-300 
-                            peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 
-                            peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-400"
-                  >
+                  <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
                     Confirm Password
                   </FormLabel>
                   <button
