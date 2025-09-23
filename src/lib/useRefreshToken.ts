@@ -8,6 +8,7 @@ import {
   setAccessTokenToLocalStorage,
 } from "./localStorage";
 import https from "@/lib/axios";
+import { AxiosError } from "axios";
 
 export function useRefreshToken() {
   const refresh = useCallback(async () => {
@@ -19,9 +20,14 @@ export function useRefreshToken() {
       const newAccessToken = res.data.data.accessToken;
       setAccessTokenToLocalStorage(newAccessToken);
       return newAccessToken;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError;
+
       // Chỉ redirect nếu thực sự không thể refresh được
-      if (err.response?.status === 401 || err.response?.status === 403) {
+      if (
+        axiosError.response?.status === 401 ||
+        axiosError.response?.status === 403
+      ) {
         removeTokenFormLocalStorage();
         if (typeof window !== "undefined") {
           window.location.href = "/login";

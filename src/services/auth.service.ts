@@ -7,7 +7,6 @@ import {
   LoginResponse,
   LogoutResponse,
   ProfileResponse,
-  RefreshTokenRequest,
   RefreshTokenResponse,
   RegisterRequest,
   RegisterResponse,
