@@ -2,7 +2,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   login,
-  getProfile,
   register,
   forgotPassword,
   refreshToken,
@@ -11,18 +10,12 @@ import {
 import {
   ForgotPasswordRequest,
   LoginRequest,
-  RefreshTokenRequest,
   RegisterRequest,
 } from "@/types/auth.type";
-import Cookies from "js-cookie";
 
 export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (data: LoginRequest) => login(data),
-    onSuccess: (data) => {
-      // TODO: Lưu token vào cookies (sẽ xử lý sau ở AuthContext)
-      console.log("Login success:", data);
-    },
     onError: (error) => {
       console.error("Login failed:", error);
     },
@@ -31,45 +24,27 @@ export const useLoginMutation = () => {
 
 export const useRefreshTokenMutation = () => {
   return useMutation({
-    mutationFn: (data: RefreshTokenRequest) => refreshToken(data),
-    onSuccess: (data) => {
-      console.log("Refresh token success:", data);
-    },
+    mutationFn: () => refreshToken(),
   });
 };
 
 export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: (data: RegisterRequest) => register(data),
-    onSuccess: (data) => {
-      console.log("Register success:", data);
-    },
     onError: (error) => {
       console.error("Register failed:", error);
     },
   });
 };
 
-export const useLogoutQuery = () => {
-  return useQuery({
-    queryKey: ["logout"],
-    queryFn: getLogout,
+export const useLogoutMutation = () => {
+  return useMutation({
+    mutationFn: getLogout,
   });
 };
 
 export const useForgotPasswordMutation = () => {
   return useMutation({
     mutationFn: (data: ForgotPasswordRequest) => forgotPassword(data),
-    onSuccess: (data) => {
-      console.log("Forgot password success:", data);
-    },
-  });
-};
-
-export const useProfileQuery = () => {
-  return useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfile,
-    enabled: !!Cookies.get("token"), // Chỉ chạy nếu có token
   });
 };

@@ -18,10 +18,8 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   return response.data;
 };
 
-export const refreshToken = async (
-  data: RefreshTokenRequest
-): Promise<RefreshTokenResponse> => {
-  const response = await https.post("/api/Auth/refresh", data);
+export const refreshToken = async (): Promise<RefreshTokenResponse> => {
+  const response = await https.post("/api/Auth/refresh", {});
   return response.data;
 };
 
@@ -36,11 +34,6 @@ export const forgotPassword = async (
   data: ForgotPasswordRequest
 ): Promise<ForgotPasswordResponse> => {
   const response = await https.post("/api/Auth/forgot-password", data);
-  return response.data;
-};
-
-export const getProfile = async (): Promise<ProfileResponse> => {
-  const response = await https.get("/auth/profile");
   return response.data;
 };
 

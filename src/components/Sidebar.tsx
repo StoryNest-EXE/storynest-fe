@@ -21,8 +21,8 @@ import {
   UserRoundPen,
   LogOut,
   LogIn,
+  Link,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -30,7 +30,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "./ui/button";
-import { useLogoutQuery } from "@/queries/auth.queries";
+import { useLogoutMutation } from "@/queries/auth.queries";
+import { useAuth } from "@/context/AuthContext";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
@@ -43,7 +44,18 @@ const items = [
 ];
 
 export function UserSidebar() {
-  const logout = useLogoutQuery();
+  const logoutMutation = useLogoutMutation();
+  const { token, logout: authLogout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      authLogout(); // Clear local state
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>Header</SidebarHeader>
@@ -85,14 +97,30 @@ export function UserSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter className="flex items-start group-data-[collapsible=icon]:items-center">
-        <Button
-          variant="outline"
-          className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center hover:!bg-red-400"
-        >
-          <LogOut className="h-5 w-5 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7 transition-all !shrink-0 !size-auto" />
-          <span className="group-data-[collapsible=icon]:hidden">Log out</span>
-        </Button>
+        {token ? (
+          <Button
+            variant="outline"
+            className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center hover:!bg-red-400"
+            onClick={handleLogout}
+            disabled={logoutMutation.isPending}
+          >
+            <LogOut className="h-5 w-5 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7 transition-all !shrink-0 !size-auto" />
+            <span className="group-data-[collapsible=icon]:hidden">
+              Log out
+            </span>
+          </Button>
+        ) : (
+          <Button
+            variant="default"
+            className="w-full bg-violet-950 text-white hover:bg-violet-900 flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center"
+            onClick={() => (window.location.href = "/login")}
+          >
+            <LogIn className="h-5 w-5 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7 transition-all !shrink-0 !size-auto" />
+            <span className="group-data-[collapsible=icon]:hidden">Log in</span>
+          </Button>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

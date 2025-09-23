@@ -27,7 +27,7 @@ export interface LogoutResponse {
 }
 
 export interface RefreshTokenRequest {
-  accessToken: string;
+  // Không cần accessToken nữa vì BE lấy từ header
 }
 
 export interface RefreshTokenResponse {

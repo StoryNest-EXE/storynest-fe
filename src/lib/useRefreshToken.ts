@@ -13,18 +13,20 @@ export function useRefreshToken() {
   const refresh = useCallback(async () => {
     const accessToken = getAccessTokenFromLocalStorage();
     if (!accessToken) return null;
-
     try {
-      const res = await https.post("/api/Auth/refresh", { accessToken });
+      const res = await https.post("/api/Auth/refresh");
+      console.log("new AT", res);
       const newAccessToken = res.data.data.accessToken;
-      console.log("[useRefreshToken] refresh response:", res?.data);
-
       setAccessTokenToLocalStorage(newAccessToken);
       return newAccessToken;
-    } catch (err) {
-      console.error("Refresh failed", err);
-      removeTokenFormLocalStorage();
-      window.location.href = "/login";
+    } catch (err: any) {
+      // Chỉ redirect nếu thực sự không thể refresh được
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        removeTokenFormLocalStorage();
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+      }
       return null;
     }
   }, []);
