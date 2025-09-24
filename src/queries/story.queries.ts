@@ -1,5 +1,14 @@
-import { getStories, postCreateStory } from "@/services/story.service";
-import { CreateStoryRequest, StoryResponse } from "@/types/story.type";
+import {
+  getStories,
+  postCreateStory,
+  postLike,
+  postUnlike,
+} from "@/services/story.service";
+import {
+  CreateStoryRequest,
+  LikeResponse,
+  StoryResponse,
+} from "@/types/story.type";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -23,6 +32,24 @@ export const useCreateStoryMutation = () => {
     },
     onError: (error) => {
       console.log("Tạo bài viết thất bại", error);
+    },
+  });
+};
+
+export const useLikeMutation = () => {
+  return useMutation({
+    mutationFn: (storyId: number) => postLike(storyId),
+    onSuccess: (data: LikeResponse) => {
+      console.log("Like success", data);
+    },
+  });
+};
+
+export const useUnlikeMutation = () => {
+  return useMutation({
+    mutationFn: (storyId: number) => postUnlike(storyId),
+    onSuccess: (data: LikeResponse) => {
+      console.log("Unlike success", data);
     },
   });
 };

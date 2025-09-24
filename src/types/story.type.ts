@@ -17,6 +17,7 @@ export interface Story {
   coverImageUrl: string;
   createdAt: string; // ISO string
   publishedAt: string; // ISO string
+  isLiked: boolean;
   likeCount: number;
   commentCount: number;
   privacyStatus: number;
@@ -68,4 +69,10 @@ export interface CreateStoryRequest {
 // Response
 export interface CreateStoryResponse {
   storyId: number;
+}
+
+export interface LikeResponse {
+  status: number;
+  message: string;
+  data: number;
 }

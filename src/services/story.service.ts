@@ -19,3 +19,13 @@ export const postCreateStory = async (req: CreateStoryRequest) => {
   );
   return response.data;
 };
+
+export const postLike = async (storyId: number) => {
+  const response = await https.post(`/api/Like/like/${storyId}`);
+  return response.data;
+};
+
+export const postUnlike = async (storyId: number) => {
+  const response = await https.post(`/api/Like/unlike/${storyId}`);
+  return response.data;
+};
