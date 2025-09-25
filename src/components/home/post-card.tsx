@@ -16,6 +16,7 @@ import {
 import { Badge } from "../ui/badge";
 import { useLikeMutation, useUnlikeMutation } from "@/queries/story.queries";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface PostCardProps {
   story: Story;
@@ -24,7 +25,7 @@ interface PostCardProps {
 export function PostCard({ story }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(story.isLiked);
   const [likeCount, setLikeCount] = useState(story.likeCount);
-  // const [showFullContent, setShowFullContent] = useState(false);
+  const [showFullContent, setShowFullContent] = useState(false);
   const likeMutation = useLikeMutation();
   const unlikeMutation = useUnlikeMutation();
 
@@ -57,11 +58,11 @@ export function PostCard({ story }: PostCardProps) {
     }
   };
 
-  // const handleReadMore = () => {
-  //   if (story.summary) {
-  //     setShowFullContent(true);
-  //   }
-  // };
+  const handleReadMore = () => {
+    if (story.summary) {
+      setShowFullContent(true);
+    }
+  };
 
   return (
     <Card className="bg-card border-border p-6 space-y-0">
@@ -121,16 +122,16 @@ export function PostCard({ story }: PostCardProps) {
             className="text-card-foreground leading-relaxed"
             dangerouslySetInnerHTML={{ __html: story.summary }}
           ></div>
-          <Button
+          {/* <Button
             variant="link"
             className="p-0 h-auto hover:text-accent/80 text-indigo-300"
             // onClick={handleReadMore}
           >
             xem thêm
-          </Button>
+          </Button> */}
         </div>
 
-        {/* Cho phép xem full ở trang home luôn
+        {/* Cho phép xem full ở trang home luôn  */}
         {story.summary && !showFullContent ? (
           <div className="space-y-2">
             <p
@@ -139,10 +140,10 @@ export function PostCard({ story }: PostCardProps) {
             ></p>
             <Button
               variant="link"
-              className="p-0 h-auto text-accent hover:text-accent/80"
+              className="p-0 h-auto text-indigo-300 hover:text-indigo-300/80"
               onClick={handleReadMore}
             >
-              ... xem thêm
+              Xem thêm
             </Button>
           </div>
         ) : (
@@ -151,7 +152,7 @@ export function PostCard({ story }: PostCardProps) {
               className="text-card-foreground leading-relaxed whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: story.content }}
             ></p>
-            {story.summary && (
+            {/* {story.summary && (
               <Link href={`/post/${story.id}`}>
                 <Button
                   variant="link"
@@ -160,9 +161,9 @@ export function PostCard({ story }: PostCardProps) {
                   Xem chi tiết
                 </Button>
               </Link>
-            )}
+            )} */}
           </div>
-        )} */}
+        )}
 
         {/* Media */}
         {story.media.length > 0 && (
