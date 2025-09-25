@@ -21,6 +21,7 @@ function CreateStory() {
         </span>
         <div className="flex-1 flex justify-end mr-5">
           <Button
+            className="cursor-pointer"
             onClick={() => {
               router.push("/create-story");
             }}

@@ -40,3 +40,8 @@ export const getLogout = async (): Promise<LogoutResponse> => {
   const response = await https.get("api/Auth/logout");
   return response.data;
 };
+
+export const getGoogleLogin = async () => {
+  const response = await https.get("/api/Auth/google-login");
+  return response.data;
+};

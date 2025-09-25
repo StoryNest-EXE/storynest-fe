@@ -6,6 +6,7 @@ import {
   forgotPassword,
   refreshToken,
   getLogout,
+  getGoogleLogin,
 } from "@/services/auth.service";
 import {
   ForgotPasswordRequest,
@@ -46,5 +47,11 @@ export const useLogoutMutation = () => {
 export const useForgotPasswordMutation = () => {
   return useMutation({
     mutationFn: (data: ForgotPasswordRequest) => forgotPassword(data),
+  });
+};
+
+export const useGoogleLoginMutation = () => {
+  return useMutation({
+    mutationFn: () => getGoogleLogin(),
   });
 };

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { useAuth } from "@/context/AuthContext";
 import { useLoginMutation } from "@/queries/auth.queries";
+import GoogleLoginButton from "../google-callback/google-login-button";
 
 const formSchema = z.object({
   usernameOrEmail: z.string().min(6, {
@@ -66,6 +67,7 @@ const LoginPage = () => {
         ipAddress: "",
         userAgent: "",
       };
+      setIsLoading(true);
       const response = await loginMutation(payload);
       login(response.data.accessToken);
       router.push("/");
@@ -79,9 +81,12 @@ const LoginPage = () => {
   return (
     <Form {...form}>
       <div className="w-full">
-        <h1 className="text-3xl font-semibold">
-          Welcome to <span className="text-gradient-2">StoryNest</span>
+        <h1 className="text-3xl font-semibold flex justify-center">
+          Chào mừng trở lại
         </h1>
+        <span className="!text-5xl flex justify-center font-semibold text-gradient-2 text-flicker-in-glow leading-[1.2]">
+          StoryNest
+        </span>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
           {/* Username */}
@@ -213,21 +218,16 @@ const LoginPage = () => {
 
         {/* Oauth 2 */}
         <div className="flex items-center gap-2">
-          {/* <GoogleButton
-            remember={form.getValues("remember")}
-            setError={setError}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          /> */}
+          <GoogleLoginButton />
         </div>
 
         <div className="mt-2 text-center text-sm text-shadow-white">
-          Do&apos;t have an account?{" "}
+          Chưa có tài khoản?{" "}
           <Link
             href="/register"
             className="text-[#4C3CC6] underline underline-offset-4 hover:text-[#5756bb]"
           >
-            Register
+            Đăng kí
           </Link>
         </div>
       </div>

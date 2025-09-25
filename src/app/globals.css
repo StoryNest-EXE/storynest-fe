@@ -120,3 +120,96 @@
     @apply bg-background text-foreground;
   }
 }
+
+@utility text-gradient-2 {
+  @apply bg-linear-to-r from-[#4C3CC6] to-[#7E60F8] bg-clip-text text-transparent;
+}
+
+/* Animation cho chữ */
+.text-flicker-in-glow {
+  -webkit-animation: text-flicker-in-glow 4s linear both;
+  animation: text-flicker-in-glow 4s linear both;
+}
+
+@-webkit-keyframes text-flicker-in-glow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    text-shadow: 0 0 30px #fff;
+  }
+  20% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    text-shadow: 0 0 60px #fff;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 100px #fff;
+  }
+  60% {
+    opacity: 0.4;
+  }
+  70% {
+    opacity: 1;
+    text-shadow: 0 0 80px #fff;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 1;
+    text-shadow: 0 0 60px #fff;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 40px #fff;
+  }
+}
+@keyframes text-flicker-in-glow {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    text-shadow: 0 0 30px #fff;
+  }
+  20% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    text-shadow: 0 0 60px #fff;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 100px #fff;
+  }
+  60% {
+    opacity: 0.4;
+  }
+  70% {
+    opacity: 1;
+    text-shadow: 0 0 80px #fff;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 1;
+    text-shadow: 0 0 60px #fff;
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 40px #fff;
+  }
+}
