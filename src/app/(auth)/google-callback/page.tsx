@@ -1,17 +1,17 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-export default function GoogleCallbackClient() {
-  const searchParams = useSearchParams();
+export default function GoogleCallbackPage() {
   const router = useRouter();
   const { login } = useAuth();
 
   useEffect(() => {
-    const token = searchParams.get("token");
-    const avatar = searchParams.get("avatar");
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const avatar = params.get("avatar");
 
     if (token) {
       login(token);
@@ -22,11 +22,7 @@ export default function GoogleCallbackClient() {
 
       router.push("/");
     }
-  }, [searchParams, login, router]);
+  }, [login, router]);
 
-  return (
-    <Suspense fallback={<p>Đang xử lý đăng nhập Google...</p>}>
-      <GoogleCallbackClient />
-    </Suspense>
-  );
+  return <p>Đang xử lý đăng nhập Google...</p>;
 }
