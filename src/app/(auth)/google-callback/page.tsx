@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
-export default function GoogleCallbackPage() {
+export default function GoogleCallbackClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { login } = useAuth();
@@ -14,18 +14,19 @@ export default function GoogleCallbackPage() {
     const avatar = searchParams.get("avatar");
 
     if (token) {
-      // gọi login() trong AuthContext
       login(token);
 
-      // nếu muốn lưu avatar
       if (avatar) {
         localStorage.setItem("avatar", avatar);
       }
 
-      // redirect về home sau khi login
       router.push("/");
     }
   }, [searchParams, login, router]);
 
-  return <p>Đang xử lý đăng nhập Google...</p>;
+  return (
+    <Suspense fallback={<p>Đang xử lý đăng nhập Google...</p>}>
+      <GoogleCallbackClient />
+    </Suspense>
+  );
 }
