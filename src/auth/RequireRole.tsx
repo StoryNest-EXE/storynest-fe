@@ -10,11 +10,13 @@ export default function RequireRole({
   children: React.ReactNode;
   role: "admin" | "user";
 }) {
-  const { token } = useAuth();
+  const { token, initialized } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!initialized) return;
+    console.log("tyoe nè", token?.type);
     if (!token) {
       router.replace("/login");
     } else if (token.type !== role) {
@@ -22,7 +24,7 @@ export default function RequireRole({
     } else {
       setLoading(false);
     }
-  }, [token, role, router]);
+  }, [token, role, router, initialized]);
 
   if (loading) return <div>Loading...</div>;
 

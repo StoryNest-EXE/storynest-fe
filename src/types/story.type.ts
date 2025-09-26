@@ -64,6 +64,7 @@ export interface CreateStoryRequest {
   privacyStatus: number;
   storyStatus: number;
   mediaUrls: string[];
+  audioUrls: string[];
 }
 
 // Response
@@ -75,4 +76,11 @@ export interface LikeResponse {
   status: number;
   message: string;
   data: number;
+}
+
+export interface StoryAICard {
+  id: string;
+  content: string;
+  mediaUrls?: string;
+  audioUrls?: string;
 }

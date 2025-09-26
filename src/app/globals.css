@@ -213,3 +213,9 @@
     text-shadow: 0 0 40px #fff;
   }
 }
+
+.bg-neat {
+  background-image: url("/assets/neat.png");
+  background-size: cover;
+  background-position: center;
+}

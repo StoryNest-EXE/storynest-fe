@@ -21,3 +21,13 @@ export const postConfirmImage = async (req: ConfirmUploadRequest) => {
   );
   return response.data;
 };
+
+export const postGenerateIamge = async (content: string) => {
+  const response = await https.post("api/AIStory/generate-image", content);
+  return response.data;
+};
+
+export const postGenerateAudio = async (content: string) => {
+  const response = await https.post("api/AIStory/generate-audio", content);
+  return response.data;
+};

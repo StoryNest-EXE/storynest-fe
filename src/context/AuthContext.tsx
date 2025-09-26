@@ -22,6 +22,7 @@ type AuthContextType = {
   token?: TokenPayload;
   login: (accessToken: string) => void;
   logout: () => void;
+  initialized: boolean;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -29,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
   token: undefined,
   login: () => {},
   logout: () => {},
+  initialized: false,
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -38,6 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<TokenPayload | undefined>(undefined);
   const refresh = useRefreshToken();
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const clearRefreshTimer = () => {
     if (refreshTimeoutRef.current) {
@@ -126,11 +129,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setToken(payload);
       scheduleRefresh(payload);
     }
+    setInitialized(true);
     return () => clearRefreshTimer();
   }, [scheduleRefresh]);
 
   return (
-    <AuthContext.Provider value={{ accessToken, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ accessToken, token, login, logout, initialized }}
+    >
       {children}
     </AuthContext.Provider>
   );

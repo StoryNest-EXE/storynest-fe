@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarHeader,
   SidebarFooter,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Home,
@@ -32,12 +34,13 @@ import {
 import { Button } from "./ui/button";
 import { useLogoutMutation } from "@/queries/auth.queries";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
   { title: "Inbox", url: "#", icon: Inbox },
   { title: "Create Story", url: "/create-story", icon: Plus },
-  { title: "Create Story with AI", url: "#", icon: Sparkles },
+  { title: "Create Story with AI", url: "/create-story-ai", icon: Sparkles },
   { title: "Search", url: "#", icon: Search },
   { title: "Notifications", url: "#", icon: Bell },
   { title: "Profile", url: "#", icon: UserRoundPen },
@@ -46,6 +49,7 @@ const items = [
 export function UserSidebar() {
   const logoutMutation = useLogoutMutation();
   const { token, logout: authLogout } = useAuth();
+  const { state } = useSidebar();
 
   const handleLogout = async () => {
     try {
@@ -58,7 +62,23 @@ export function UserSidebar() {
   };
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>Header</SidebarHeader>
+      <SidebarHeader className="flex items-center">
+        {state === "collapsed" ? (
+          // <Image src="/svg/logo-2.svg" alt="Logo nhỏ" width={100} height={60} />
+          <SidebarTrigger />
+        ) : (
+          <div className="flex flex-row gap-8">
+            <Image
+              src="/svg/StoryNest_logo.svg"
+              alt="Logo lớn"
+              width={120}
+              height={80}
+            />
+            <SidebarTrigger />
+          </div>
+        )}
+      </SidebarHeader>
+
       <SidebarContent className="flex justify-center">
         <SidebarGroup>
           <SidebarGroupContent>
@@ -97,7 +117,6 @@ export function UserSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter className="flex items-start group-data-[collapsible=icon]:items-center">
         {token ? (
           <Button
