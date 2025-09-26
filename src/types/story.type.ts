@@ -63,8 +63,8 @@ export interface CreateStoryRequest {
   tags: string[];
   privacyStatus: number;
   storyStatus: number;
-  mediaUrls: string[];
-  audioUrls: string[];
+  mediaUrls?: string[];
+  audioUrls?: string[];
 }
 
 // Response
