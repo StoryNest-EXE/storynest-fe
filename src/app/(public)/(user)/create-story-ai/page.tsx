@@ -1,14 +1,20 @@
 "use client";
 
+import { ImagePreview } from "@/components/ImagePreview";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import VoicePlayer from "@/components/VoicePlayer";
+import {
+  useGenerateAudioMuation,
+  useGenerateImageMuation,
+} from "@/queries/media.queries";
 import { StoryAICard } from "@/types/story.type";
 import { Eye, ImageIcon, Mic, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 
 function CreateStoryAI() {
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  // const [isAnonymous, setIsAnonymous] = useState(false);
   const [title, setTitle] = useState("");
   const [cards, setCards] = useState<StoryAICard[]>([{ id: "1", content: "" }]);
   const [isGeneratingVoice, setIsGeneratingVoice] = useState<string | null>(
@@ -17,6 +23,42 @@ function CreateStoryAI() {
   const [isGeneratingImage, setIsGeneratingImage] = useState<string | null>(
     null
   );
+  const generateVoiceMutation = useGenerateAudioMuation();
+  const generateMediaMutation = useGenerateImageMuation();
+
+  const handleGenerateVoice = async (id: string, content: string) => {
+    setIsGeneratingVoice(id);
+    try {
+      const res = await generateVoiceMutation.mutateAsync(content);
+      console.log("res", res.data);
+      const audioUrl = "https://cdn.storynest.io.vn/" + res.data;
+
+      setCards((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, audioUrl: audioUrl } : c))
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsGeneratingVoice(null);
+    }
+  };
+
+  const handleGenerateMedia = async (id: string, content: string) => {
+    setIsGeneratingImage(id);
+    try {
+      const res = await generateMediaMutation.mutateAsync(content);
+      console.log("res", res.data);
+      const mediaUrl = "https://cdn.storynest.io.vn/" + res.data;
+
+      setCards((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, mediaUrl: mediaUrl } : c))
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsGeneratingVoice(null);
+    }
+  };
 
   const updateCardContent = (id: string, newContent: string) => {
     setCards((prevCards) =>
@@ -92,35 +134,43 @@ function CreateStoryAI() {
           {/* Story Cards */}
           <div className="space-y-6 mb-8">
             {cards.map((card, index) => (
-              <Card key={card.id} className="w-full bg-neat p-6">
+              <Card
+                key={card.id}
+                className="w-full bg-slate-800/50 backdrop-blur-lg border border-slate-600/40 rounded-3xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 hover:border-purple-400/50"
+              >
+                {/* Header */}
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white text-xl font-semibold">
+                  <h3 className="text-white text-xl font-semibold tracking-wide">
                     Thẻ {index + 1}
                   </h3>
                   {cards.length > 1 && (
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => deleteCard(card.id)}
-                      className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                      className="rounded-full p-2 text-red-400 hover:text-red-300 hover:bg-red-900/30 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   )}
                 </div>
 
+                {/* Textarea */}
                 <Textarea
                   placeholder="Viết đoạn câu chuyện của bạn tại đây..."
                   value={card.content}
                   onChange={(e) => updateCardContent(card.id, e.target.value)}
-                  className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[200px] mb-4 resize-none"
+                  className="bg-slate-900/60 border border-slate-700 text-white placeholder:text-slate-400 min-h-[180px] mb-5 resize-none rounded-2xl focus:ring-2 focus:ring-purple-500/40 focus:border-purple-400"
                 />
 
-                <div className="flex gap-4">
+                {/* Buttons */}
+                <div className="flex gap-4 mb-6">
                   <Button
-                    // onClick={() => handleGenerateVoice(card.id)}
-                    disabled={isGeneratingVoice === card.id}
-                    className="flex-1 bg-transparent hover:bg-slate-600 border border-amber-50 text-white"
+                    onClick={() => handleGenerateVoice(card.id, card.content)}
+                    disabled={
+                      !card.content.trim() || isGeneratingVoice === card.id
+                    }
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-md"
                   >
                     <Mic className="w-4 h-4 mr-2" />
                     {isGeneratingVoice === card.id
@@ -129,9 +179,11 @@ function CreateStoryAI() {
                   </Button>
 
                   <Button
-                    // onClick={() => handleGenerateImage(card.id)}
-                    disabled={isGeneratingImage === card.id}
-                    className="flex-1 bg-transparent hover:bg-slate-600 border border-amber-50 text-white"
+                    onClick={() => handleGenerateMedia(card.id, card.content)}
+                    disabled={
+                      !card.content.trim() || isGeneratingImage === card.id
+                    }
+                    className="flex-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:from-pink-400 hover:to-orange-400 shadow-md"
                   >
                     <ImageIcon className="w-4 h-4 mr-2" />
                     {isGeneratingImage === card.id
@@ -140,28 +192,23 @@ function CreateStoryAI() {
                   </Button>
                 </div>
 
-                <div className="flex flex-col items-center">
-                  {/* Preview audio */}
-                  {/* {card.audioUrl && ( */}
-                  <audio controls className="mt-3 w-full">
-                    <source
-                      src={
-                        "https://cdn.storynest.io.vn/generated-content/audio/aud_4ab4356aad96477eae9969646ddf9232.wav"
-                      }
-                      type="audio/mpeg"
-                    />
-                    Trình duyệt không hỗ trợ audio.
-                  </audio>
-                  {/* )} */}
+                {/* Preview Zone */}
+                <div className="flex flex-col items-center space-y-6">
+                  {/* Audio chỉ render khi có audioUrl */}
+                  {card.audioUrl && (
+                    <VoicePlayer className="w-full" audioUrl={card.audioUrl} />
+                  )}
 
-                  {/* Preview image */}
-                  {/* {card.imageUrl && ( */}
-                  <img
-                    src="https://reactjsexample.com/content/images/2018/03/react-modular-audio-player.jpg"
-                    alt="Generated"
-                    className="mt-3 w-200 h-100 object-cover rounded-lg"
-                  />
-                  {/* )} */}
+                  {/* Image chỉ render khi có imageUrl */}
+                  {card.mediaUrl && (
+                    <div className="w-full overflow-hidden rounded-2xl border border-slate-600/50 shadow-md">
+                      <ImagePreview
+                        src={card.mediaUrl}
+                        alt="Generated"
+                        className="w-full h-72 object-cover !object-[50%_30%]"
+                      />
+                    </div>
+                  )}
                 </div>
               </Card>
             ))}

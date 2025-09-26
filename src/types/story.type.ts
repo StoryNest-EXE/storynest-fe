@@ -81,6 +81,6 @@ export interface LikeResponse {
 export interface StoryAICard {
   id: string;
   content: string;
-  mediaUrls?: string;
-  audioUrls?: string;
+  mediaUrl?: string;
+  audioUrl?: string;
 }
