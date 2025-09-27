@@ -17,6 +17,7 @@ import { Badge } from "../ui/badge";
 import { useLikeMutation, useUnlikeMutation } from "@/queries/story.queries";
 import { toast } from "sonner";
 import Link from "next/link";
+import VoicePlayer from "../VoicePlayer";
 
 interface PostCardProps {
   story: Story;
@@ -28,6 +29,8 @@ export function PostCard({ story }: PostCardProps) {
   const [showFullContent, setShowFullContent] = useState(false);
   const likeMutation = useLikeMutation();
   const unlikeMutation = useUnlikeMutation();
+  const audio = story.media.find((m) => m.mediaType === "Audio");
+  const images = story.media.filter((m) => m.mediaType === "Image");
 
   const handleLike = () => {
     const prevLiked = isLiked;
@@ -166,28 +169,30 @@ export function PostCard({ story }: PostCardProps) {
         )}
 
         {/* Media */}
-        {story.media.length > 0 && (
+
+        {/* Image(s) */}
+        {images.length > 0 && (
           <>
-            {story.media.length === 1 ? (
+            {images.length === 1 ? (
               <div className="relative overflow-hidden rounded-lg w-full flex items-center justify-center">
                 <img
-                  src={story.media[0].mediaUrl || "/placeholder.svg"}
-                  alt={story.media[0].caption || "Post image"}
-                  className="w-full max-h-96 object-contain"
+                  src={images[0].mediaUrl || "/placeholder.svg"}
+                  alt={images[0].caption || "Post image"}
+                  className="w-full h-[80%] max-h-96 object-contain"
                 />
               </div>
             ) : (
               <Carousel className="relative w-full">
                 <CarouselContent className="mx-auto">
-                  {story.media.map((m) => (
+                  {images.map((img) => (
                     <CarouselItem
-                      key={m.id}
+                      key={img.id}
                       className="flex items-center justify-center"
                     >
                       <div className="relative overflow-hidden rounded-lg w-full flex items-center justify-center">
                         <img
-                          src={m.mediaUrl || "/placeholder.svg"}
-                          alt={m.caption || "Post image"}
+                          src={img.mediaUrl || "/placeholder.svg"}
+                          alt={img.caption || "Post image"}
                           className="w-[85%] max-h-96 object-contain"
                         />
                       </div>
@@ -197,6 +202,12 @@ export function PostCard({ story }: PostCardProps) {
                 <CarouselPrevious className="left-4 top-1/2 -translate-y-1/2" />
                 <CarouselNext className="right-1 top-1/2 -translate-y-1/2" />
               </Carousel>
+            )}
+            {/* Audio (chỉ 1) */}
+            {audio && (
+              <div className="mb-4">
+                <VoicePlayer className="w-full" audioUrl={audio.mediaUrl} />
+              </div>
             )}
           </>
         )}

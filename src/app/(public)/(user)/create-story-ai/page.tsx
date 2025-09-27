@@ -155,7 +155,7 @@ function CreateStoryAI() {
           {/* Title Field */}
           <div className="mb-2">
             <label className="text-sm text-gray-300">
-              Title<span className="text-red-500 ml-1">*</span>
+              Tiêu đề câu chuyện<span className="text-red-500 ml-1">*</span>
             </label>
             <Textarea
               placeholder="Nhập tiêu đề câu chuyện..."
@@ -167,16 +167,22 @@ function CreateStoryAI() {
 
           {/* Tags */}
           <div className="space-y-2 mb-4">
-            <label className="text-sm text-gray-400">Add tags</label>
+            <label className="text-sm text-gray-400">
+              Nhập tags cho câu chuyện
+            </label>
             <TagInput value={tags} onChange={setTags} />
           </div>
 
           {/* Story Cards */}
           <div className="space-y-6 mb-8">
+            <label className="text-sm text-gray-300">
+              Nội dung của câu chuyện
+              <span className="text-red-500 ml-1">*</span>
+            </label>
             {cards.map((card, index) => (
               <Card
                 key={card.id}
-                className="w-full bg-slate-800/50 backdrop-blur-lg border border-slate-600/40 rounded-3xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 hover:border-purple-400/50"
+                className="mt-1 w-full bg-slate-800/50 backdrop-blur-lg border border-slate-600/40 rounded-3xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 hover:border-purple-400/50"
               >
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">

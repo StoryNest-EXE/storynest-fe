@@ -15,8 +15,8 @@ export interface Story {
   summary: string;
   slug: string;
   coverImageUrl: string;
-  createdAt: string; // ISO string
-  publishedAt: string; // ISO string
+  createdAt: string;
+  publishedAt: string;
   isLiked: boolean;
   likeCount: number;
   commentCount: number;
@@ -37,13 +37,13 @@ export interface StoryMedia {
   id: number;
   storyId: number;
   mediaUrl: string;
-  mediaType: string;
+  mediaType: "Image" | "Audio";
   caption: string;
   mimeType: string;
   size: number;
   width: number;
   height: number;
-  createdAt: string; // ISO string
+  createdAt: string;
 }
 
 export interface StoryTag {

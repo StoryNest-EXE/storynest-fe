@@ -17,7 +17,7 @@ function CreateStory() {
           className="opacity-40 ml-4 flex items-center"
           onClick={() => router.push("/create-story")}
         >
-          What&apos;s new
+          Có chuyện gì hot!
         </span>
         <div className="flex-1 flex justify-end mr-5">
           <Button
@@ -26,7 +26,7 @@ function CreateStory() {
               router.push("/create-story");
             }}
           >
-            Post
+            Kể chuyện ngay
           </Button>
         </div>
       </div>

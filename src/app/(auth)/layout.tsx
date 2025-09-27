@@ -8,23 +8,21 @@ import Image from "next/image";
 const slides = [
   {
     animationSrc:
-      "https://lottie.host/9dbf53dc-2cb3-41f3-b3c0-9ab8e06fcfe6/Ls9yDx8oSb.lottie",
-    title: "All your dev assets, in one place",
-    subtitle: "Snippets, API keys, configs – all organized like a second brain",
+      "https://lottie.host/86302aff-b3d7-4016-9200-42fb8668e109/qJy87G3qKz.lottie",
+    title: "Thế giới mở ra từ từng trang sách",
+    subtitle: "Mỗi câu chuyện là một phép màu, chỉ chờ được kể lại.",
   },
   {
     animationSrc:
-      "https://lottie.host/ba494b30-0f32-41c5-b869-fa3ef21841c2/YYTlG2veGZ.lottie",
-    title: "Save It    Find It    Done",
-    subtitle:
-      'Save it once. Find it fast.\nNo more "Where did I put that key?"',
+      "https://lottie.host/2297fe7f-7267-4858-bce6-e1332b87b935/nobEBbCVv1.lottie",
+    title: "Cuốn sách cũng có hành trình riêng",
+    subtitle: "Giống như chúng ta – bước đi, ghi nhớ, và để lại dấu ấn.",
   },
   {
     animationSrc:
-      "https://lottie.host/e03679a1-6baf-4321-a4a6-6082aa1fc3a2/MeFAahqLqW.lottie",
-    title: "Your Peace of Mind, Vaulted",
-    subtitle:
-      "No more clutter. No more chaos.\nJust one vault — for everything that matters.",
+      "https://lottie.host/58561e12-da82-40e0-8941-ccfe8c36a5aa/nzclpCwW0g.lottie",
+    title: "Nơi ý tưởng hóa thành câu chữ",
+    subtitle: "Viết, chia sẻ, và lưu giữ – tất cả trong StoryNest.",
   },
 ];
 
@@ -60,20 +58,31 @@ export default function AuthLayout({
                 opacity: currentSlide === index ? 1 : 0,
                 x: currentSlide === index ? 0 : -50,
               }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 1 }}
               className={`absolute top-0 left-0 w-full h-full ${
                 currentSlide === index
                   ? "pointer-events-auto"
                   : "pointer-events-none"
               }`}
             >
-              <DotLottieReact
-                src={slide.animationSrc}
-                loop
-                autoplay
-                style={{ width: "100%", height: "500px" }}
-                renderConfig={{ devicePixelRatio: dpr }}
-              />
+              {slide.animationSrc.endsWith(".lottie") ||
+              slide.animationSrc.endsWith(".json") ? (
+                <DotLottieReact
+                  src={slide.animationSrc}
+                  loop
+                  autoplay
+                  style={{ width: "100%", height: "500px" }}
+                  renderConfig={{ devicePixelRatio: dpr }}
+                />
+              ) : (
+                <img
+                  src={slide.animationSrc}
+                  alt={slide.title}
+                  width={800}
+                  height={500}
+                  className="h-full w-full object-contain"
+                />
+              )}
             </motion.div>
           ))}
         </div>

@@ -75,7 +75,7 @@ function FileUpload({
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        <h2 className={styles.header}>Drop & Drag</h2>
+        <h2 className={styles.header}>Kéo & Thả</h2>
         <div
           className={styles.drop_file_container}
           ref={wrapperRef}
@@ -97,11 +97,11 @@ function FileUpload({
             accept={accept}
             onChange={onFileDrop}
           />
-          <p className={styles.drop_file_label}>Drag & drop your files here</p>
+          <p className={styles.drop_file_label}>Kéo & Thả ảnh ở đây</p>
         </div>
         {fileList.length > 0 && (
           <div className={styles.drop_file_preview}>
-            <p className={styles.drop_file_preview_title}>Ready to upload</p>
+            <p className={styles.drop_file_preview_title}>Đã sẵn sàng</p>
             {fileList.map((item, index) => (
               <div key={index} className={styles.drop_file_preview_item}>
                 <img src={previewUrls[index]} alt={item.name} />

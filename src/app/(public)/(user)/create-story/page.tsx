@@ -149,7 +149,7 @@ function CreateStory() {
       tags: tags,
       privacyStatus: 0,
       storyStatus: 1,
-      mediaUrls: mediaKey, // truyền mảng mediaUrls
+      mediaUrls: mediaKey,
     };
 
     try {
@@ -162,7 +162,9 @@ function CreateStory() {
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-semibold text-gray-200">Create Story</h1>
+        <h1 className="text-2xl font-semibold text-gray-200">
+          Chia sẻ câu chuyện của mình
+        </h1>
         {/* <Button variant="ghost" className="text-gray-400 hover:text-white">
           Drafts
         </Button> */}
@@ -176,7 +178,7 @@ function CreateStory() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm text-gray-300">
-                Title<span className="text-red-500 ml-1">*</span>
+                Tiêu đề câu chuyện<span className="text-red-500 ml-1">*</span>
               </label>
               <span className="text-xs text-gray-500">{title.length}/300</span>
             </div>
@@ -191,13 +193,18 @@ function CreateStory() {
 
           {/* Tags */}
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Add tags</label>
+            <label className="text-sm text-gray-400">
+              Nhập tags cho câu chuyện
+            </label>
             <TagInput value={tags} onChange={setTags} />
           </div>
 
           {/* Editor */}
           <div className="space-y-2">
-            <div className="border border-slate-600 rounded-md bg-slate-800/50">
+            <label className="text-sm text-gray-400">
+              Nội dung của câu chuyện
+            </label>
+            <div className="mt-1 border border-slate-600 rounded-md bg-slate-800/50">
               {/* Toolbar */}
               <div className="flex items-center gap-1 p-3 border-b border-slate-600">
                 {/* Bold */}
@@ -295,7 +302,7 @@ function CreateStory() {
 
         {/* Cột phải */}
         <div className="w-72">
-          <h2 className="text-sm text-gray-400 mb-2">Upload media</h2>
+          <h2 className="text-sm text-gray-400 mb-2">Đăng ảnh ở đây</h2>
           <FileUpload onUpload={handleUploadImages} allowMultiple={true} />
         </div>
       </div>

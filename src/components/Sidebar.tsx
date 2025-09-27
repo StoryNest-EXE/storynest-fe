@@ -37,13 +37,13 @@ import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 
 const items = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Inbox", url: "#", icon: Inbox },
-  { title: "Create Story", url: "/create-story", icon: Plus },
-  { title: "Create Story with AI", url: "/create-story-ai", icon: Sparkles },
-  { title: "Search", url: "#", icon: Search },
-  { title: "Notifications", url: "#", icon: Bell },
-  { title: "Profile", url: "#", icon: UserRoundPen },
+  { title: "Trang chủ", url: "/", icon: Home },
+  { title: "Gói đăng kí", url: "#", icon: Inbox },
+  { title: "Tạo câu chuyện", url: "/create-story", icon: Plus },
+  { title: "Tạo câu chuyện cùng AI", url: "/create-story-ai", icon: Sparkles },
+  { title: "Tìm kiếm", url: "#", icon: Search },
+  { title: "Thông báo", url: "#", icon: Bell },
+  { title: "Trang cá nhân", url: "#", icon: UserRoundPen },
 ];
 
 export function UserSidebar() {
