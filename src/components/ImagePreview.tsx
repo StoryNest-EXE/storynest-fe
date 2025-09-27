@@ -22,7 +22,7 @@ export function ImagePreview({
           <img
             src={src}
             alt={alt}
-            className="w-full h-72 object-cover hover:scale-105 transition-transform duration-300 rounded-xl"
+            className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300 rounded-xl"
           />
         </div>
       </DialogTrigger>

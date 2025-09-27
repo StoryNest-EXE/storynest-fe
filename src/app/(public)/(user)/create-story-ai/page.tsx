@@ -1,6 +1,7 @@
 "use client";
 
 import { ImagePreview } from "@/components/ImagePreview";
+import { TagInput } from "@/components/TagInput";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,46 +10,49 @@ import {
   useGenerateAudioMuation,
   useGenerateImageMuation,
 } from "@/queries/media.queries";
-import { StoryAICard } from "@/types/story.type";
+import { useCreateStoryMutation } from "@/queries/story.queries";
+import { CreateStoryRequest, StoryAICard } from "@/types/story.type";
 import { Eye, ImageIcon, Mic, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 
 function CreateStoryAI() {
   // const [isAnonymous, setIsAnonymous] = useState(false);
   const [title, setTitle] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [cards, setCards] = useState<StoryAICard[]>([{ id: "1", content: "" }]);
-  const [isGeneratingVoice, setIsGeneratingVoice] = useState<string | null>(
-    null
+  const [generatingVoices, setGeneratingVoices] = useState<Set<string>>(
+    new Set()
   );
-  const [isGeneratingImage, setIsGeneratingImage] = useState<string | null>(
-    null
+  const [generatingImages, setGeneratingImages] = useState<Set<string>>(
+    new Set()
   );
   const generateVoiceMutation = useGenerateAudioMuation();
   const generateMediaMutation = useGenerateImageMuation();
+  const createStoryMutation = useCreateStoryMutation();
 
   const handleGenerateVoice = async (id: string, content: string) => {
-    setIsGeneratingVoice(id);
+    setGeneratingVoices((prev) => new Set(prev).add(id));
     try {
       const res = await generateVoiceMutation.mutateAsync(content);
-      console.log("res", res.data);
-      const audioUrl = "https://cdn.storynest.io.vn/" + res.data;
-
+      const audioUrl = res.data;
       setCards((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, audioUrl: audioUrl } : c))
+        prev.map((c) => (c.id === id ? { ...c, audioUrl } : c))
       );
-    } catch (err) {
-      console.error(err);
     } finally {
-      setIsGeneratingVoice(null);
+      setGeneratingVoices((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
   const handleGenerateMedia = async (id: string, content: string) => {
-    setIsGeneratingImage(id);
+    setGeneratingImages((prev) => new Set(prev).add(id));
     try {
       const res = await generateMediaMutation.mutateAsync(content);
       console.log("res", res.data);
-      const mediaUrl = "https://cdn.storynest.io.vn/" + res.data;
+      const mediaUrl = res.data;
 
       setCards((prev) =>
         prev.map((c) => (c.id === id ? { ...c, mediaUrl: mediaUrl } : c))
@@ -56,7 +60,11 @@ function CreateStoryAI() {
     } catch (err) {
       console.error(err);
     } finally {
-      setIsGeneratingVoice(null);
+      setGeneratingImages((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -69,7 +77,7 @@ function CreateStoryAI() {
   const addNewCard = () => {
     if (cards.length < 5) {
       const newCard: StoryAICard = {
-        id: (cards.length + 1).toString(),
+        id: crypto.randomUUID(),
         content: "",
       };
       setCards([...cards, newCard]);
@@ -80,6 +88,32 @@ function CreateStoryAI() {
     if (cards.length > 1) {
       setCards(cards.filter((card) => card.id !== id));
     }
+  };
+
+  const handlePublish = () => {
+    const fullContent = cards.map((c) => c.content).join("\n");
+
+    // Gom mediaUrls và audioUrls
+    const mediaUrls = cards
+      .map((c) => c.mediaUrl)
+      .filter((url): url is string => Boolean(url));
+
+    const audioUrls = cards
+      .map((c) => c.audioUrl)
+      .filter((url): url is string => Boolean(url));
+
+    const request: CreateStoryRequest = {
+      title,
+      content: fullContent,
+      coverImageUrl: "", // lấy ảnh đầu tiên làm cover
+      tags: tags,
+      privacyStatus: 0,
+      storyStatus: 1,
+      mediaUrls,
+      audioUrls,
+    };
+
+    createStoryMutation.mutate(request);
   };
 
   return (
@@ -119,7 +153,7 @@ function CreateStoryAI() {
     </Card> */}
 
           {/* Title Field */}
-          <div className="mb-6">
+          <div className="mb-2">
             <label className="text-sm text-gray-300">
               Title<span className="text-red-500 ml-1">*</span>
             </label>
@@ -129,6 +163,12 @@ function CreateStoryAI() {
               onChange={(e) => setTitle(e.target.value)}
               className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400 text-lg py-3"
             />
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-2 mb-4">
+            <label className="text-sm text-gray-400">Add tags</label>
+            <TagInput value={tags} onChange={setTags} />
           </div>
 
           {/* Story Cards */}
@@ -168,12 +208,12 @@ function CreateStoryAI() {
                   <Button
                     onClick={() => handleGenerateVoice(card.id, card.content)}
                     disabled={
-                      !card.content.trim() || isGeneratingVoice === card.id
+                      !card.content.trim() || generatingVoices.has(card.id)
                     }
                     className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-md"
                   >
                     <Mic className="w-4 h-4 mr-2" />
-                    {isGeneratingVoice === card.id
+                    {generatingVoices.has(card.id)
                       ? "Đang Tạo..."
                       : "Tạo Giọng Nói"}
                   </Button>
@@ -181,12 +221,12 @@ function CreateStoryAI() {
                   <Button
                     onClick={() => handleGenerateMedia(card.id, card.content)}
                     disabled={
-                      !card.content.trim() || isGeneratingImage === card.id
+                      !card.content.trim() || generatingImages.has(card.id)
                     }
                     className="flex-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:from-pink-400 hover:to-orange-400 shadow-md"
                   >
                     <ImageIcon className="w-4 h-4 mr-2" />
-                    {isGeneratingImage === card.id
+                    {generatingImages.has(card.id)
                       ? "Đang Tạo..."
                       : "Tạo Hình Ảnh"}
                   </Button>
@@ -196,16 +236,19 @@ function CreateStoryAI() {
                 <div className="flex flex-col items-center space-y-6">
                   {/* Audio chỉ render khi có audioUrl */}
                   {card.audioUrl && (
-                    <VoicePlayer className="w-full" audioUrl={card.audioUrl} />
+                    <VoicePlayer
+                      className="w-full"
+                      audioUrl={`https://cdn.storynest.io.vn/${card.audioUrl}`}
+                    />
                   )}
 
                   {/* Image chỉ render khi có imageUrl */}
                   {card.mediaUrl && (
                     <div className="w-full overflow-hidden rounded-2xl border border-slate-600/50 shadow-md">
                       <ImagePreview
-                        src={card.mediaUrl}
+                        src={`https://cdn.storynest.io.vn/${card.mediaUrl}`}
                         alt="Generated"
-                        className="w-full h-72 object-cover !object-[50%_30%]"
+                        className="w-full h-72 object-cover object-[50%_30%]"
                       />
                     </div>
                   )}
@@ -237,7 +280,10 @@ function CreateStoryAI() {
               Lưu Bản Nháp
             </Button>
 
-            <Button className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white">
+            <Button
+              className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white"
+              onClick={handlePublish}
+            >
               Xuất Bản Câu Chuyện
             </Button>
           </div>

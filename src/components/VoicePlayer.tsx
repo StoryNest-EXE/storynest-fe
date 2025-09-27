@@ -6,7 +6,7 @@ import clsx from "clsx"; // tiện cho merge class (có thể bỏ nếu không 
 
 interface VoicePlayerProps {
   audioUrl: string;
-  className?: string; // 👈 cho phép custom className
+  className?: string;
 }
 
 const VoicePlayer: React.FC<VoicePlayerProps> = ({ audioUrl, className }) => {
