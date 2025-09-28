@@ -38,7 +38,7 @@ import Image from "next/image";
 
 const items = [
   { title: "Trang chủ", url: "/", icon: Home },
-  { title: "Gói đăng kí", url: "#", icon: Inbox },
+  { title: "Gói đăng kí", url: "subcription", icon: Inbox },
   { title: "Tạo câu chuyện", url: "/create-story", icon: Plus },
   { title: "Tạo câu chuyện cùng AI", url: "/create-story-ai", icon: Sparkles },
   { title: "Tìm kiếm", url: "#", icon: Search },

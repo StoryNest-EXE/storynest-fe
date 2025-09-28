@@ -32,7 +32,7 @@ export default function PublicLayout({
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <SidebarProvider
         open={sidebarOpen}
         onOpenChange={handleSidebarOpenChange}
