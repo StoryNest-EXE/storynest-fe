@@ -13,7 +13,9 @@ import {
 import { useCreateStoryMutation } from "@/queries/story.queries";
 import { CreateStoryRequest, StoryAICard } from "@/types/story.type";
 import { Eye, ImageIcon, Mic, Plus, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 function CreateStoryAI() {
   // const [isAnonymous, setIsAnonymous] = useState(false);
@@ -26,9 +28,11 @@ function CreateStoryAI() {
   const [generatingImages, setGeneratingImages] = useState<Set<string>>(
     new Set()
   );
+  const router = useRouter();
   const generateVoiceMutation = useGenerateAudioMuation();
   const generateMediaMutation = useGenerateImageMuation();
   const createStoryMutation = useCreateStoryMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerateVoice = async (id: string, content: string) => {
     setGeneratingVoices((prev) => new Set(prev).add(id));
@@ -91,6 +95,7 @@ function CreateStoryAI() {
   };
 
   const handlePublish = () => {
+    setIsLoading(true);
     const fullContent = cards.map((c) => c.content).join("\n");
 
     // Gom mediaUrls và audioUrls
@@ -113,7 +118,16 @@ function CreateStoryAI() {
       audioUrls,
     };
 
-    createStoryMutation.mutate(request);
+    createStoryMutation.mutate(request, {
+      onSuccess: () => {
+        toast.success("Tạo bài viết thành công!");
+        setIsLoading(false);
+        router.push("/");
+      },
+      onError: () => {
+        setIsLoading(false);
+      },
+    });
   };
 
   return (
@@ -161,7 +175,8 @@ function CreateStoryAI() {
               placeholder="Nhập tiêu đề câu chuyện..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400 text-lg py-3"
+              className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-400 py-3 !text-xl font-semibold"
+              spellCheck={false}
             />
           </div>
 
@@ -280,17 +295,37 @@ function CreateStoryAI() {
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center pb-8">
             <Button
-              variant="outline"
-              className="px-8 py-3 border-gray-500 text-gray-300 hover:text-white hover:border-gray-400 bg-transparent"
-            >
-              Lưu Bản Nháp
-            </Button>
-
-            <Button
-              className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white"
+              className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
               onClick={handlePublish}
+              disabled={isLoading}
             >
-              Xuất Bản Câu Chuyện
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Đang xuất bản...
+                </>
+              ) : (
+                "Xuất Bản Câu Chuyện"
+              )}
             </Button>
           </div>
         </div>

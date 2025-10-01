@@ -21,12 +21,12 @@ import Strike from "@tiptap/extension-strike";
 // import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import { usePresignUploadMutation } from "@/queries/media.queries";
-import { toast } from "sonner";
 import { CreateStoryRequest } from "@/types/story.type";
 import { useCreateStoryMutation } from "@/queries/story.queries";
 import { PresignUploadRequest } from "@/types/media.type";
 import { useRouter } from "next/navigation";
 import FileUpload from "@/components/custom-ui/FileUpload/FileUpload";
+import { toast, Toaster } from "sonner";
 
 function CreateStory() {
   const [title, setTitle] = useState("");
@@ -152,11 +152,12 @@ function CreateStory() {
       mediaUrls: mediaKey,
     };
 
-    try {
-      const res = await createStoryMutation.mutateAsync(storyReq);
-      console.log("res", res);
-      router.push("/");
-    } catch (err) {}
+    createStoryMutation.mutate(storyReq, {
+      onSuccess: () => {
+        toast.success("Tạo bài viết thành công!");
+        router.push("/");
+      },
+    });
   };
   return (
     <div className="max-w-6xl mx-auto p-6">

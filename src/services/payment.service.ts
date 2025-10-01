@@ -6,7 +6,7 @@ export const getCheckout = async (plan: string) => {
 };
 
 export const getCancelPayment = async (orderCode: number) => {
-  const response = await https.post(
+  const response = await https.get(
     `/api/Payment/cancel?orderCode=${orderCode}`
   );
   return response.data.data;

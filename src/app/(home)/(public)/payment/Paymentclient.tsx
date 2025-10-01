@@ -12,7 +12,7 @@ import {
   useCancelPaymentMutation,
   useCheckoutQuery,
 } from "@/queries/payment.queries";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function PaymentCheckoutClient() {
   const searchParams = useSearchParams();
@@ -23,6 +23,7 @@ export default function PaymentCheckoutClient() {
   const { data: checkout, isLoading, error } = useCheckoutQuery(plan as string);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const cancelPaymentMutation = useCancelPaymentMutation();
+  const router = useRouter();
 
   useEffect(() => {
     if (!checkout?.expiredAt) return;
@@ -61,6 +62,7 @@ export default function PaymentCheckoutClient() {
 
   const handleCancelPayment = (orderCode: number) => {
     cancelPaymentMutation.mutate(orderCode);
+    router.push("/");
   };
 
   return (
@@ -284,7 +286,12 @@ export default function PaymentCheckoutClient() {
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock className="w-4 h-4" />
                   {timeLeft > 0 ? (
-                    <span>Hết hạn sau: {formatCountdown(timeLeft)}</span>
+                    <span>
+                      Hết hạn sau:{" "}
+                      <span className="text-green-400 text-2xl">
+                        {formatCountdown(timeLeft)}
+                      </span>
+                    </span>
                   ) : (
                     <span className="text-red-500 font-semibold">
                       Đã hết hạn
