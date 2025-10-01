@@ -35,6 +35,7 @@ import { Button } from "./ui/button";
 import { useLogoutMutation } from "@/queries/auth.queries";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
+import { getPlanIdFromLocalStorage } from "@/lib/localStorage";
 
 const items = [
   { title: "Trang chủ", url: "/", icon: Home },
@@ -50,6 +51,7 @@ export function UserSidebar() {
   const logoutMutation = useLogoutMutation();
   const { token, logout: authLogout } = useAuth();
   const { state } = useSidebar();
+  const planId = getPlanIdFromLocalStorage();
 
   const handleLogout = async () => {
     try {
@@ -60,6 +62,14 @@ export function UserSidebar() {
       console.error("Logout failed:", error);
     }
   };
+
+  const filteredItems = items.filter((item) => {
+    if (item.title === "Gói đăng kí" && planId !== null) {
+      return false; // ẩn đi
+    }
+    return true;
+  });
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex items-center">
@@ -84,7 +94,7 @@ export function UserSidebar() {
           <SidebarGroupContent>
             <TooltipProvider>
               <SidebarMenu className="gap-10 items-start group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                   <SidebarMenuItem key={item.title} className="w-full">
                     <Tooltip>
                       <TooltipTrigger asChild>

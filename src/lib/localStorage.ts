@@ -14,3 +14,19 @@ export const removeTokenFormLocalStorage = () => {
   isBrowser && localStorage.removeItem("accessToken");
   isBrowser && localStorage.removeItem("refreshToken");
 };
+
+export const getAvatarFromLocalStorage = () =>
+  isBrowser ? localStorage.getItem("avatar") : null;
+export const setAvatarToLocalStorage = (avatar: string) =>
+  isBrowser && localStorage.setItem("avatar", avatar);
+export const removeAvatarFromLocalStorage = () => {
+  isBrowser && localStorage.removeItem("avatar");
+};
+
+export const getPlanIdFromLocalStorage = () =>
+  isBrowser ? localStorage.getItem("planId") : null;
+export const setPlanIdToLocalStorage = (planId: number) =>
+  isBrowser && localStorage.setItem("planId", planId.toString());
+export const removePlanIdFromLocalStorage = () => {
+  isBrowser && localStorage.removeItem("planId");
+};

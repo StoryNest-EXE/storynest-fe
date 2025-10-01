@@ -11,8 +11,11 @@ import pricingTiers from "../subcription/data";
 import {
   useCancelPaymentMutation,
   useCheckoutQuery,
+  useCheckPaymentQuery,
 } from "@/queries/payment.queries";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function PaymentCheckoutClient() {
   const searchParams = useSearchParams();
@@ -20,10 +23,27 @@ export default function PaymentCheckoutClient() {
   const tier = pricingTiers.find((tier) => tier.value === plan);
   const [copied, setCopied] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"qr" | "bank">("qr");
-  const { data: checkout, isLoading, error } = useCheckoutQuery(plan as string);
+  const { data: checkout } = useCheckoutQuery(plan as string);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const cancelPaymentMutation = useCancelPaymentMutation();
   const router = useRouter();
+  const orderCode = checkout?.orderCode;
+  const { data: checkPayment } = useCheckPaymentQuery(orderCode ?? 0);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      queryClient.cancelQueries({ queryKey: ["checkPayment", orderCode] });
+    }, 10 * 60 * 1000); // 10 phút
+    return () => clearTimeout(timer);
+  }, [orderCode, queryClient]);
+
+  useEffect(() => {
+    if (checkPayment?.status === 200) {
+      toast.success("Thanh toán thành công");
+      router.push("/");
+    }
+  }, [checkPayment, router]);
 
   useEffect(() => {
     if (!checkout?.expiredAt) return;

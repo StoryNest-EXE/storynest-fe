@@ -17,3 +17,19 @@ export interface PaymentCheckoutResponse {
   checkoutUrl: string;
   qrCode: string;
 }
+
+export interface CheckPaymentResponse {
+  id: number;
+  userId: number;
+  user: string;
+  subscriptionId: number;
+  subscription: string;
+  amount: number;
+  currency: string;
+  provider: string;
+  providerTXN: string;
+  status: number;
+  paidAt: string;
+  createdAt: string;
+  updatedAt: string;
+}

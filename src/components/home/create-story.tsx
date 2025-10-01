@@ -3,14 +3,19 @@ import { Card } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { getAvatarFromLocalStorage } from "@/lib/localStorage";
 
 function CreateStory() {
   const router = useRouter();
+  const avatar = getAvatarFromLocalStorage();
   return (
     <Card>
       <div className="flex row">
         <Avatar className="ml-7">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage
+            src={"https://cdn.storynest.io.vn/" + avatar}
+            alt="@shadcn"
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <span

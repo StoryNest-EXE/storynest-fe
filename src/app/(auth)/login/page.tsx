@@ -23,6 +23,10 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { useLoginMutation } from "@/queries/auth.queries";
 import GoogleLoginButton from "../google-callback/google-login-button";
+import {
+  setAvatarToLocalStorage,
+  setPlanIdToLocalStorage,
+} from "@/lib/localStorage";
 
 const formSchema = z.object({
   usernameOrEmail: z.string().min(6, {
@@ -41,7 +45,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { mutateAsync: loginMutation, isPending } = useLoginMutation();
+  const { mutateAsync: loginMutation } = useLoginMutation();
   const { login } = useAuth();
   const router = useRouter();
 
@@ -70,6 +74,9 @@ const LoginPage = () => {
       setIsLoading(true);
       const response = await loginMutation(payload);
       login(response.data.accessToken);
+      setAvatarToLocalStorage(response.data.avatarUrl);
+      setPlanIdToLocalStorage(response.data.planId);
+      console.log("response ligin nè", response.data);
       router.push("/");
     } catch (err) {
       form.setError("root", {

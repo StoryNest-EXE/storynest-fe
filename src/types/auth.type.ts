@@ -12,6 +12,8 @@ export interface LoginData {
   username: string;
   accessToken: string;
   refreshToken: string;
+  avatarUrl: string;
+  planId: number;
 }
 
 export interface LoginResponse {

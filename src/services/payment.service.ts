@@ -1,4 +1,5 @@
 import https from "@/lib/axios";
+import { ApiResponse, CheckPaymentResponse } from "@/types/payment";
 
 export const getCheckout = async (plan: string) => {
   const response = await https.get(`/api/Payment/checkout?plan=${plan}`);
@@ -10,4 +11,11 @@ export const getCancelPayment = async (orderCode: number) => {
     `/api/Payment/cancel?orderCode=${orderCode}`
   );
   return response.data.data;
+};
+
+export const getCheckPayment = async (orderCode: number) => {
+  const response = await https.get<ApiResponse<CheckPaymentResponse>>(
+    `/api/Payment/check-update?orderCode=${orderCode}`
+  );
+  return response.data;
 };
