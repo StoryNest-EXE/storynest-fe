@@ -27,6 +27,7 @@ import { PresignUploadRequest } from "@/types/media.type";
 import { useRouter } from "next/navigation";
 import FileUpload from "@/components/custom-ui/FileUpload/FileUpload";
 import { toast, Toaster } from "sonner";
+import AnonymousComponent from "@/components/Anonymous";
 
 function CreateStory() {
   const [title, setTitle] = useState("");
@@ -38,6 +39,11 @@ function CreateStory() {
   const createStoryMutation = useCreateStoryMutation();
   const [mediaKey, setMediaKey] = useState<string[]>([]);
   const router = useRouter();
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const handleToggle = (value: boolean) => {
+    setIsAnonymous(value);
+  };
 
   const editor = useEditor({
     extensions: [
@@ -149,6 +155,7 @@ function CreateStory() {
       tags: tags,
       privacyStatus: 0,
       storyStatus: 1,
+      isAnonymous: isAnonymous,
       mediaUrls: mediaKey,
     };
 
@@ -159,6 +166,7 @@ function CreateStory() {
       },
     });
   };
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
@@ -175,6 +183,10 @@ function CreateStory() {
       <div className="flex gap-6">
         {/* Cột trái */}
         <div className="flex-1 space-y-5">
+          <AnonymousComponent
+            isAnonymous={isAnonymous}
+            onToggle={handleToggle}
+          />
           {/* Title */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">

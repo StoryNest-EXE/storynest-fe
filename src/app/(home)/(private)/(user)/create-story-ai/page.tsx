@@ -1,5 +1,6 @@
 "use client";
 
+import AnonymousComponent from "@/components/Anonymous";
 import { ImagePreview } from "@/components/ImagePreview";
 import { TagInput } from "@/components/TagInput";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,11 @@ function CreateStoryAI() {
   const generateMediaMutation = useGenerateImageMuation();
   const createStoryMutation = useCreateStoryMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const handleToggle = (value: boolean) => {
+    setIsAnonymous(value);
+  };
 
   const handleGenerateVoice = async (id: string, content: string) => {
     setGeneratingVoices((prev) => new Set(prev).add(id));
@@ -114,6 +120,7 @@ function CreateStoryAI() {
       tags: tags,
       privacyStatus: 0,
       storyStatus: 1,
+      isAnonymous: isAnonymous,
       mediaUrls,
       audioUrls,
     };
@@ -153,18 +160,10 @@ function CreateStoryAI() {
           </div>
 
           {/* Anonymous Posting */}
-          {/* <Card className="bg-gray-900/50 border-gray-700 p-6 mb-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Eye className="w-5 h-5 text-gray-400" />
-          <div>
-            <h3 className="text-white font-medium">Đăng Ẩn Danh</h3>
-            <p className="text-gray-400 text-sm">Bài đăng sẽ công khai với tên và hồ sơ của bạn được hiển thị.</p>
-          </div>
-        </div>
-        <Switch checked={isAnonymous} onCheckedChange={setIsAnonymous} className="data-[state=checked]:bg-white" />
-      </div>
-    </Card> */}
+          <AnonymousComponent
+            isAnonymous={isAnonymous}
+            onToggle={handleToggle}
+          />
 
           {/* Title Field */}
           <div className="mb-2">

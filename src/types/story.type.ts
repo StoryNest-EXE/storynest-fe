@@ -63,6 +63,7 @@ export interface CreateStoryRequest {
   tags: string[];
   privacyStatus: number;
   storyStatus: number;
+  isAnonymous: boolean;
   mediaUrls?: string[];
   audioUrls?: string[];
 }
