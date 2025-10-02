@@ -2,12 +2,15 @@
 
 import CreateStory from "@/components/home/create-story";
 import { PostCard } from "@/components/home/post-card";
-import { useStoriesQuery } from "@/queries/story.queries";
+import { useSearchStoriesQuery } from "@/queries/story.queries";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-export default function HomePage() {
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useStoriesQuery(5);
+    useSearchStoriesQuery(keyword, 5);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -23,7 +26,7 @@ export default function HomePage() {
       },
       { threshold: 1 }
     );
-    console.log("data ne1111", data);
+    console.log("data ne3333", data);
     observer.observe(loadMoreRef.current);
 
     return () => {
@@ -32,30 +35,30 @@ export default function HomePage() {
   }, [fetchNextPage, hasNextPage]);
 
   // Flatten data từ các page
-  const posts =
-    data?.pages.flatMap((page) =>
-      page.data.items.map((story) => ({
-        id: story.id,
-        user: {
-          name: story.title, // tạm map sang title làm user name
-          avatar: story.coverImageUrl || "/placeholder.svg",
-        },
-        timestamp: new Date(story.createdAt).toLocaleString(),
-        content: story.summary,
-        images: story.coverImageUrl ? [story.coverImageUrl] : [],
-        likes: Math.floor(Math.random() * 100), // giả likes (nếu API chưa có)
-        comments: Math.floor(Math.random() * 10), // giả comments (nếu API chưa có)
-      }))
-    ) ?? [];
+  //   const posts =
+  //     data?.pages.flatMap((page) =>
+  //       page.data.items.map((story) => ({
+  //         id: story.id,
+  //         user: {
+  //           name: story.title, // tạm map sang title làm user name
+  //           avatar: story.coverImageUrl || "/placeholder.svg",
+  //         },
+  //         timestamp: new Date(story.createdAt).toLocaleString(),
+  //         content: story.summary,
+  //         images: story.coverImageUrl ? [story.coverImageUrl] : [],
+  //         likes: Math.floor(Math.random() * 100), // giả likes (nếu API chưa có)
+  //         comments: Math.floor(Math.random() * 10), // giả comments (nếu API chưa có)
+  //       }))
+  //     ) ?? [];
 
   return (
     <div className="min-h-screen">
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        <CreateStory />
-        {data?.pages.flatMap((page) =>
-          page.data.items.map((story) => (
-            <PostCard key={story.id} story={story} />
-          ))
+        {data?.pages.flatMap(
+          (page) =>
+            page.data.stories?.map((story) => (
+              <PostCard key={story.id} story={story} />
+            )) ?? []
         )}
 
         <div

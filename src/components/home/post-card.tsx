@@ -87,7 +87,13 @@ export function PostCard({ story }: PostCardProps) {
                 {story.user.username}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {new Date(story.createdAt).toLocaleString()}
+                {new Intl.DateTimeFormat("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }).format(new Date(story.createdAt))}
               </p>
             </div>
           </div>

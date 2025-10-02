@@ -8,6 +8,16 @@ export interface StoryResponse {
   };
 }
 
+export interface SearchStoryResponse {
+  status: number;
+  message: string;
+  data: {
+    lastId: number;
+    hasMore: boolean;
+    stories: Story[];
+  };
+}
+
 export interface Story {
   id: number;
   title: string;

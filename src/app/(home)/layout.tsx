@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { UserSidebar } from "@/components/Sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SearchBar } from "@/components/SearchBar";
 
 export default function PublicLayout({
   children,
@@ -40,8 +41,9 @@ export default function PublicLayout({
         <UserSidebar />
         <SidebarInset className="">
           {/* Header hoặc đặt trigger ở đây */}
-          <header className="sticky top-0 z-50 not-even:flex items-center h-16 px-4 border-b bg-neutral-950">
-            <h1 className="flex-1 text-center font-semibold">For you</h1>
+          <header className="sticky top-0 z-50 not-even:flex justify-center h-16 px-4 border-b ">
+            {/* <h1 className="flex-1 text-center font-semibold">For you</h1> */}
+            <SearchBar />
           </header>
           <main className="flex-1 p-6">{children}</main>
         </SidebarInset>

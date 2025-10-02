@@ -2,13 +2,31 @@ import https from "@/lib/axios";
 import {
   CreateStoryRequest,
   CreateStoryResponse,
+  SearchStoryResponse,
   StoryResponse,
 } from "@/types/story.type";
+import { Console } from "console";
 
 export const getStories = async (limit: number, cursor?: string) => {
   const response = await https.get<StoryResponse>("/api/Story/get-stories", {
     params: { limit, cursor },
   });
+  return response.data;
+};
+
+export const getSearchStories = async (
+  keyword: string,
+  limit: number,
+  lastId?: number
+) => {
+  const response = await https.get<SearchStoryResponse>("/api/Story/search", {
+    params: {
+      keyword,
+      limit,
+      lastId,
+    },
+  });
+  console.log("data 123123123", response.data);
   return response.data;
 };
 

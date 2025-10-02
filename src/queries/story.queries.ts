@@ -1,4 +1,5 @@
 import {
+  getSearchStories,
   getStories,
   postCreateStory,
   postLike,
@@ -7,6 +8,7 @@ import {
 import {
   CreateStoryRequest,
   LikeResponse,
+  SearchStoryResponse,
   StoryResponse,
 } from "@/types/story.type";
 import {
@@ -24,6 +26,18 @@ export const useStoriesQuery = (limit: number) => {
     getNextPageParam: (lastPage) =>
       lastPage.data.hasMore ? lastPage.data.nextCursor : undefined,
     initialPageParam: undefined,
+  });
+};
+
+export const useSearchStoriesQuery = (keyword: string, limit: number) => {
+  return useInfiniteQuery<SearchStoryResponse>({
+    queryKey: ["searchStories", keyword, limit], // cache riêng theo keyword
+    queryFn: ({ pageParam }) =>
+      getSearchStories(keyword, limit, pageParam as number | undefined),
+    getNextPageParam: (lastPage) =>
+      lastPage.data.hasMore ? lastPage.data.lastId : undefined,
+    initialPageParam: undefined,
+    enabled: !!keyword,
   });
 };
 
