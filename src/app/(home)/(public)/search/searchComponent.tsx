@@ -25,7 +25,6 @@ export default function SearchComponent() {
       },
       { threshold: 1 }
     );
-    console.log("data ne3333", data);
     observer.observe(loadMoreRef.current);
 
     return () => {
@@ -66,6 +65,8 @@ export default function SearchComponent() {
         >
           {isFetchingNextPage
             ? "Đang tải thêm..."
+            : !data
+            ? "Đang tải..."
             : hasNextPage
             ? "Kéo xuống để tải thêm"
             : "Hết dữ liệu"}

@@ -1,4 +1,7 @@
 import {
+  deleteStory,
+  getMyAIStories,
+  getMyStories,
   getSearchStories,
   getStories,
   postCreateStory,
@@ -72,6 +75,44 @@ export const useUnlikeMutation = () => {
     mutationFn: (storyId: number) => postUnlike(storyId),
     onSuccess: (data: LikeResponse) => {
       console.log("Unlike success", data);
+    },
+  });
+};
+
+export const useMyStoriesQuery = (limit: number) => {
+  return useInfiniteQuery<StoryResponse>({
+    queryKey: ["my-stories", limit],
+    queryFn: ({ pageParam }) =>
+      getMyStories(limit, pageParam as string | undefined),
+    getNextPageParam: (lastPage) =>
+      lastPage.data.hasMore ? lastPage.data.nextCursor : undefined,
+    initialPageParam: undefined,
+  });
+};
+
+export const useMyAIStoriesQuery = (limit: number) => {
+  return useInfiniteQuery<StoryResponse>({
+    queryKey: ["my-ai-stories", limit],
+    queryFn: ({ pageParam }) =>
+      getMyAIStories(limit, pageParam as string | undefined),
+    getNextPageParam: (lastPage) =>
+      lastPage.data.hasMore ? lastPage.data.nextCursor : undefined,
+    initialPageParam: undefined,
+  });
+};
+
+export const useDeleteStoryMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (storyId: number) => deleteStory(storyId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-stories"] });
+      queryClient.invalidateQueries({ queryKey: ["my-ai-stories"] });
+      toast.success("Xóa thành công!");
+    },
+    onError: (error) => {
+      toast.error("Xóa thất bại");
+      console.log("Xóa thất bại", error);
     },
   });
 };

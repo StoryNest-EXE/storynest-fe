@@ -16,7 +16,6 @@ import {
 import { Badge } from "../ui/badge";
 import { useLikeMutation, useUnlikeMutation } from "@/queries/story.queries";
 import { toast } from "sonner";
-import Link from "next/link";
 import VoicePlayer from "../VoicePlayer";
 
 interface PostCardProps {

@@ -18,7 +18,6 @@ import {
   Inbox,
   Plus,
   Sparkles,
-  Search,
   Bell,
   UserRoundPen,
   LogOut,
@@ -36,22 +35,26 @@ import { useLogoutMutation } from "@/queries/auth.queries";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import { getPlanIdFromLocalStorage } from "@/lib/localStorage";
+import { useEffect, useState } from "react";
 
 const items = [
   { title: "Trang chủ", url: "/", icon: Home },
   { title: "Gói đăng kí", url: "subcription", icon: Inbox },
   { title: "Tạo câu chuyện", url: "/create-story", icon: Plus },
   { title: "Tạo câu chuyện cùng AI", url: "/create-story-ai", icon: Sparkles },
-  { title: "Tìm kiếm", url: "#", icon: Search },
   { title: "Thông báo", url: "#", icon: Bell },
-  { title: "Trang cá nhân", url: "#", icon: UserRoundPen },
+  { title: "Trang cá nhân", url: "/profile", icon: UserRoundPen },
 ];
 
 export function UserSidebar() {
   const logoutMutation = useLogoutMutation();
   const { token, logout: authLogout } = useAuth();
   const { state } = useSidebar();
-  const planId = getPlanIdFromLocalStorage();
+  const [planId, setPlanId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPlanId(getPlanIdFromLocalStorage());
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -95,22 +98,22 @@ export function UserSidebar() {
             <TooltipProvider>
               <SidebarMenu className="gap-10 items-start group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
                 {filteredItems.map((item) => (
-                  <SidebarMenuItem key={item.title} className="w-full">
+                  <SidebarMenuItem key={item.title} className="w-full h-full">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <SidebarMenuButton asChild className="w-full">
+                        <SidebarMenuButton asChild className="w-full h-full">
                           <a
                             href={item.url}
                             className="flex items-center gap-2 w-full px-2 py-2 rounded-md justify-start 
                               group-data-[collapsible=icon]:justify-center"
                           >
                             <item.icon
-                              className="h-5 w-5 group-data-[collapsible=icon]:h-7 
+                              className="!h-7 !w-7 group-data-[collapsible=icon]:h-7 
                                 group-data-[collapsible=icon]:w-7 transition-all
                                 !shrink-0 !size-auto"
                             />
                             {/* chỉ hiện khi chưa collapsed */}
-                            <span className="group-data-[collapsible=icon]:hidden">
+                            <span className="ml-5 group-data-[collapsible=icon]:hidden">
                               {item.title}
                             </span>
                           </a>

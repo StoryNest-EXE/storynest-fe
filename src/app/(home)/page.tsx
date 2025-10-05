@@ -23,30 +23,12 @@ export default function HomePage() {
       },
       { threshold: 1 }
     );
-    console.log("data ne1111", data);
     observer.observe(loadMoreRef.current);
-
+    console.log("data nè", data);
     return () => {
       if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
     };
   }, [fetchNextPage, hasNextPage]);
-
-  // Flatten data từ các page
-  const posts =
-    data?.pages.flatMap((page) =>
-      page.data.items.map((story) => ({
-        id: story.id,
-        user: {
-          name: story.title, // tạm map sang title làm user name
-          avatar: story.coverImageUrl || "/placeholder.svg",
-        },
-        timestamp: new Date(story.createdAt).toLocaleString(),
-        content: story.summary,
-        images: story.coverImageUrl ? [story.coverImageUrl] : [],
-        likes: Math.floor(Math.random() * 100), // giả likes (nếu API chưa có)
-        comments: Math.floor(Math.random() * 10), // giả comments (nếu API chưa có)
-      }))
-    ) ?? [];
 
   return (
     <div className="min-h-screen">
@@ -64,6 +46,8 @@ export default function HomePage() {
         >
           {isFetchingNextPage
             ? "Đang tải thêm..."
+            : !data // chưa có data -> đang load lần đầu
+            ? "Đang tải..."
             : hasNextPage
             ? "Kéo xuống để tải thêm"
             : "Hết dữ liệu"}

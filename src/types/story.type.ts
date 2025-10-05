@@ -19,6 +19,7 @@ export interface SearchStoryResponse {
 }
 
 export interface Story {
+  isAI: boolean;
   id: number;
   title: string;
   content: string;
@@ -26,6 +27,7 @@ export interface Story {
   slug: string;
   coverImageUrl: string;
   createdAt: string;
+  lastUpdatedAt: string;
   publishedAt: string;
   isLiked: boolean;
   likeCount: number;

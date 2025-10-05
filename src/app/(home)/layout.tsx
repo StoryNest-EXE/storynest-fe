@@ -41,7 +41,7 @@ export default function PublicLayout({
         <UserSidebar />
         <SidebarInset className="">
           {/* Header hoặc đặt trigger ở đây */}
-          <header className="sticky top-0 z-50 not-even:flex justify-center h-16 px-4 border-b ">
+          <header className="sticky top-0 z-50 not-even:flex justify-center h-16 px-4 border-b bg-sidebar  ">
             {/* <h1 className="flex-1 text-center font-semibold">For you</h1> */}
             <SearchBar />
           </header>
