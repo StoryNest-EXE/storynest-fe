@@ -97,3 +97,11 @@ export interface StoryAICard {
   mediaUrl?: string;
   audioUrl?: string;
 }
+
+export type StoryFormData = {
+  title: string;
+  tags: string[];
+  content: string;
+  mediaList?: { key: string; url: string }[];
+  isAnonymous: boolean;
+};

@@ -13,7 +13,7 @@ export const usePresignUploadMutation = () => {
     mutationFn: (data: PresignUploadRequest) => postPresignUpload(data),
     onSuccess: (data) => {
       console.log("Upload image success", data);
-      toast.success("Đăng Story thành công");
+      toast.success("Upload thành công");
     },
     onError: (error) => {
       console.log("Upload image error", error);
