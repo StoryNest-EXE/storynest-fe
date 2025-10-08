@@ -30,15 +30,28 @@ export interface Story {
   lastUpdatedAt: string;
   publishedAt: string;
   isLiked: boolean;
+  isAnonymous: boolean;
   likeCount: number;
   commentCount: number;
-  privacyStatus: number;
-  storyStatus: number;
+  privacyStatus: PrivacyStatus;
+  storyStatus: StoryStatus;
   user: StoryUser;
   media: StoryMedia[];
   tags: StoryTag[];
 }
 
+export enum PrivacyStatus {
+  Public = 0,
+  Private = 1,
+  Unlisted = 2,
+}
+
+export enum StoryStatus {
+  Draft = 0,
+  Published = 1,
+  Archived = 2,
+  Deleted = 3,
+}
 export interface StoryUser {
   id: number;
   username: string;
@@ -102,6 +115,26 @@ export type StoryFormData = {
   title: string;
   tags: string[];
   content: string;
+  privacyStatus: number;
+  storyStatus: number;
   mediaList?: { key: string; url: string }[];
   isAnonymous: boolean;
+};
+
+export type MyDetailStory = {
+  status: number;
+  message: string;
+  data: Story;
+};
+
+export type UpdateStoryRequest = {
+  title: string;
+  content: string;
+  coverImageUrl: string;
+  tags: string[];
+  privacyStatus: number;
+  storyStatus: number;
+  isAnonymous: boolean;
+  mediaUrls: string[];
+  audioUrls: string[];
 };

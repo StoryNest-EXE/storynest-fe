@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import FileUpload from "@/components/custom-ui/FileUpload/FileUpload";
 import AnonymousComponent from "@/components/Anonymous";
 import { usePresignUploadMutation } from "@/queries/media.queries";
-import { StoryFormData } from "@/types/story.type";
+import { PrivacyStatus, StoryFormData, StoryStatus } from "@/types/story.type";
 
 type StoryFormProps = {
   onSubmit: (data: StoryFormData) => Promise<void> | void;
@@ -35,7 +35,12 @@ type PendingUpload = {
 };
 
 export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
+  const [isFocused, setIsFocused] = useState(false);
   const [title, setTitle] = useState(initialData?.title || "");
+  const [privacyStatus, setPrivacyStatus] = useState<PrivacyStatus>(0);
+  const [storyStatus, setStoryStatus] = useState<StoryStatus>(
+    StoryStatus.Published
+  );
   const [tags, setTags] = useState<string[]>(initialData?.tags || []);
   const [isAnonymous, setIsAnonymous] = useState(
     initialData?.isAnonymous ?? false
@@ -65,6 +70,8 @@ export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
           "min-h-[200px] outline-none p-3 text-white placeholder:text-slate-400",
       },
     },
+    onFocus: () => setIsFocused(true),
+    onBlur: () => setIsFocused(false),
     immediatelyRender: false,
   });
 
@@ -158,10 +165,14 @@ export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
       return;
     }
 
+    setStoryStatus(StoryStatus.Published);
+
     const content = editor?.getHTML() || "";
     onSubmit({
       title,
       tags,
+      privacyStatus,
+      storyStatus,
       content,
       mediaList,
       isAnonymous,

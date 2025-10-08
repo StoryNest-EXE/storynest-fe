@@ -4,6 +4,7 @@ import {
   CreateStoryResponse,
   SearchStoryResponse,
   StoryResponse,
+  UpdateStoryRequest,
 } from "@/types/story.type";
 
 export const getStories = async (limit: number, cursor?: string) => {
@@ -66,5 +67,20 @@ export const getMyAIStories = async (limit: number, cursor?: string) => {
 
 export const deleteStory = async (storyId: number) => {
   const response = await https.delete(`/api/Story/delete/${storyId}`);
+  return response.data;
+};
+
+export const getMyDetailStory = async (id?: number, slug?: string) => {
+  const response = await https.get("/api/Story/get-by-id-or-slug-owner", {
+    params: { id, slug },
+  });
+  return response.data;
+};
+
+export const putUpdateStory = async (
+  storyId: number,
+  req: UpdateStoryRequest
+) => {
+  const response = await https.put(`/api/Story/update/${storyId}`, req);
   return response.data;
 };

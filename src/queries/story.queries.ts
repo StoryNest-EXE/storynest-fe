@@ -1,22 +1,27 @@
 import {
   deleteStory,
   getMyAIStories,
+  getMyDetailStory,
   getMyStories,
   getSearchStories,
   getStories,
   postCreateStory,
   postLike,
   postUnlike,
+  putUpdateStory,
 } from "@/services/story.service";
 import {
   CreateStoryRequest,
   LikeResponse,
+  MyDetailStory,
   SearchStoryResponse,
   StoryResponse,
+  UpdateStoryRequest,
 } from "@/types/story.type";
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -113,6 +118,37 @@ export const useDeleteStoryMutation = () => {
     onError: (error) => {
       toast.error("Xóa thất bại");
       console.log("Xóa thất bại", error);
+    },
+  });
+};
+
+export const useMyDetailStoryQuery = (id?: number, slug?: string) => {
+  return useQuery<MyDetailStory>({
+    queryKey: ["my-detail-story"],
+    queryFn: () => getMyDetailStory(id, slug),
+    enabled: !!id || !!slug,
+  });
+};
+
+export const useUpdateStoryMutation = (storyId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UpdateStoryRequest) => putUpdateStory(storyId, data),
+    onSuccess: async (data) => {
+      await queryClient.refetchQueries({
+        queryKey: ["my-stories"],
+        exact: false,
+      });
+      await queryClient.refetchQueries({
+        queryKey: ["my-ai-stories"],
+        exact: false,
+      });
+      console.log("Data response: ", data);
+      toast.success("Cập nhật câu chuyện thành công");
+    },
+    onError: (error) => {
+      console.log("Lỗi nè: ", error);
+      toast.error("Cập nhật thất bại");
     },
   });
 };

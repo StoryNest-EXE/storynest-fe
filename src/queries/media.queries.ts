@@ -6,15 +6,11 @@ import {
 } from "@/services/media.service";
 import { ConfirmUploadRequest, PresignUploadRequest } from "@/types/media.type";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 export const usePresignUploadMutation = () => {
   return useMutation({
     mutationFn: (data: PresignUploadRequest) => postPresignUpload(data),
-    onSuccess: (data) => {
-      console.log("Upload image success", data);
-      toast.success("Upload thành công");
-    },
+
     onError: (error) => {
       console.log("Upload image error", error);
     },
