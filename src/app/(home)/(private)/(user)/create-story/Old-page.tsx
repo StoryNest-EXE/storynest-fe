@@ -314,10 +314,10 @@ function CreateStory() {
         </div>
 
         {/* Cột phải */}
-        <div className="w-72">
+        {/* <div className="w-72">
           <h2 className="text-sm text-gray-400 mb-2">Đăng ảnh ở đây</h2>
           <FileUpload onUpload={handleUploadImages} allowMultiple={true} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
