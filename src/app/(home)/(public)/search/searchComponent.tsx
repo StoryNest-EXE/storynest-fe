@@ -1,6 +1,7 @@
 "use client";
 
 import { PostCard } from "@/components/home/post-card";
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 import { useSearchStoriesQuery } from "@/queries/story.queries";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -63,13 +64,15 @@ export default function SearchComponent() {
           ref={loadMoreRef}
           className="h-12 flex justify-center items-center text-muted-foreground"
         >
-          {isFetchingNextPage
-            ? "Đang tải thêm..."
-            : !data
-            ? "Đang tải..."
-            : hasNextPage
-            ? "Kéo xuống để tải thêm"
-            : "Hết dữ liệu"}
+          {isFetchingNextPage ? (
+            <StoryNestLoader />
+          ) : !data ? (
+            <StoryNestLoader />
+          ) : hasNextPage ? (
+            <StoryNestLoader />
+          ) : (
+            "Hết dữ liệu"
+          )}
         </div>
       </main>
     </div>

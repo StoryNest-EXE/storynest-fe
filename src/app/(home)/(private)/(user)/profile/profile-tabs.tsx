@@ -6,6 +6,7 @@ import {
   useMyAIStoriesQuery,
   useMyStoriesQuery,
 } from "@/queries/story.queries";
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 
 const tabs = ["Story", "Replies", "Media", "Story AI"];
 
@@ -65,11 +66,13 @@ export function ProfileTabs() {
           ref={loadMoreRef}
           className="h-12 flex justify-center items-center text-muted-foreground"
         >
-          {selectedQuery.isFetchingNextPage
-            ? "Đang tải thêm..."
-            : selectedQuery.hasNextPage
-            ? "Kéo xuống để tải thêm"
-            : "Hết dữ liệu"}
+          {selectedQuery.isFetchingNextPage ? (
+            <StoryNestLoader />
+          ) : selectedQuery.hasNextPage ? (
+            <StoryNestLoader />
+          ) : (
+            "Hết dữ liệu"
+          )}
         </div>
       </>
     );

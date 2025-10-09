@@ -17,6 +17,7 @@ import { Badge } from "../ui/badge";
 import { useLikeMutation, useUnlikeMutation } from "@/queries/story.queries";
 import { toast } from "sonner";
 import VoicePlayer from "../VoicePlayer";
+import { useRouter } from "next/navigation";
 
 interface PostCardProps {
   story: Story;
@@ -30,6 +31,7 @@ export function PostCard({ story }: PostCardProps) {
   const unlikeMutation = useUnlikeMutation();
   const audio = story.media.find((m) => m.mediaType === "Audio");
   const images = story.media.filter((m) => m.mediaType === "Image");
+  const router = useRouter();
 
   const handleLike = () => {
     const prevLiked = isLiked;
@@ -64,6 +66,10 @@ export function PostCard({ story }: PostCardProps) {
     if (story.summary) {
       setShowFullContent(true);
     }
+  };
+
+  const handleComment = (storyId: number) => {
+    router.push(`/detail-story/${storyId}`);
   };
 
   return (
@@ -125,7 +131,7 @@ export function PostCard({ story }: PostCardProps) {
           </h1>
         )}
 
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <div
             className="text-card-foreground leading-relaxed"
             dangerouslySetInnerHTML={{ __html: story.summary }}
@@ -136,8 +142,8 @@ export function PostCard({ story }: PostCardProps) {
             // onClick={handleReadMore}
           >
             xem thêm
-          </Button> */}
-        </div>
+          </Button>
+        </div> */}
 
         {/* Cho phép xem full ở trang home luôn  */}
         {story.summary && !showFullContent ? (
@@ -238,6 +244,7 @@ export function PostCard({ story }: PostCardProps) {
           variant="ghost"
           size="sm"
           className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
+          onClick={() => handleComment(story.id)}
         >
           <MessageCircle className="h-5 w-5" />
           <span>{story.commentCount}</span>

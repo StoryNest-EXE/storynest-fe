@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
@@ -24,5 +25,9 @@ export default function GoogleCallbackPage() {
     }
   }, [login, router]);
 
-  return <p>Đang xử lý đăng nhập Google...</p>;
+  return (
+    <div className="mt-3">
+      <StoryNestLoader />
+    </div>
+  );
 }

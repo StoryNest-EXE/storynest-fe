@@ -8,6 +8,7 @@ import {
 } from "@/queries/story.queries";
 import type { StoryFormData, UpdateStoryRequest } from "@/types/story.type";
 import { toast } from "sonner";
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 
 export default function UpdateStoryPage() {
   const params = useParams();
@@ -19,7 +20,7 @@ export default function UpdateStoryPage() {
 
   // Nếu đang load
   if (isLoading) {
-    return <p className="p-6 text-gray-500">Đang tải dữ liệu...</p>;
+    return <StoryNestLoader />;
   }
 
   function extractKeyFromUrl(url: string) {

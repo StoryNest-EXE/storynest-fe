@@ -2,6 +2,7 @@
 
 import CreateStory from "@/components/home/create-story";
 import { PostCard } from "@/components/home/post-card";
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 import { useStoriesQuery } from "@/queries/story.queries";
 import { useEffect, useRef } from "react";
 
@@ -44,13 +45,15 @@ export default function HomePage() {
           ref={loadMoreRef}
           className="h-12 flex justify-center items-center text-muted-foreground"
         >
-          {isFetchingNextPage
-            ? "Đang tải thêm..."
-            : !data // chưa có data -> đang load lần đầu
-            ? "Đang tải..."
-            : hasNextPage
-            ? "Kéo xuống để tải thêm"
-            : "Hết dữ liệu"}
+          {isFetchingNextPage ? (
+            <StoryNestLoader />
+          ) : !data ? (
+            <StoryNestLoader />
+          ) : hasNextPage ? (
+            <StoryNestLoader />
+          ) : (
+            "Hết dữ liệu"
+          )}
         </div>
       </main>
     </div>
