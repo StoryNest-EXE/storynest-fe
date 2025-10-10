@@ -4,13 +4,16 @@ import { useCreateStoryMutation } from "@/queries/story.queries";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import StoryForm from "@/components/StoryForm";
-import { CreateStoryRequest, StoryFormData } from "@/types/story.type";
+import { StoryFormData } from "@/types/story.type";
+import { useState } from "react";
 
 export default function CreateStoryPage() {
   const createStoryMutation = useCreateStoryMutation();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleCreate = async (data: StoryFormData) => {
+    setIsSubmitting(true);
     try {
       await createStoryMutation.mutateAsync({
         title: data.title,
@@ -26,12 +29,13 @@ export default function CreateStoryPage() {
       router.push("/");
     } catch {
       toast.error("Tạo bài viết thất bại!");
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <StoryForm onSubmit={handleCreate} />
+      <StoryForm onSubmit={handleCreate} isSubmitting={isSubmitting} />
     </div>
   );
 }

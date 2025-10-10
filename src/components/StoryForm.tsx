@@ -26,6 +26,7 @@ import { PrivacyStatus, StoryFormData, StoryStatus } from "@/types/story.type";
 type StoryFormProps = {
   onSubmit: (data: StoryFormData) => Promise<void> | void;
   initialData?: Partial<StoryFormData>; // dùng cho Update
+  isSubmitting?: boolean;
 };
 
 type PendingUpload = {
@@ -34,7 +35,11 @@ type PendingUpload = {
   controller: AbortController;
 };
 
-export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
+export default function StoryForm({
+  onSubmit,
+  initialData,
+  isSubmitting,
+}: StoryFormProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [title, setTitle] = useState(initialData?.title || "");
   const [privacyStatus, setPrivacyStatus] = useState<PrivacyStatus>(0);
@@ -165,6 +170,8 @@ export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
       return;
     }
 
+    setIsSubmitDisabled(true);
+
     setStoryStatus(StoryStatus.Published);
 
     const content = editor?.getHTML() || "";
@@ -177,6 +184,8 @@ export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
       mediaList,
       isAnonymous,
     });
+
+    setIsSubmitDisabled(false);
   };
 
   if (!editor) return null;
@@ -272,8 +281,11 @@ export default function StoryForm({ onSubmit, initialData }: StoryFormProps) {
           </div>
 
           <div className="flex justify-end">
-            <Button onClick={handleSubmit} disabled={isSubmitDisabled}>
-              Đăng bài
+            <Button
+              onClick={handleSubmit}
+              disabled={isSubmitting || isSubmitDisabled}
+            >
+              {isSubmitting ? "Đang đăng..." : "Đăng bài"}
             </Button>
           </div>
         </div>
