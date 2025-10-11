@@ -15,6 +15,7 @@ import {
   removeTokenFormLocalStorage,
   removeAvatarFromLocalStorage,
   removePlanIdFromLocalStorage,
+  removePlanNameFromLocalStorage,
 } from "@/lib/localStorage";
 import { TokenPayload } from "@/types/jwt.type";
 import { useRefreshToken } from "@/lib/useRefreshToken";
@@ -119,6 +120,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     removeTokenFormLocalStorage();
     removeAvatarFromLocalStorage();
     removePlanIdFromLocalStorage();
+    removePlanNameFromLocalStorage();
     setAccessToken(undefined);
     setToken(undefined);
     clearRefreshTimer();

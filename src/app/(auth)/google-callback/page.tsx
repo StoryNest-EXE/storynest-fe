@@ -13,6 +13,8 @@ export default function GoogleCallbackPage() {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
     const avatar = params.get("avatar");
+    const planId = params.get("planId");
+    const planName = params.get("planName");
 
     if (token) {
       login(token);
@@ -21,7 +23,19 @@ export default function GoogleCallbackPage() {
         localStorage.setItem("avatar", avatar);
       }
 
-      router.push("/");
+      if (planId) {
+        localStorage.setItem("plainId", planId);
+      } else {
+        localStorage.setItem("planId", "null");
+      }
+
+      if (planName) {
+        localStorage.setItem("planName", planName);
+      } else {
+        localStorage.setItem("planName", "null");
+      }
+
+      // router.push("/");
     }
   }, [login, router]);
 
