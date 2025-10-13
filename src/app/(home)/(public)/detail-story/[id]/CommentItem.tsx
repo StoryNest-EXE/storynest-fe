@@ -8,9 +8,10 @@ import { MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgoVi } from "@/helper/format-time";
 import { useGetCommentMutation } from "@/queries/story.queries";
+import { Comment } from "@/types/story.type";
 
 interface CommentItemProps {
-  comment: any;
+  comment: Comment;
   storyId: number;
   hasReply?: boolean;
 }
