@@ -121,7 +121,7 @@ export type StoryFormData = {
   isAnonymous: boolean;
 };
 
-export type MyDetailStory = {
+export type DetailStory = {
   status: number;
   message: string;
   data: Story;
@@ -138,3 +138,31 @@ export type UpdateStoryRequest = {
   mediaUrls: string[];
   audioUrls: string[];
 };
+
+export interface CommentUser {
+  id: number;
+  username: string;
+  avatarUrl: string;
+}
+
+export interface Comment {
+  id: number;
+  storyId: number;
+  userId: number;
+  parentCommentId: number | null;
+  content: string;
+  commentStatus: number;
+  createdAt: string;
+  updatedAt: string | null;
+  user: CommentUser;
+  repliesCount: number;
+  hasReplies: boolean;
+  replies?: Comment[];
+  length: 10;
+}
+
+export interface CommentResponse {
+  status: number;
+  message: string;
+  data: Comment[];
+}

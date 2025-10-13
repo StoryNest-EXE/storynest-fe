@@ -1,5 +1,7 @@
 import {
   deleteStory,
+  getComment,
+  getDetailStory,
   getMyAIStories,
   getMyDetailStory,
   getMyStories,
@@ -11,9 +13,10 @@ import {
   putUpdateStory,
 } from "@/services/story.service";
 import {
+  CommentResponse,
   CreateStoryRequest,
+  DetailStory,
   LikeResponse,
-  MyDetailStory,
   SearchStoryResponse,
   StoryResponse,
   UpdateStoryRequest,
@@ -25,6 +28,14 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+interface CommentQueryParams {
+  id: number;
+  limit: number;
+  offset?: number;
+  parentId?: string;
+  enabled?: boolean;
+}
 
 export const useStoriesQuery = (limit: number) => {
   return useInfiniteQuery<StoryResponse>({
@@ -123,7 +134,7 @@ export const useDeleteStoryMutation = () => {
 };
 
 export const useMyDetailStoryQuery = (id?: number, slug?: string) => {
-  return useQuery<MyDetailStory>({
+  return useQuery<DetailStory>({
     queryKey: ["my-detail-story"],
     queryFn: () => getMyDetailStory(id, slug),
     enabled: !!id || !!slug,
@@ -150,5 +161,32 @@ export const useUpdateStoryMutation = (storyId: number) => {
       console.log("Lỗi nè: ", error);
       toast.error("Cập nhật thất bại");
     },
+  });
+};
+
+export const useDetailStoryQuery = (id?: string, slug?: string) => {
+  return useQuery<DetailStory>({
+    queryKey: ["detail-story"],
+    queryFn: () => getDetailStory(id, slug),
+    enabled: !!id || !!slug,
+  });
+};
+
+export const useCommentQuery = ({
+  id,
+  limit,
+  offset = 0,
+  parentId,
+}: CommentQueryParams) => {
+  return useQuery<CommentResponse>({
+    queryKey: ["get-comments", id, limit, offset, parentId],
+    queryFn: () => getComment(id, limit, offset, parentId),
+  });
+};
+
+export const useGetCommentMutation = () => {
+  return useMutation({
+    mutationFn: ({ id, limit, offset = 0, parentId }: CommentQueryParams) =>
+      getComment(id, limit, offset, parentId),
   });
 };

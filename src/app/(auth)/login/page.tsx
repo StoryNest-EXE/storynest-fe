@@ -26,6 +26,7 @@ import GoogleLoginButton from "../google-callback/google-login-button";
 import {
   setAvatarToLocalStorage,
   setPlanIdToLocalStorage,
+  setPlanNameFromLocalStorage,
 } from "@/lib/localStorage";
 
 const formSchema = z.object({
@@ -73,9 +74,19 @@ const LoginPage = () => {
       };
       setIsLoading(true);
       const response = await loginMutation(payload);
+      console.log("login data: ", response.data);
       login(response.data.accessToken);
       setAvatarToLocalStorage(response.data.avatarUrl);
-      setPlanIdToLocalStorage(response.data.planId);
+      if (response.data.planId === null) {
+        setPlanIdToLocalStorage(1);
+      } else {
+        setPlanIdToLocalStorage(response.data.planId);
+      }
+      if (response.data.planName === null) {
+        setPlanNameFromLocalStorage("");
+      } else {
+        setPlanNameFromLocalStorage(response.data.planName);
+      }
       console.log("response ligin nè", response.data);
       router.push("/");
     } catch (err) {

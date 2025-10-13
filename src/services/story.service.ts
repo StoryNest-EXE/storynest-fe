@@ -84,3 +84,31 @@ export const putUpdateStory = async (
   const response = await https.put(`/api/Story/update/${storyId}`, req);
   return response.data;
 };
+
+export const getDetailStory = async (id?: string, slug?: string) => {
+  const response = await https.get("/api/Story/get-by-id-or-slug", {
+    params: { id, slug },
+  });
+  return response.data;
+};
+
+export const getComment = async (
+  id: number,
+  limit: number,
+  offset: number,
+  parentId?: string
+) => {
+  const params = new URLSearchParams({
+    limit: limit.toString(),
+    offset: offset.toString(),
+  });
+
+  if (parentId) {
+    params.append("parentId", parentId);
+  }
+
+  const response = await https.get(
+    `/api/Comment/all-comment/${id}?${params.toString()}`
+  );
+  return response.data;
+};
