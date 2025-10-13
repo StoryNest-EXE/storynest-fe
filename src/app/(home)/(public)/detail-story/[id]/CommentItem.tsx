@@ -22,7 +22,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showReplies, setShowReplies] = useState(false);
-  const [repliesData, setRepliesData] = useState<any[]>([]);
+  const [repliesData, setRepliesData] = useState<Comment[]>([]);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
   const [isErrorReplies, setIsErrorReplies] = useState(false);
 

@@ -158,7 +158,6 @@ export interface Comment {
   repliesCount: number;
   hasReplies: boolean;
   replies?: Comment[];
-  length: 10;
 }
 
 export interface CommentResponse {

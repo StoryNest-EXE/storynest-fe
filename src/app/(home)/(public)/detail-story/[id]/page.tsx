@@ -231,7 +231,10 @@ export default function StoryDetailPage() {
         </Card>
 
         <Card className="bg-card border-border p-6 mt-4">
-          <CommentSection storyId={detailStory?.data.id || 0} />
+          <CommentSection
+            storyId={detailStory?.data.id || 0}
+            commemtCount={Number(detailStory?.data.commentCount)}
+          />
         </Card>
       </div>
     </div>

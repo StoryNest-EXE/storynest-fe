@@ -9,9 +9,10 @@ import { CommentItem } from "./CommentItem";
 
 interface CommentSectionProps {
   storyId: number;
+  commemtCount: number;
 }
 
-export function CommentSection({ storyId }: CommentSectionProps) {
+export function CommentSection({ storyId, commemtCount }: CommentSectionProps) {
   const { data: comments } = useCommentQuery({
     id: storyId,
     limit: 5,
@@ -54,7 +55,7 @@ export function CommentSection({ storyId }: CommentSectionProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Bình luận ({length})</h3>
+      <h3 className="text-lg font-semibold">Bình luận ({commemtCount})</h3>
 
       {/* Ô nhập bình luận */}
       <div className="space-y-2">
@@ -77,7 +78,7 @@ export function CommentSection({ storyId }: CommentSectionProps) {
 
       {/* Danh sách bình luận */}
       <div className="space-y-3">
-        {length === 0 ? (
+        {commemtCount === 0 ? (
           <p className="text-center text-muted-foreground py-6 text-sm">
             Chưa có bình luận nào. Hãy là người đầu tiên bình luận!
           </p>
