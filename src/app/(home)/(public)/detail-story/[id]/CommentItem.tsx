@@ -70,7 +70,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
           offset: 0,
           parentId: comment.id.toString(),
         });
-        setRepliesData(data.data || []);
+        setRepliesData(data.data.items || []);
         console.log("data : ,,,,", data, repliesData);
       } catch (err) {
         console.error(err);

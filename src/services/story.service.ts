@@ -1,5 +1,6 @@
 import https from "@/lib/axios";
 import {
+  CreateCommentRequest,
   CreateStoryRequest,
   CreateStoryResponse,
   SearchStoryResponse,
@@ -110,5 +111,13 @@ export const getComment = async (
   const response = await https.get(
     `/api/Comment/all-comment/${id}?${params.toString()}`
   );
+  return response.data;
+};
+
+export const postCreateComment = async (
+  data: CreateCommentRequest,
+  id: string
+) => {
+  const response = await https.post(`/api/Comment/${id}`, data);
   return response.data;
 };

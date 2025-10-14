@@ -7,6 +7,7 @@ import {
   getMyStories,
   getSearchStories,
   getStories,
+  postCreateComment,
   postCreateStory,
   postLike,
   postUnlike,
@@ -14,6 +15,7 @@ import {
 } from "@/services/story.service";
 import {
   CommentResponse,
+  CreateCommentRequest,
   CreateStoryRequest,
   DetailStory,
   LikeResponse,
@@ -188,5 +190,12 @@ export const useGetCommentMutation = () => {
   return useMutation({
     mutationFn: ({ id, limit, offset = 0, parentId }: CommentQueryParams) =>
       getComment(id, limit, offset, parentId),
+  });
+};
+
+export const usePostCreateMutation = () => {
+  return useMutation({
+    mutationFn: ({ data, id }: { data: CreateCommentRequest; id: string }) =>
+      postCreateComment(data, id),
   });
 };

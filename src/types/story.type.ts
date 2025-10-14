@@ -160,8 +160,20 @@ export interface Comment {
   replies?: Comment[];
 }
 
+export interface PaginatedComments {
+  nextCursor: string | null;
+  hasMore: boolean;
+  items: Comment[];
+}
+
 export interface CommentResponse {
   status: number;
   message: string;
-  data: Comment[];
+  data: PaginatedComments;
+}
+
+export interface CreateCommentRequest {
+  content: string;
+  isAnonymous: boolean;
+  parentCommentId?: string;
 }
