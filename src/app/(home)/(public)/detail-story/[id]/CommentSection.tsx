@@ -1,17 +1,21 @@
+// src/components/CommentSection.tsx
+
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
-  useCommentQuery,
+  // 1. Import hook mới và bỏ hook cũ
+  useInfiniteCommentsQuery,
   usePostCreateMutation,
 } from "@/queries/story.queries";
 import { CommentItem } from "./CommentItem";
 import SparkleSwitch from "@/components/custom-ui/SparkleSwitch";
 import { Label } from "@/components/ui/label";
-import { UserX } from "lucide-react";
+import { UserX, Loader2 } from "lucide-react"; // Thêm icon loading
+import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
 
 interface CommentSectionProps {
   storyId: number;
@@ -19,28 +23,60 @@ interface CommentSectionProps {
 }
 
 export function CommentSection({ storyId, commemtCount }: CommentSectionProps) {
-  const { data: comments } = useCommentQuery({
-    id: storyId,
-    limit: 5,
-    offset: 0,
-  });
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [length, setLength] = useState<number>(10);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // 2. Sử dụng hook useInfiniteCommentsQuery
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading, // Trạng thái loading ban đầu
+    isError, // Trạng thái lỗi
+  } = useInfiniteCommentsQuery({
+    id: storyId,
+    limit: 5, // Bạn có thể tăng limit nếu muốn, ví dụ: 10
+  });
 
   const createCommentMutation = usePostCreateMutation();
+
+  // 3. Gom tất cả bình luận từ các trang vào một mảng duy nhất
+  const allComments = data?.pages.flatMap((page) => page.data.items) ?? [];
+
+  // 4. Sử dụng IntersectionObserver để trigger fetchNextPage
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Nếu phần tử loadMoreRef hiển thị trên màn hình, còn trang tiếp theo, và không đang fetch
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   const handleSubmitComment = async () => {
     if (!newComment.trim()) {
       toast.error("Vui lòng nhập nội dung bình luận");
       return;
     }
-
     setIsSubmitting(true);
     try {
-      console.log("data request: ", newComment, isAnonymous, 0);
       createCommentMutation.mutate({
         data: { content: newComment, isAnonymous },
         id: storyId.toString(),
@@ -54,21 +90,37 @@ export function CommentSection({ storyId, commemtCount }: CommentSectionProps) {
     }
   };
 
+  // Xử lý các trạng thái loading và lỗi
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <span className="ml-2">Đang tải bình luận...</span>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <p className="text-center text-red-500 py-6">Tải bình luận thất bại.</p>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Bình luận ({commemtCount})</h3>
 
       {/* Ô nhập bình luận */}
       <div className="space-y-3">
+        {/* ... JSX cho ô nhập bình luận giữ nguyên ... */}
         <Textarea
-          ref={textareaRef}
           placeholder="Viết bình luận của bạn..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           className="min-h-[80px] resize-none text-sm"
         />
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 px-1 py-2.5 rounded-lg bg-muted/50 border border-border hover:bg-muted/70 transition-colors">
+          <div className="flex items-center gap-2 px-1 py-2.5 rounded-lg hover:bg-muted/70 transition-colors">
             <div style={{ transform: "scale(0.6)" }}>
               <SparkleSwitch checked={isAnonymous} onChange={setIsAnonymous} />
             </div>
@@ -92,14 +144,25 @@ export function CommentSection({ storyId, commemtCount }: CommentSectionProps) {
 
       {/* Danh sách bình luận */}
       <div className="space-y-3">
-        {commemtCount === 0 ? (
+        {allComments.length === 0 ? (
           <p className="text-center text-muted-foreground py-6 text-sm">
             Chưa có bình luận nào. Hãy là người đầu tiên bình luận!
           </p>
         ) : (
-          comments?.data.items.map((comment) => (
+          allComments.map((comment) => (
             <CommentItem key={comment.id} storyId={storyId} comment={comment} />
           ))
+        )}
+
+        {/* 5. Phần tử trigger và hiển thị trạng thái loading more */}
+        <div ref={loadMoreRef} className="h-1" />
+        {isFetchingNextPage && (
+          <div className="flex justify-center items-center py-4">
+            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-sm text-muted-foreground">
+              <StoryNestLoader />
+            </span>
+          </div>
         )}
       </div>
     </div>

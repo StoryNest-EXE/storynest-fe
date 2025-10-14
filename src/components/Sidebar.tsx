@@ -82,7 +82,7 @@ export function UserSidebar() {
         ) : (
           <div className="flex flex-row gap-8">
             <Image
-              src="/svg/StoryNest_logo.svg"
+              src="/assets/icon.png"
               alt="Logo lớn"
               width={120}
               height={80}

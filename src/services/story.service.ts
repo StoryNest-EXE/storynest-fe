@@ -96,12 +96,12 @@ export const getDetailStory = async (id?: string, slug?: string) => {
 export const getComment = async (
   id: number,
   limit: number,
-  offset: number,
+  cursor: number,
   parentId?: string
 ) => {
   const params = new URLSearchParams({
     limit: limit.toString(),
-    offset: offset.toString(),
+    cursor: cursor.toString(),
   });
 
   if (parentId) {

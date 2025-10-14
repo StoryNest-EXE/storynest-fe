@@ -34,7 +34,7 @@ import { toast } from "sonner";
 interface CommentQueryParams {
   id: number;
   limit: number;
-  offset?: number;
+  cursor?: number;
   parentId?: string;
   enabled?: boolean;
 }
@@ -174,22 +174,41 @@ export const useDetailStoryQuery = (id?: string, slug?: string) => {
   });
 };
 
-export const useCommentQuery = ({
+export const useInfiniteCommentsQuery = ({
   id,
   limit,
-  offset = 0,
   parentId,
-}: CommentQueryParams) => {
-  return useQuery<CommentResponse>({
-    queryKey: ["get-comments", id, limit, offset, parentId],
-    queryFn: () => getComment(id, limit, offset, parentId),
+}: {
+  id: number;
+  limit: number;
+  parentId?: string;
+}) => {
+  return useInfiniteQuery({
+    // queryKey phải ổn định và không chứa tham số trang (cursor)
+    queryKey: ["comments", "infinite", id, parentId],
+
+    // queryFn giờ sẽ nhận vào một object chứa pageParam
+    queryFn: ({ pageParam }) => getComment(id, limit, pageParam, parentId),
+
+    // Giá trị cursor ban đầu
+    initialPageParam: 0,
+
+    // Hàm quyết định cursor cho trang tiếp theo
+    // `lastPage` là dữ liệu trả về từ API của lần gọi gần nhất
+    getNextPageParam: (lastPage) =>
+      lastPage.data.hasMore ? lastPage.data.nextCursor : undefined,
   });
 };
 
-export const useGetCommentMutation = () => {
-  return useMutation({
-    mutationFn: ({ id, limit, offset = 0, parentId }: CommentQueryParams) =>
-      getComment(id, limit, offset, parentId),
+export const useRepliesQuery = (
+  storyId: number,
+  parentId: string,
+  enabled: boolean
+) => {
+  return useQuery({
+    queryKey: ["comments", storyId, "replies", parentId],
+    queryFn: () => getComment(storyId, 5, 0, parentId),
+    enabled: enabled,
   });
 };
 

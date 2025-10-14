@@ -7,9 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgoVi } from "@/helper/format-time";
-import { useGetCommentMutation } from "@/queries/story.queries";
+import { useRepliesQuery } from "@/queries/story.queries";
 import { Comment } from "@/types/story.type";
 import { getAvatarFromLocalStorage } from "@/lib/localStorage";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CommentItemProps {
   comment: Comment;
@@ -21,15 +22,19 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [showReplies, setShowReplies] = useState(false);
-  const [repliesData, setRepliesData] = useState<Comment[]>([]);
-  const [isLoadingReplies, setIsLoadingReplies] = useState(false);
-  const [isErrorReplies, setIsErrorReplies] = useState(false);
-
-  const commentMutation = useGetCommentMutation();
 
   const myAvatar = getAvatarFromLocalStorage();
+  const queryClient = useQueryClient();
+
+  const {
+    data: repliesResponse,
+    isLoading: isLoadingReplies,
+    isError: isErrorReplies,
+  } = useRepliesQuery(storyId, comment.id.toString(), showReplies);
+
+  // Lấy danh sách replies từ data trả về
+  const repliesData = repliesResponse?.data.items || [];
 
   const handleReply = async () => {
     if (!replyContent.trim()) {
@@ -37,20 +42,32 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
       return;
     }
     setIsSubmitting(true);
+
+    // --- PHẦN LOGIC API THẬT (ví dụ) ---
+    // createReplyMutation.mutate(
+    //   { storyId, parentId: comment.id, content: replyContent },
+    //   {
+    //     onSuccess: () => {
+    //       toast.success("Đã gửi trả lời");
+    //       setReplyContent("");
+    //       setShowReplyForm(false);
+    //       // Làm mới lại danh sách replies để hiển thị comment mới
+    //       queryClient.invalidateQueries({
+    //         queryKey: ["comments", storyId, "replies", comment.id.toString()],
+    //       });
+    //     },
+    //     onError: () => {
+    //       toast.error("Gửi trả lời thất bại");
+    //     },
+    //     onSettled: () => {
+    //       setIsSubmitting(false);
+    //     },
+    //   }
+    // );
+
+    // --- PHẦN LOGIC TẠM THỜI (để test UI) ---
     try {
-      const fakeReply = {
-        id: Date.now(),
-        content: replyContent,
-        createdAt: new Date().toISOString(),
-        isLiked: false,
-        likeCount: 0,
-        user: {
-          username: "You",
-          avatarUrl: "",
-        },
-        replies: [],
-      };
-      toast.success("Đã thêm trả lời");
+      toast.success("Đã thêm trả lời (fake)");
       setReplyContent("");
       setShowReplyForm(false);
     } finally {
@@ -58,56 +75,20 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
     }
   };
 
-  const handleToggleReplies = async () => {
-    console.log("call nè", comment.id.toString());
-    if (!showReplies) {
-      setIsLoadingReplies(true);
-      setIsErrorReplies(false);
-      try {
-        const data = await commentMutation.mutateAsync({
-          id: storyId,
-          limit: 5,
-          offset: 0,
-          parentId: comment.id.toString(),
-        });
-        setRepliesData(data.data.items || []);
-        console.log("data : ,,,,", data, repliesData);
-      } catch (err) {
-        console.error(err);
-        setIsErrorReplies(true);
-        toast.error("Tải phản hồi thất bại");
-      } finally {
-        setIsLoadingReplies(false);
-      }
-    }
+  // Hàm này chỉ cần bật/tắt state, hook useRepliesQuery sẽ tự lo việc còn lại
+  const handleToggleReplies = () => {
     setShowReplies((prev) => !prev);
   };
 
   const handleReplyClick = () => {
     setShowReplyForm(!showReplyForm);
     if (!showReplyForm) {
+      // Tùy chọn: tự động điền @username khi trả lời
       // setReplyContent(`@${comment.user.username} `);
     } else {
       setReplyContent("");
     }
   };
-
-  // Parse content để hiển thị mention
-  // const renderContent = (content: string) => {
-  //   const mentionRegex = /@(\w+)/g;
-  //   const parts = content.split(mentionRegex);
-
-  //   return parts.map((part, index) => {
-  //     if (index % 2 === 1) {
-  //       return (
-  //         <span key={index} className="text-blue-500 font-semibold">
-  //           @{part}
-  //         </span>
-  //       );
-  //     }
-  //     return part;
-  //   });
-  // };
 
   return (
     <div className={hasReply ? "ml-8" : ""}>
@@ -145,15 +126,15 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
               Trả lời
             </Button>
 
-            {comment.repliesCount > (repliesData.length || 0) && (
+            {comment.repliesCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleToggleReplies}
-                disabled={isLoadingReplies}
+                disabled={isLoadingReplies && showReplies}
                 className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50"
               >
-                {isLoadingReplies
+                {isLoadingReplies && showReplies
                   ? "Đang tải..."
                   : showReplies
                   ? "Ẩn phản hồi"
@@ -170,9 +151,9 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
             <Avatar className="h-9 w-9 flex-shrink-0">
               <AvatarImage
                 src={`https://cdn.storynest.io.vn/${myAvatar}`}
-                alt="@shadcn"
+                alt="Your avatar"
               />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>ME</AvatarFallback>
             </Avatar>
             <Textarea
               placeholder="Viết trả lời của bạn..."
@@ -206,7 +187,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
         </div>
       )}
 
-      {/* 🔸 Render replies */}
+      {/* Render replies */}
       {showReplies && (
         <>
           {isErrorReplies && (
