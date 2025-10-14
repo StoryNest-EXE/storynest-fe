@@ -200,7 +200,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
               {/* Thread line */}
               <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
               <div className="pl-6 space-y-0">
-                {repliesData.map((reply) => (
+                {repliesData.map((reply: Comment) => (
                   <CommentItem
                     key={reply.id}
                     comment={reply}
