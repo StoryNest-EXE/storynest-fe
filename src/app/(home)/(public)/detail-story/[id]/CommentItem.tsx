@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { timeAgoVi } from "@/helper/format-time";
 import { useGetCommentMutation } from "@/queries/story.queries";
 import { Comment } from "@/types/story.type";
+import { getAvatarFromLocalStorage } from "@/lib/localStorage";
 
 interface CommentItemProps {
   comment: Comment;
@@ -27,6 +28,8 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
   const [isErrorReplies, setIsErrorReplies] = useState(false);
 
   const commentMutation = useGetCommentMutation();
+
+  const myAvatar = getAvatarFromLocalStorage();
 
   const handleReply = async () => {
     if (!replyContent.trim()) {
@@ -68,6 +71,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
           parentId: comment.id.toString(),
         });
         setRepliesData(data.data || []);
+        console.log("data : ,,,,", data, repliesData);
       } catch (err) {
         console.error(err);
         setIsErrorReplies(true);
@@ -82,28 +86,28 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
   const handleReplyClick = () => {
     setShowReplyForm(!showReplyForm);
     if (!showReplyForm) {
-      setReplyContent(`@${comment.user.username} `);
+      // setReplyContent(`@${comment.user.username} `);
     } else {
       setReplyContent("");
     }
   };
 
   // Parse content để hiển thị mention
-  const renderContent = (content: string) => {
-    const mentionRegex = /@(\w+)/g;
-    const parts = content.split(mentionRegex);
+  // const renderContent = (content: string) => {
+  //   const mentionRegex = /@(\w+)/g;
+  //   const parts = content.split(mentionRegex);
 
-    return parts.map((part, index) => {
-      if (index % 2 === 1) {
-        return (
-          <span key={index} className="text-blue-500 font-semibold">
-            @{part}
-          </span>
-        );
-      }
-      return part;
-    });
-  };
+  //   return parts.map((part, index) => {
+  //     if (index % 2 === 1) {
+  //       return (
+  //         <span key={index} className="text-blue-500 font-semibold">
+  //           @{part}
+  //         </span>
+  //       );
+  //     }
+  //     return part;
+  //   });
+  // };
 
   return (
     <div className={hasReply ? "ml-8" : ""}>
@@ -127,23 +131,21 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
           </div>
 
           <p className="text-sm leading-relaxed break-words text-foreground/90">
-            {renderContent(comment.content)}
+            {comment.content}
           </p>
 
           <div className="flex items-center gap-1 pt-0.5">
-            {!hasReply && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleReplyClick}
-                className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              >
-                <MessageCircle className="h-3.5 w-3.5 mr-1" />
-                Trả lời
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleReplyClick}
+              className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            >
+              <MessageCircle className="h-3.5 w-3.5 mr-1" />
+              Trả lời
+            </Button>
 
-            {comment.repliesCount > 0 && !hasReply && (
+            {comment.repliesCount > (repliesData.length || 0) && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -164,13 +166,22 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
 
       {showReplyForm && (
         <div className="ml-12 mb-3 space-y-2">
-          <Textarea
-            placeholder="Viết trả lời của bạn..."
-            value={replyContent}
-            onChange={(e) => setReplyContent(e.target.value)}
-            className="min-h-[70px] resize-none text-sm border-muted focus-visible:ring-1"
-            autoFocus
-          />
+          <div className="flex gap-2 items-start">
+            <Avatar className="h-9 w-9 flex-shrink-0">
+              <AvatarImage
+                src={`https://cdn.storynest.io.vn/${myAvatar}`}
+                alt="@shadcn"
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <Textarea
+              placeholder="Viết trả lời của bạn..."
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              className="flex-1 min-h-[70px] resize-none text-sm border-muted focus-visible:ring-1"
+              autoFocus
+            />
+          </div>
           <div className="flex justify-end gap-2">
             <Button
               size="sm"

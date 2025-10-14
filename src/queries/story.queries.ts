@@ -166,7 +166,7 @@ export const useUpdateStoryMutation = (storyId: number) => {
 
 export const useDetailStoryQuery = (id?: string, slug?: string) => {
   return useQuery<DetailStory>({
-    queryKey: ["detail-story"],
+    queryKey: ["detail-story", id, slug],
     queryFn: () => getDetailStory(id, slug),
     enabled: !!id || !!slug,
   });

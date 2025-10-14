@@ -35,7 +35,7 @@ export default function GoogleCallbackPage() {
         localStorage.setItem("planName", "null");
       }
 
-      // router.push("/");
+      router.push("/");
     }
   }, [login, router]);
 
