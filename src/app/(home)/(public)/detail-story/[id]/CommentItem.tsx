@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgoVi } from "@/helper/format-time";
-import { useRepliesQuery } from "@/queries/story.queries";
-import { Comment } from "@/types/story.type";
+import {
+  useInfiniteRepliesQuery,
+  usePostCreateMutation,
+} from "@/queries/story.queries";
+import { Comment, CommentResponse } from "@/types/story.type";
 import { getAvatarFromLocalStorage } from "@/lib/localStorage";
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 
 interface CommentItemProps {
   comment: Comment;
@@ -23,6 +26,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
   const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   const myAvatar = getAvatarFromLocalStorage();
   const queryClient = useQueryClient();
@@ -31,47 +35,106 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
     data: repliesResponse,
     isLoading: isLoadingReplies,
     isError: isErrorReplies,
-  } = useRepliesQuery(storyId, comment.id.toString(), showReplies);
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteRepliesQuery(storyId, comment.id.toString(), showReplies);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const createCommentMutation = usePostCreateMutation();
 
   // Lấy danh sách replies từ data trả về
-  const repliesData = repliesResponse?.data.items || [];
+  const repliesData =
+    repliesResponse?.pages?.flatMap((page) => page.data.items) || [];
 
-  const handleReply = async () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Nếu phần tử loadMoreRef hiển thị trên màn hình, còn trang tiếp theo, và không đang fetch
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
+
+  const handleReply = async (id: string) => {
     if (!replyContent.trim()) {
       toast.error("Vui lòng nhập nội dung trả lời");
       return;
     }
     setIsSubmitting(true);
 
-    // --- PHẦN LOGIC API THẬT (ví dụ) ---
-    // createReplyMutation.mutate(
-    //   { storyId, parentId: comment.id, content: replyContent },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success("Đã gửi trả lời");
-    //       setReplyContent("");
-    //       setShowReplyForm(false);
-    //       // Làm mới lại danh sách replies để hiển thị comment mới
-    //       queryClient.invalidateQueries({
-    //         queryKey: ["comments", storyId, "replies", comment.id.toString()],
-    //       });
-    //     },
-    //     onError: () => {
-    //       toast.error("Gửi trả lời thất bại");
-    //     },
-    //     onSettled: () => {
-    //       setIsSubmitting(false);
-    //     },
-    //   }
-    // );
+    // Tạo optimistic comment
+    const optimisticComment = {
+      id: Date.now(), // id tạm
+      content: replyContent,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      parentCommentId: Number(id),
+      storyId,
+      user: {
+        id: -1,
+        username: "Bạn",
+        avatarUrl: `https://cdn.storynest.io.vn/${myAvatar}`,
+      },
+      repliesCount: 0,
+    };
 
-    // --- PHẦN LOGIC TẠM THỜI (để test UI) ---
+    // ✅ Cập nhật cache optimistically
+    queryClient.setQueryData(
+      ["replies", "infinite", storyId, id],
+      (oldData: InfiniteData<CommentResponse>) => {
+        if (!oldData) return oldData;
+
+        const updatedPages = oldData.pages.map((page, index) => {
+          if (index === 0) {
+            return {
+              ...page,
+              data: {
+                ...page.data,
+                items: [optimisticComment, ...page.data.items],
+              },
+            };
+          }
+          return page;
+        });
+
+        return { ...oldData, pages: updatedPages };
+      }
+    );
+
+    const data = {
+      content: replyContent,
+      isAnonymous: isAnonymous,
+      parentCommentId: id,
+    };
+
     try {
-      toast.success("Đã thêm trả lời (fake)");
-      setReplyContent("");
-      setShowReplyForm(false);
+      await createCommentMutation.mutateAsync({
+        data: data,
+        id: storyId.toString(),
+      });
+    } catch (error) {
+      toast.error("Gửi phản hồi thất bại");
+      // Có thể rollback optimistic nếu muốn
     } finally {
+      setShowReplyForm(false);
       setIsSubmitting(false);
+      setReplyContent("");
+      setShowReplies(true); //
     }
   };
 
@@ -177,7 +240,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
             </Button>
             <Button
               size="sm"
-              onClick={handleReply}
+              onClick={() => handleReply(comment.id.toString())}
               disabled={isSubmitting || !replyContent.trim()}
               className="h-8"
             >
@@ -188,7 +251,7 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
       )}
 
       {/* Render replies */}
-      {showReplies && (
+      {(showReplies || repliesData.length > 0) && (
         <>
           {isErrorReplies && (
             <p className="text-red-500 text-xs mt-2 ml-12">
@@ -197,7 +260,6 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
           )}
           {repliesData.length > 0 && (
             <div className="mt-1 ml-6 relative">
-              {/* Thread line */}
               <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-border" />
               <div className="pl-6 space-y-0">
                 {repliesData.map((reply: Comment) => (
@@ -208,6 +270,16 @@ export function CommentItem({ comment, storyId, hasReply }: CommentItemProps) {
                     hasReply
                   />
                 ))}
+                {hasNextPage && (
+                  <div
+                    ref={loadMoreRef}
+                    className="flex justify-center py-3 text-xs text-muted-foreground"
+                  >
+                    {isFetchingNextPage
+                      ? "Đang tải thêm phản hồi..."
+                      : "Đang tải..."}
+                  </div>
+                )}
               </div>
             </div>
           )}

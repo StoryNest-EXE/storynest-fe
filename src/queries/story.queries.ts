@@ -16,6 +16,7 @@ import {
 import {
   CommentResponse,
   CreateCommentRequest,
+  CreateCommentResponse,
   CreateStoryRequest,
   DetailStory,
   LikeResponse,
@@ -26,18 +27,11 @@ import {
 import {
   useInfiniteQuery,
   useMutation,
+  UseMutationOptions,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-interface CommentQueryParams {
-  id: number;
-  limit: number;
-  cursor?: number;
-  parentId?: string;
-  enabled?: boolean;
-}
 
 export const useStoriesQuery = (limit: number) => {
   return useInfiniteQuery<StoryResponse>({
@@ -200,21 +194,31 @@ export const useInfiniteCommentsQuery = ({
   });
 };
 
-export const useRepliesQuery = (
+export const useInfiniteRepliesQuery = (
   storyId: number,
   parentId: string,
   enabled: boolean
 ) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["comments", storyId, "replies", parentId],
-    queryFn: () => getComment(storyId, 5, 0, parentId),
+    queryFn: ({ pageParam }) => getComment(storyId, 5, pageParam, parentId),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.data.hasMore ? lastPage.data.nextCursor : undefined,
     enabled: enabled,
   });
 };
 
-export const usePostCreateMutation = () => {
+export const usePostCreateMutation = (
+  options?: UseMutationOptions<
+    CreateCommentResponse, // Type của kết quả trả về (TData)
+    unknown, // Type của lỗi (TError)
+    { data: CreateCommentRequest; id: string } // Type của biến (TVariables)
+  >
+) => {
   return useMutation({
     mutationFn: ({ data, id }: { data: CreateCommentRequest; id: string }) =>
       postCreateComment(data, id),
+    ...options,
   });
 };

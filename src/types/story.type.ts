@@ -177,3 +177,26 @@ export interface CreateCommentRequest {
   isAnonymous: boolean;
   parentCommentId?: string;
 }
+
+export interface CreateCommentResponse {
+  status: number;
+  message: string;
+  data: {
+    id: number;
+    storyId: number;
+    userId: number;
+    parentCommentId: number | null;
+    content: string;
+    commentStatus: number;
+    createdAt: string;
+    updatedAt: string | null;
+    user: {
+      id: number;
+      username: string;
+      avatarUrl: string;
+    };
+    repliesCount: number;
+    hasReplies: boolean;
+    isOwner: boolean;
+  };
+}

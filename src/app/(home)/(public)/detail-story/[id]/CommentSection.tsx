@@ -1,5 +1,3 @@
-// src/components/CommentSection.tsx
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -16,6 +14,8 @@ import SparkleSwitch from "@/components/custom-ui/SparkleSwitch";
 import { Label } from "@/components/ui/label";
 import { UserX, Loader2 } from "lucide-react"; // Thêm icon loading
 import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { CommentResponse, CreateCommentRequest } from "@/types/story.type";
 
 interface CommentSectionProps {
   storyId: number;
@@ -34,14 +34,98 @@ export function CommentSection({ storyId, commemtCount }: CommentSectionProps) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading, // Trạng thái loading ban đầu
-    isError, // Trạng thái lỗi
+    isLoading,
+    isError,
   } = useInfiniteCommentsQuery({
     id: storyId,
-    limit: 5, // Bạn có thể tăng limit nếu muốn, ví dụ: 10
+    limit: 5,
   });
 
-  const createCommentMutation = usePostCreateMutation();
+  const queryClient = useQueryClient();
+
+  const createCommentMutation = usePostCreateMutation({
+    // Thêm onMutate
+    onMutate: async (variables) => {
+      // Dừng các query liên quan để tránh race condition
+      await queryClient.cancelQueries({
+        queryKey: ["comments", "infinite", storyId, undefined],
+      });
+
+      // Lưu lại snapshot dữ liệu hiện tại
+      const previousData = queryClient.getQueryData([
+        "comments",
+        "infinite",
+        storyId,
+        undefined,
+      ]);
+
+      // Tạo 1 comment tạm
+      const optimisticComment = {
+        id: `temp-${Date.now()}`, // id tạm
+        content: variables.data.content,
+        user: {
+          username: "Bạn",
+          avatarUrl: "/placeholder.svg",
+        },
+        createdAt: new Date().toISOString(),
+        repliesCount: 0,
+        isAnonymous: variables.data.isAnonymous,
+      };
+
+      // Update cache tạm thời
+      queryClient.setQueryData(
+        ["comments", "infinite", storyId, undefined],
+        (oldData: InfiniteData<CommentResponse> | undefined) => {
+          if (!oldData) return oldData;
+          const updatedPages = oldData.pages.map((page, index) => {
+            if (index === 0) {
+              return {
+                ...page,
+                data: {
+                  ...page.data,
+                  items: [optimisticComment, ...page.data.items],
+                },
+              };
+            }
+            return page;
+          });
+
+          return {
+            ...oldData,
+            pages: updatedPages,
+          };
+        }
+      );
+
+      // Trả về snapshot để rollback nếu lỗi
+      return { previousData };
+    },
+
+    //  Nếu lỗi → rollback
+    onError: (
+      err: unknown,
+      variables: { data: CreateCommentRequest; id: string },
+      context: unknown
+    ) => {
+      const typedContext = context as
+        | { previousData?: InfiniteData<CommentResponse> }
+        | undefined;
+      if (typedContext?.previousData) {
+        queryClient.setQueryData(
+          ["comments", "infinite", storyId],
+          typedContext.previousData
+        );
+      }
+      toast.error("Gửi bình luận thất bại");
+    },
+
+    // ✅ Sau khi request xong → refetch để đồng bộ dữ liệu thật (id thật từ server)
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["comments", "infinite", storyId],
+      });
+    },
+  });
 
   // 3. Gom tất cả bình luận từ các trang vào một mảng duy nhất
   const allComments = data?.pages.flatMap((page) => page.data.items) ?? [];
