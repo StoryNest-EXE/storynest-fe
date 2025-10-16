@@ -1,0 +1,138 @@
+.container {
+  display: flex;
+  text-align: center;
+}
+
+.box {
+  background-color: var(--color-primary-foreground);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.header {
+  display: fle;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.upload_icon {
+  width: 160px;
+  height: 140px;
+  display: flex;
+  justify-items: left;
+  user-select: none;
+}
+/* -------------------------------------------------- DROP FILE ---------------------------------------------- */
+.drop_file_container {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  padding: 0 0 10px 0;
+  border: 2px dashed var(--primary); /* viền xanh theo theme */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--muted); /* nền phụ đồng bộ với textarea */
+  color: var(--foreground);
+}
+
+.drop_file_container input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  cursor: pointer;
+}
+
+.drop_file_container:hover,
+.dragover {
+  opacity: 0.6;
+}
+
+.drop_file_label {
+  position: absolute;
+  top: 75%;
+  text-align: center;
+  color: #797777;
+  user-select: none;
+}
+
+/* -------------------------------------------------- PREVIEW ITEM ---------------------------------------------- */
+.drop_file_preview img {
+  width: 100px;
+}
+
+.drop_file_preview {
+  margin: 10px 0 0 0;
+}
+.drop_file_preview p {
+  font-weight: 500;
+  font-size: smaller;
+}
+
+.drop_file_preview_title {
+  margin: 0 0 8px 0;
+}
+
+.drop_file_preview_item {
+  position: relative;
+  display: flex;
+  margin: 0 0 10px 0;
+  background-color: var(--muted);
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.drop_file_preview_item img {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin: 0 5px 0 0;
+}
+
+.drop_file_preview_item_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 0 0 5px;
+}
+
+.name {
+  margin: 0 0 0 0;
+}
+
+.size {
+  text-align: start;
+  margin: 0 0 0 0px;
+}
+
+.drop_file_preview_item_remove {
+  background-color: #eaeaea;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.drop_file_preview_item:hover .drop_file_preview_item_remove {
+  opacity: 1;
+  background-color: #dd131d;
+  color: white;
+}
