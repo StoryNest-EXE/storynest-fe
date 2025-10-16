@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./AuthContext";
 import { Toaster } from "sonner";
+import { SignalRProvider } from "./SignalRContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,15 +23,17 @@ export default function AppProviders({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       {/* Thêm các provider khác ở đây sau này, ví dụ: <AuthProvider> */}
       <AuthProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Toaster richColors position="top-right" />
-          {children}
-        </ThemeProvider>
+        <SignalRProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster richColors position="top-right" />
+            {children}
+          </ThemeProvider>
+        </SignalRProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
