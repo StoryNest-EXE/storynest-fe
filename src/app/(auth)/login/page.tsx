@@ -28,6 +28,7 @@ import {
   setPlanIdToLocalStorage,
   setPlanNameFromLocalStorage,
 } from "@/lib/localStorage";
+import GradientText from "@/components/GradientText";
 
 const formSchema = z.object({
   usernameOrEmail: z.string().min(2, {
@@ -102,9 +103,13 @@ const LoginPage = () => {
         <h1 className="text-3xl font-semibold flex justify-center">
           Chào mừng trở lại
         </h1>
-        <span className="!text-5xl flex justify-center font-semibold text-gradient-2 text-flicker-in-glow leading-[1.2]">
+        <GradientText
+          colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+          animationSpeed={3}
+          className="!text-5xl flex justify-center font-semibold leading-[1.2]"
+        >
           StoryNest
-        </span>
+        </GradientText>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-4">
           {/* Username */}
