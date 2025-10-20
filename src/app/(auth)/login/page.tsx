@@ -11,6 +11,7 @@ import { z } from "zod";
 import Loader from "@/components/Loader";
 import RippleButton from "@/components/custom-ui/RippleButton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { isAxiosError } from "axios";
 import {
   Form,
   FormControl,
@@ -83,9 +84,9 @@ const LoginPage = () => {
       setPlanNameFromLocalStorage(response.data.planName ?? "");
 
       router.push("/");
-    } catch (err: any) {
+    } catch (err) {
       // 🛑 Nếu server trả về lỗi 400: Invalid username or password
-      if (err?.response?.status === 400) {
+      if (isAxiosError(err) && err.response?.status === 400) {
         form.setError("root", {
           message: "Tên đăng nhập hoặc mật khẩu không đúng",
         });
