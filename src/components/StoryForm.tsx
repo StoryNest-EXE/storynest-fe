@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import HardBreak from "@tiptap/extension-hard-break";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import Strike from "@tiptap/extension-strike";
@@ -60,10 +61,41 @@ export default function StoryForm({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ hardBreak: false }),
       Underline,
       Strike,
       Image,
+      HardBreak.extend({
+        addKeyboardShortcuts() {
+          return {
+            Enter: () => {
+              const { state } = this.editor;
+              const { $from } = state.selection;
+              let hardBreakCount = 0;
+              let pos = $from.pos - 1;
+
+              // Đếm số hardBreak liên tiếp ở cuối
+              while (pos >= 0) {
+                const nodeBefore = state.doc.nodeAt(pos);
+                if (nodeBefore && nodeBefore.type.name === "hardBreak") {
+                  hardBreakCount++;
+                  pos--;
+                } else {
+                  break;
+                }
+              }
+
+              if (hardBreakCount >= 2) {
+                // Đã 2 dòng trống => chặn xuống thêm
+                return true;
+              }
+
+              // Cho phép thêm 1 hardBreak
+              return this.editor.commands.setHardBreak();
+            },
+          };
+        },
+      }),
       Placeholder.configure({
         placeholder: "Nội dung câu chuyện...",
       }),

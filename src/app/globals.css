@@ -275,3 +275,26 @@
   );
   border: 1px solid oklch(0.72 0.18 60 / 0.3);
 }
+
+/* handle thẻ pre */
+.story-content pre {
+  /* Cho phép ngắt dòng */
+  white-space: pre-wrap !important;
+  /* Đảm bảo các từ dài cũng bị ngắt */
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Ẩn con mắt trong show password */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-clear-button,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-textfield-decoration-container,
+input[type="password"]::-webkit-password-toggle {
+  display: none !important;
+}

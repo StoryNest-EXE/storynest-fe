@@ -7,11 +7,14 @@ import {
   refreshToken,
   getLogout,
   getGoogleLogin,
+  postResetPassword,
+  postVerifyReset,
 } from "@/services/auth.service";
 import {
   ForgotPasswordRequest,
   LoginRequest,
   RegisterRequest,
+  ResetPasswordRequest,
 } from "@/types/auth.type";
 
 export const useLoginMutation = () => {
@@ -53,5 +56,17 @@ export const useForgotPasswordMutation = () => {
 export const useGoogleLoginMutation = () => {
   return useMutation({
     mutationFn: () => getGoogleLogin(),
+  });
+};
+
+export const useResetPasswordMutation = () => {
+  return useMutation({
+    mutationFn: (data: ResetPasswordRequest) => postResetPassword(data),
+  });
+};
+
+export const useVerifyResetMutation = () => {
+  return useMutation({
+    mutationFn: (token: string) => postVerifyReset(token),
   });
 };

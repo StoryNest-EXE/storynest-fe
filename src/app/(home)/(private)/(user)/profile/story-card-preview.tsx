@@ -84,7 +84,11 @@ export function StoryCardPreview({ story }: PostCardProps) {
             size="icon"
             className="text-muted-foreground hover:text-foreground"
           >
-            <MoreOptionsButton storyId={story.id} isAI={story.isAI} />
+            <MoreOptionsButton
+              storyId={story.id}
+              slug={story.slug}
+              isAI={story.isAI}
+            />
           </Button>
         </div>
 

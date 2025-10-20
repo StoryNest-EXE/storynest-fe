@@ -65,3 +65,9 @@ export interface User {
 export interface ProfileResponse {
   user: User;
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
