@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { UserSidebar } from "@/components/Sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { SearchBar } from "@/components/SearchBar";
 import { Header } from "@/components/Header";
 
 export default function PublicLayout({

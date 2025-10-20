@@ -10,6 +10,7 @@ import {
   RefreshTokenResponse,
   RegisterRequest,
   RegisterResponse,
+  ResetPasswordRequest,
 } from "@/types/auth.type";
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
@@ -43,5 +44,15 @@ export const getLogout = async (): Promise<LogoutResponse> => {
 
 export const getGoogleLogin = async () => {
   const response = await https.get("/api/Auth/google-login");
+  return response.data;
+};
+
+export const postResetPassword = async (data: ResetPasswordRequest) => {
+  const response = await https.post("api/Auth/reset-password", data);
+  return response.data;
+};
+
+export const postVerifyReset = async (token: string) => {
+  const response = await https.post(`/api/Auth/verify-reset?token=${token}`);
   return response.data;
 };

@@ -26,8 +26,8 @@ import { CommentSection } from "@/app/(home)/(public)/detail-story/[id]/CommentS
 
 export default function StoryDetailPage() {
   const params = useParams();
-  const storyId = params.id as string;
-  const { data: detailStory } = useDetailStoryQuery(storyId, "");
+  const slug = params.id as string;
+  const { data: detailStory } = useDetailStoryQuery("", slug);
 
   const images =
     detailStory?.data.media.filter((m) => m.mediaType === "Image") ?? [];
@@ -141,7 +141,7 @@ export default function StoryDetailPage() {
 
           {/* Content */}
           <div
-            className="text-card-foreground leading-relaxed text-base prose prose-invert max-w-none prose-p:my-3 prose-strong:text-card-foreground prose-em:text-card-foreground"
+            className="text-card-foreground leading-relaxed text-base prose prose-invert max-w-none prose-p:my-3 prose-strong:text-card-foreground prose-em:text-card-foreground break-all story-content"
             dangerouslySetInnerHTML={{
               __html: detailStory?.data.content || "",
             }}

@@ -68,8 +68,8 @@ export function PostCard({ story }: PostCardProps) {
     }
   };
 
-  const handleComment = (storyId: number) => {
-    router.push(`/detail-story/${storyId}`);
+  const handleComment = (slug: string) => {
+    router.push(`/detail-story/${slug}`);
   };
 
   return (
@@ -244,7 +244,7 @@ export function PostCard({ story }: PostCardProps) {
           variant="ghost"
           size="sm"
           className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
-          onClick={() => handleComment(story.id)}
+          onClick={() => handleComment(story.slug)}
         >
           <MessageCircle className="h-5 w-5" />
           <span>{story.commentCount}</span>

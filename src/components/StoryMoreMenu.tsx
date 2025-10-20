@@ -12,11 +12,13 @@ import { useRouter } from "next/navigation";
 
 interface MoreOptionsButtonProps {
   storyId: number;
+  slug: string;
   isAI: boolean;
 }
 
 export default function MoreOptionsButton({
   storyId,
+  slug,
   isAI,
 }: MoreOptionsButtonProps) {
   const deleteStory = useDeleteStoryMutation();

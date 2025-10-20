@@ -20,11 +20,13 @@ import {
 import { getAvatarFromLocalStorage } from "@/lib/localStorage";
 import { useAuth } from "@/context/AuthContext";
 import { Notification } from "@/types/notification";
+import { useLogoutMutation } from "@/queries/auth.queries";
 
 export function Header() {
   const router = useRouter();
   const { connection } = useSignalR();
-  const { logout } = useAuth();
+  const logoutMutation = useLogoutMutation();
+  const { token, logout: authLogout } = useAuth();
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -94,13 +96,15 @@ export function Header() {
     };
   }, [connection]);
 
-  // Hàm xử lý đăng xuất
-  // const handleLogout = useCallback(() => {
-  //   removeTokenFormLocalStorage()
-  //   // removeFromLocalStorage("username");
-  //   removeFromLocalStorage("avatar");
-  //   router.push("/login");
-  // }, [router]);
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      authLogout(); // Clear local state
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   // Hàm đánh dấu tất cả là đã đọc
   const handleMarkAllAsRead = useCallback(async () => {
@@ -204,7 +208,7 @@ export function Header() {
                 <span>Cài đặt</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLogout()}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Đăng xuất</span>
               </DropdownMenuItem>

@@ -31,11 +31,11 @@ import {
 
 const formSchema = z.object({
   usernameOrEmail: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "Tên đăng nhập phải có ít nhất 2 ký tự.",
   }),
 
   password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+    message: "Mật khẩu phải có ít nhất 6 ký tự.",
   }),
   remember: z.boolean().default(false).optional(),
 });
@@ -91,7 +91,7 @@ const LoginPage = () => {
       router.push("/");
     } catch (err) {
       form.setError("root", {
-        message: "Invalid username or password",
+        message: "Tên đăng nhập hoặc mật khẩu không đúng",
       });
     }
   }
@@ -124,7 +124,7 @@ const LoginPage = () => {
                   />
                 </FormControl>
                 <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
-                  Username or Email
+                  Tên đăng nhập hoặc Email
                 </FormLabel>
                 <FormMessage />
               </FormItem>
@@ -147,13 +147,13 @@ const LoginPage = () => {
                       placeholder=" "
                     />
                     <FormLabel className="pointer-events-none absolute top-3 z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-80 peer-focus:text-violet-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:text-gray-400 peer-focus:dark:text-violet-500">
-                      Password
+                      Mật khẩu
                     </FormLabel>
                     <button
                       type="button"
                       onClick={togglePasswordVisibility}
                       tabIndex={-1}
-                      className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer text-black/50 hover:text-black"
+                      className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600"
                     >
                       {showPassword ? (
                         <GrFormView size={24} />
@@ -185,7 +185,7 @@ const LoginPage = () => {
                   </FormControl>
 
                   <div className="leading-none text-shadow-white">
-                    <FormLabel>Remember me</FormLabel>
+                    <FormLabel>Ghi nhớ đăng nhập</FormLabel>
                   </div>
                 </FormItem>
               )}
@@ -196,7 +196,7 @@ const LoginPage = () => {
               tabIndex={-1}
               className="text-center text-sm text-gray-400 hover:text-black"
             >
-              Forgot Password?
+              Quên mật khẩu?
             </Link>
           </div>
 
@@ -218,10 +218,11 @@ const LoginPage = () => {
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
-                <Loader /> <span className="text-violet-300">Loading...</span>
+                <Loader />{" "}
+                <span className="text-violet-300">Đang đăng nhập...</span>
               </div>
             ) : (
-              "Login"
+              "Đăng nhập"
             )}
           </RippleButton>
         </form>
@@ -229,7 +230,7 @@ const LoginPage = () => {
         <div className="my-4">
           <div className="flex items-center justify-between">
             <span className="w-1/3 border-t border-[#E1E0E5]"></span>
-            <span className="text-xs text-[#737379]">Or login with</span>
+            <span className="text-xs text-[#737379]">Hoặc đăng nhập với</span>
             <span className="w-1/3 border-t border-[#E1E0E5]"></span>
           </div>
         </div>
@@ -245,7 +246,7 @@ const LoginPage = () => {
             href="/register"
             className="text-[#4C3CC6] underline underline-offset-4 hover:text-[#5756bb]"
           >
-            Đăng kí
+            Đăng ký
           </Link>
         </div>
       </div>
