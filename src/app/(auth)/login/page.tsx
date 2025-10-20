@@ -11,6 +11,7 @@ import { z } from "zod";
 import Loader from "@/components/Loader";
 import RippleButton from "@/components/custom-ui/RippleButton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { isAxiosError } from "axios";
 import {
   Form,
   FormControl,
@@ -66,6 +67,7 @@ const LoginPage = () => {
   });
 
   async function onSubmit(values: FormValues) {
+    setIsLoading(true);
     try {
       const payload = {
         ...values,
@@ -73,27 +75,29 @@ const LoginPage = () => {
         ipAddress: "",
         userAgent: "",
       };
-      setIsLoading(true);
       const response = await loginMutation(payload);
-      console.log("login data: ", response.data);
+
+      // 🟢 Đăng nhập thành công
       login(response.data.accessToken);
       setAvatarToLocalStorage(response.data.avatarUrl);
-      if (response.data.planId === null) {
-        setPlanIdToLocalStorage(1);
-      } else {
-        setPlanIdToLocalStorage(response.data.planId);
-      }
-      if (response.data.planName === null) {
-        setPlanNameFromLocalStorage("");
-      } else {
-        setPlanNameFromLocalStorage(response.data.planName);
-      }
-      console.log("response ligin nè", response.data);
+      setPlanIdToLocalStorage(response.data.planId ?? 1);
+      setPlanNameFromLocalStorage(response.data.planName ?? "");
+
       router.push("/");
     } catch (err) {
-      form.setError("root", {
-        message: "Tên đăng nhập hoặc mật khẩu không đúng",
-      });
+      // 🛑 Nếu server trả về lỗi 400: Invalid username or password
+      if (isAxiosError(err) && err.response?.status === 400) {
+        form.setError("root", {
+          message: "Tên đăng nhập hoặc mật khẩu không đúng",
+        });
+      } else {
+        form.setError("root", {
+          message: "Đã có lỗi xảy ra. Vui lòng thử lại.",
+        });
+      }
+    } finally {
+      // 🔥 Luôn tắt loading
+      setIsLoading(false);
     }
   }
 
@@ -216,15 +220,14 @@ const LoginPage = () => {
           <RippleButton
             type="submit"
             disabled={isLoading}
-            className="w-full cursor-pointer border-transparent bg-[#5E49D8] text-white shadow-lg shadow-black/16 duration-200 hover:bg-[#6B53F6] active:scale-95"
-            onClick={() => {
-              console.log("text");
-            }}
+            className="w-full h-12 cursor-pointer border-transparent bg-[#5E49D8] text-white shadow-lg shadow-black/16 duration-200 hover:bg-[#6B53F6] active:scale-95"
           >
             {isLoading ? (
-              <div className="flex items-center gap-2">
-                <Loader />{" "}
-                <span className="text-violet-300">Đang đăng nhập...</span>
+              <div className="flex items-center gap-2 justify-center">
+                <Loader />
+                <span className="text-violet-300 whitespace-nowrap">
+                  Đang đăng nhập...
+                </span>
               </div>
             ) : (
               "Đăng nhập"
