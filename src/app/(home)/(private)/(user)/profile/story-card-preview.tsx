@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useLikeMutation, useUnlikeMutation } from "@/queries/story.queries";
 import { Story } from "@/types/story.type";
 import { Heart, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ export function StoryCardPreview({ story }: PostCardProps) {
   const [likeCount, setLikeCount] = useState(story.likeCount);
   const likeMutation = useLikeMutation();
   const unlikeMutation = useUnlikeMutation();
+  const router = useRouter();
 
   const handleLike = () => {
     const prevLiked = isLiked;
@@ -47,6 +49,10 @@ export function StoryCardPreview({ story }: PostCardProps) {
         },
       });
     }
+  };
+
+  const handleComment = (slug: string) => {
+    router.push(`/detail-story/${slug}`);
   };
 
   return (
@@ -140,6 +146,7 @@ export function StoryCardPreview({ story }: PostCardProps) {
           variant="ghost"
           size="sm"
           className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
+          onClick={() => handleComment(story.slug)}
         >
           <MessageCircle className="h-5 w-5" />
           <span>{story.commentCount}</span>
