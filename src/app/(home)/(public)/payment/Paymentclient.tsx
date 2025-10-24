@@ -20,7 +20,7 @@ import { toast } from "sonner";
 export default function PaymentCheckoutClient() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
-  const tier = pricingTiers.find((tier) => tier.value === plan);
+  const tier = pricingTiers.find((tier) => tier.plainId === plan);
   const [copied, setCopied] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"qr" | "bank">("qr");
   const { data: checkout } = useCheckoutQuery(plan as string);
