@@ -7,8 +7,9 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import StoryForm from "@/components/StoryForm";
-import { StoryFormData } from "@/types/story.type";
+import { CheckNLPResponse, StoryFormData } from "@/types/story.type";
 import { useState } from "react";
+import { AxiosError } from "axios";
 
 export default function CreateStoryPage() {
   const createStoryMutation = useCreateStoryMutation();
@@ -52,9 +53,10 @@ export default function CreateStoryPage() {
 
       toast.success("Tạo bài viết thành công!");
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       // ⚠️ Nếu checkNLP trả lỗi 400 từ Axios thì nó sẽ bị catch ở đây
-      const response = error?.response?.data;
+      const axiosError = error as AxiosError<CheckNLPResponse>;
+      const response = axiosError.response?.data;
       if (response?.status === 400) {
         const offensiveWords = response.data
           .map((item: any) => item.wordForm)
