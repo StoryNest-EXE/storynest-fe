@@ -11,8 +11,15 @@ import {
   useGenerateAudioMuation,
   useGenerateImageMuation,
 } from "@/queries/media.queries";
-import { useCreateStoryMutation } from "@/queries/story.queries";
-import { CreateStoryRequest, StoryAICard } from "@/types/story.type";
+import {
+  useCheckNLPMutation,
+  useCreateStoryMutation,
+} from "@/queries/story.queries";
+import {
+  CheckNLPResponse,
+  CreateStoryRequest,
+  StoryAICard,
+} from "@/types/story.type";
 import { Eye, ImageIcon, Mic, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -33,6 +40,7 @@ function CreateStoryAI() {
   const generateVoiceMutation = useGenerateAudioMuation();
   const generateMediaMutation = useGenerateImageMuation();
   const createStoryMutation = useCreateStoryMutation();
+  const checkNLPMutation = useCheckNLPMutation();
   const [isLoading, setIsLoading] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
@@ -40,14 +48,37 @@ function CreateStoryAI() {
     setIsAnonymous(value);
   };
 
+  const checkNLP = async (
+    content: string,
+    title?: string,
+    tags?: string[]
+  ): Promise<boolean> => {
+    try {
+      await checkNLPMutation.mutateAsync({ content, title, tags });
+      return true;
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: CheckNLPResponse } };
+      if (err.response?.data?.status === 400) {
+        const words = err.response.data.data?.map((w) => w.wordForm).join(", ");
+        toast.error(`Phát hiện từ ngữ nhạy cảm: ${words}`);
+      }
+      return false;
+    }
+  };
+
   const handleGenerateVoice = async (id: string, content: string) => {
     setGeneratingVoices((prev) => new Set(prev).add(id));
     try {
+      const ok = await checkNLP(content);
+      if (!ok) return;
+
       const res = await generateVoiceMutation.mutateAsync(content);
       const audioUrl = res.data;
       setCards((prev) =>
         prev.map((c) => (c.id === id ? { ...c, audioUrl } : c))
       );
+    } catch {
+      toast.error("Đã có lỗi xảy ra khi tạo giọng nói!");
     } finally {
       setGeneratingVoices((prev) => {
         const next = new Set(prev);
@@ -60,6 +91,9 @@ function CreateStoryAI() {
   const handleGenerateMedia = async (id: string, content: string) => {
     setGeneratingImages((prev) => new Set(prev).add(id));
     try {
+      const ok = await checkNLP(content);
+      if (!ok) return;
+
       const res = await generateMediaMutation.mutateAsync(content);
       console.log("res", res.data);
       const mediaUrl = res.data;
@@ -67,8 +101,8 @@ function CreateStoryAI() {
       setCards((prev) =>
         prev.map((c) => (c.id === id ? { ...c, mediaUrl: mediaUrl } : c))
       );
-    } catch (err) {
-      console.error(err);
+    } catch {
+      toast.error("Đã có lỗi xảy ra khi tạo hình ảnh!");
     } finally {
       setGeneratingImages((prev) => {
         const next = new Set(prev);
@@ -100,8 +134,9 @@ function CreateStoryAI() {
     }
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     setIsLoading(true);
+
     const fullContent = cards.map((c) => c.content).join("\n");
 
     // Gom mediaUrls và audioUrls
@@ -113,28 +148,35 @@ function CreateStoryAI() {
       .map((c) => c.audioUrl)
       .filter((url): url is string => Boolean(url));
 
-    const request: CreateStoryRequest = {
-      title,
-      content: fullContent,
-      coverImageUrl: "", // lấy ảnh đầu tiên làm cover
-      tags: tags,
-      privacyStatus: 0,
-      storyStatus: 1,
-      isAnonymous: isAnonymous,
-      mediaUrls,
-      audioUrls,
-    };
+    try {
+      // 🧠 Gọi NLP check
+      const ok = await checkNLP(fullContent, title, tags);
+      if (!ok) {
+        setIsLoading(false);
+        return;
+      }
 
-    createStoryMutation.mutate(request, {
-      onSuccess: () => {
-        toast.success("Tạo bài viết thành công!");
-        setIsLoading(false);
-        router.push("/");
-      },
-      onError: () => {
-        setIsLoading(false);
-      },
-    });
+      // ✅ Nếu không lỗi (status 200) => gọi createStory
+      const request: CreateStoryRequest = {
+        title,
+        content: fullContent,
+        coverImageUrl: "",
+        tags,
+        privacyStatus: 0,
+        storyStatus: 1,
+        isAnonymous,
+        mediaUrls,
+        audioUrls,
+      };
+
+      await createStoryMutation.mutateAsync(request);
+      toast.success("Tạo bài viết thành công!");
+      router.push("/");
+    } catch {
+      toast.error("Đã có lỗi xảy ra khi tạo bài viết!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

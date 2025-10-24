@@ -200,3 +200,21 @@ export interface CreateCommentResponse {
     isOwner: boolean;
   };
 }
+export interface CheckNLPRequest {
+  title?: string;
+  content?: string;
+  tags?: string[];
+}
+export interface CheckNLPResponse {
+  status: number;
+  message: string;
+  data: OffensiveWord[];
+}
+export interface OffensiveWord {
+  index: number;
+  wordForm: string;
+  posTag: string;
+  nerLabel: string;
+  head: number;
+  depLabel: string;
+}
