@@ -38,3 +38,11 @@ export const setPlanNameFromLocalStorage = (planName: string) =>
 export const removePlanNameFromLocalStorage = () => {
   isBrowser && localStorage.removeItem("planName");
 };
+
+export const getCreaditsFromLocalStorage = () =>
+  isBrowser ? localStorage.getItem("Creadits") : null;
+export const setCreaditsToLocalStorage = (planId: number) =>
+  isBrowser && localStorage.setItem("Creadits", planId.toString());
+export const removeCreaditsFromLocalStorage = () => {
+  isBrowser && localStorage.removeItem("Creadits");
+};

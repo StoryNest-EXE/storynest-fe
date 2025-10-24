@@ -203,7 +203,7 @@ const LoginPage = () => {
             <Link
               href="/forgot-password"
               tabIndex={-1}
-              className="text-center text-sm text-gray-400 hover:text-black"
+              className="text-center text-sm text-gray-400 hover:text-white"
             >
               Quên mật khẩu?
             </Link>

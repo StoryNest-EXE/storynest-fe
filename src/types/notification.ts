@@ -24,3 +24,15 @@ export interface Notification {
   createdAt: string; // ISO datetime string
   isRead: boolean;
 }
+
+export interface NotificationResponse {
+  status: number;
+  message: string;
+  data: NotificationData;
+}
+
+export interface NotificationData {
+  nextCursor: string | null;
+  hasMore: boolean;
+  items: Notification[];
+}

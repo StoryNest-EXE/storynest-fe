@@ -5,14 +5,20 @@ import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import pricingTiers from "./data";
 import { useRouter } from "next/navigation";
+import { getPlanIdFromLocalStorage } from "@/lib/localStorage";
 
 export default function Subcription() {
+  const myPlainId = getPlanIdFromLocalStorage();
   const router = useRouter();
-  const handlePayment = (value: string) => {
-    router.push(`/payment?plan=${value}`);
+  const handlePayment = (plainId: string) => {
+    if (myPlainId === plainId) {
+      router.push("/create-story");
+      return;
+    }
+    router.push(`/payment?plan=${plainId}`);
   };
   return (
-    <div className="container mx-auto px-4 py-16 gradient-bg">
+    <div className="container mx-auto px-4 py-16 ">
       {/* Header */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
@@ -80,8 +86,8 @@ export default function Subcription() {
                   : "bg-ensemble hover:bg-ensemble/90 text-background"
               }`}
               variant={tier.buttonVariant}
-              disabled={tier.name === "Mầm Non"}
-              onClick={() => handlePayment(tier.value)}
+              // disabled={tier.name === "Mầm Non"}
+              onClick={() => handlePayment(tier.plainId)}
             >
               {tier.buttonText}
             </Button>

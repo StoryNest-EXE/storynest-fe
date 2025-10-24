@@ -1,5 +1,7 @@
 import https from "@/lib/axios";
 import {
+  CheckNLPRequest,
+  CheckNLPResponse,
   CreateCommentRequest,
   CreateStoryRequest,
   CreateStoryResponse,
@@ -119,5 +121,10 @@ export const postCreateComment = async (
   id: string
 ) => {
   const response = await https.post(`/api/Comment/${id}`, data);
+  return response.data;
+};
+
+export const postCheckNLP = async (data: CheckNLPRequest) => {
+  const response = await https.post<CheckNLPResponse>(`/api/Nlp/check`, data);
   return response.data;
 };

@@ -7,6 +7,7 @@ import {
   getMyStories,
   getSearchStories,
   getStories,
+  postCheckNLP,
   postCreateComment,
   postCreateStory,
   postLike,
@@ -14,6 +15,7 @@ import {
   putUpdateStory,
 } from "@/services/story.service";
 import {
+  CheckNLPRequest,
   CommentResponse,
   CreateCommentRequest,
   CreateCommentResponse,
@@ -220,5 +222,11 @@ export const usePostCreateMutation = (
     mutationFn: ({ data, id }: { data: CreateCommentRequest; id: string }) =>
       postCreateComment(data, id),
     ...options,
+  });
+};
+
+export const useCheckNLPMutation = () => {
+  return useMutation({
+    mutationFn: (data: CheckNLPRequest) => postCheckNLP(data),
   });
 };

@@ -221,13 +221,13 @@ export default function ResetPasswordContent() {
           <RippleButton
             type="submit"
             disabled={isResetting}
-            className="mt-2 w-full bg-[#5E49D8] text-white shadow-lg hover:bg-[#6B53F6] active:scale-95"
+            className="w-full h-12 cursor-pointer border-transparent bg-[#5E49D8] text-white shadow-lg shadow-black/16 duration-200 hover:bg-[#6B53F6] active:scale-95"
           >
             {isResetting ? (
               <div className="flex items-center gap-2">
                 <Loader />{" "}
                 <span>
-                  <StoryNestLoader />
+                  <p>Loading...</p>
                 </span>
               </div>
             ) : (

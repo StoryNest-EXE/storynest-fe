@@ -1,4 +1,6 @@
 "use client";
+
+import { NeatBackground } from "@/components/NeatBackground";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +28,14 @@ export default function RequireRole({
     }
   }, [token, role, router, initialized]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        {/* Vẫn có background phía sau vì NeatBackground nằm ngoài RequireRole */}
+        <span>Loading...</span>
+      </div>
+    );
+  }
 
   return <>{children}</>;
 }
