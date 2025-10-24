@@ -59,7 +59,7 @@ export default function CreateStoryPage() {
       const response = axiosError.response?.data;
       if (response?.status === 400) {
         const offensiveWords = response.data
-          .map((item: any) => item.wordForm)
+          .map((item) => item.wordForm)
           .join(", ");
         toast.error(
           `Câu chuyện của bạn chứa từ ngữ nhạy cảm: ${offensiveWords}`
