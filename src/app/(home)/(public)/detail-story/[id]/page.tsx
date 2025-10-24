@@ -70,7 +70,7 @@ export default function StoryDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="">
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Back Button */}
         <Link href="/">

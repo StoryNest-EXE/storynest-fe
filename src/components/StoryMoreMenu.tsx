@@ -28,9 +28,11 @@ export default function MoreOptionsButton({
     deleteStory.mutate(storyId);
   };
 
-  const handleUpdate = (storyId: number, isAI: boolean) => {
+  const handleUpdate = (storyId: number, isAI: boolean, slug: string) => {
     if (!isAI) {
       router.push(`/update-story/${storyId}`);
+    } else {
+      router.push(`/update-story-ai/${slug}`);
     }
   };
   return (
@@ -44,9 +46,11 @@ export default function MoreOptionsButton({
       <DropdownMenuContent align="end" className="w-40">
         <DropdownMenuLabel>Tuỳ chọn</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleUpdate(storyId, isAI)}>
-          ✏️ Chỉnh sửa
-        </DropdownMenuItem>
+        {!isAI && (
+          <DropdownMenuItem onClick={() => handleUpdate(storyId, isAI, slug)}>
+            ✏️ Chỉnh sửa
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={() => handleDelete(storyId)}>
           🗑️ Xoá
         </DropdownMenuItem>

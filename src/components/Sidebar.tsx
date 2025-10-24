@@ -42,7 +42,7 @@ const items = [
   { title: "Gói đăng kí", url: "subcription", icon: Inbox },
   { title: "Tạo câu chuyện", url: "/create-story", icon: Plus },
   { title: "Tạo câu chuyện cùng AI", url: "/create-story-ai", icon: Sparkles },
-  { title: "Thông báo", url: "#", icon: Bell },
+  // { title: "Thông báo", url: "#", icon: Bell },
   { title: "Trang cá nhân", url: "/profile", icon: UserRoundPen },
 ];
 
@@ -59,7 +59,7 @@ export function UserSidebar() {
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync();
-      authLogout(); // Clear local state
+      authLogout();
       window.location.href = "/login";
     } catch (error) {
       console.error("Logout failed:", error);
@@ -68,26 +68,28 @@ export function UserSidebar() {
 
   const filteredItems = items.filter((item) => {
     if (item.title === "Gói đăng kí" && planId !== null) {
-      return false; // ẩn đi
+      return false;
     }
     return true;
   });
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="flex items-center">
+    <Sidebar
+      collapsible="icon"
+      className="border-white/10 bg-white/5 backdrop-blur-xl backdrop-saturate-150"
+    >
+      <SidebarHeader className="flex items-center border-b border-white/10 pb-4">
         {state === "collapsed" ? (
-          // <Image src="/svg/logo-2.svg" alt="Logo nhỏ" width={100} height={60} />
-          <SidebarTrigger />
+          <SidebarTrigger className="hover:bg-white/10 focus-visible:ring-0 focus-visible:ring-offset-0" />
         ) : (
-          <div className="flex flex-row gap-8">
+          <div className="flex flex-row gap-8 items-center">
             <Image
               src="/assets/icon.png"
               alt="Logo lớn"
               width={120}
               height={80}
             />
-            <SidebarTrigger />
+            <SidebarTrigger className="hover:bg-white/10 focus-visible:ring-0 focus-visible:ring-offset-0" />
           </div>
         )}
       </SidebarHeader>
@@ -97,29 +99,32 @@ export function UserSidebar() {
           <SidebarGroupContent>
             <TooltipProvider>
               <SidebarMenu className="gap-10 items-start group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
-                {filteredItems.map((item) => (
+                {items.map((item) => (
                   <SidebarMenuItem key={item.title} className="w-full h-full">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <SidebarMenuButton asChild className="w-full h-full">
+                        <SidebarMenuButton
+                          asChild
+                          className="w-full h-full hover:bg-white/10 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        >
                           <a
                             href={item.url}
                             className="flex items-center gap-2 w-full px-2 py-2 rounded-md justify-start 
-                              group-data-[collapsible=icon]:justify-center"
+                              group-data-[collapsible=icon]:justify-center transition-all duration-200
+                              hover:bg-white/10"
                           >
                             <item.icon
                               className="!h-7 !w-7 group-data-[collapsible=icon]:h-7 
                                 group-data-[collapsible=icon]:w-7 transition-all
-                                !shrink-0 !size-auto"
+                                !shrink-0 !size-auto text-white/90"
                             />
-                            {/* chỉ hiện khi chưa collapsed */}
-                            <span className="ml-5 group-data-[collapsible=icon]:hidden">
+                            <span className="ml-5 group-data-[collapsible=icon]:hidden text-white/90">
                               {item.title}
                             </span>
                           </a>
                         </SidebarMenuButton>
                       </TooltipTrigger>
-                      <TooltipContent side="right">
+                      <TooltipContent side="right" className="">
                         <p>{item.title}</p>
                       </TooltipContent>
                     </Tooltip>
@@ -130,11 +135,14 @@ export function UserSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="flex items-start group-data-[collapsible=icon]:items-center">
+
+      <SidebarFooter className="flex items-start group-data-[collapsible=icon]:items-center border-t border-white/10 pt-4">
         {token ? (
           <Button
             variant="outline"
-            className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center hover:!bg-red-400"
+            className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center 
+              bg-transparent border-white/20 text-white/90 hover:bg-red-500/20 hover:border-red-500/40 
+              hover:text-red-400 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0"
             onClick={handleLogout}
             disabled={logoutMutation.isPending}
           >
@@ -146,7 +154,10 @@ export function UserSidebar() {
         ) : (
           <Button
             variant="default"
-            className="w-full bg-violet-950 text-white hover:bg-violet-900 flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center"
+            className="w-full bg-violet-600/30 backdrop-blur-sm border border-violet-500/30 text-white 
+              hover:bg-violet-600/50 hover:border-violet-500/50 flex items-center gap-2 justify-center 
+              group-data-[collapsible=icon]:justify-center transition-all duration-200 
+              focus-visible:ring-0 focus-visible:ring-offset-0"
             onClick={() => (window.location.href = "/login")}
           >
             <LogIn className="h-5 w-5 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7 transition-all !shrink-0 !size-auto" />

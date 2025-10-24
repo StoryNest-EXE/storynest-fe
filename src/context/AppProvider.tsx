@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./AuthContext";
 import { Toaster } from "sonner";
 import { SignalRProvider } from "./SignalRContext";
+import { NeatBackground } from "@/components/NeatBackground";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,7 @@ const queryClient = new QueryClient({
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Thêm các provider khác ở đây sau này, ví dụ: <AuthProvider> */}
+      {/* <NeatBackground /> */}
       <AuthProvider>
         <SignalRProvider>
           <ThemeProvider
