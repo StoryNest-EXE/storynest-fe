@@ -140,9 +140,7 @@ export function UserSidebar() {
         {token ? (
           <Button
             variant="outline"
-            className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center 
-              bg-transparent border-white/20 text-white/90 hover:bg-red-500/20 hover:border-red-500/40 
-              hover:text-red-400 transition-all duration-200 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center hover:!bg-red-400"
             onClick={handleLogout}
             disabled={logoutMutation.isPending}
           >
@@ -154,10 +152,7 @@ export function UserSidebar() {
         ) : (
           <Button
             variant="default"
-            className="w-full bg-violet-600/30 backdrop-blur-sm border border-violet-500/30 text-white 
-              hover:bg-violet-600/50 hover:border-violet-500/50 flex items-center gap-2 justify-center 
-              group-data-[collapsible=icon]:justify-center transition-all duration-200 
-              focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full bg-violet-950 text-white hover:bg-violet-900 flex items-center gap-2 justify-center group-data-[collapsible=icon]:justify-center"
             onClick={() => (window.location.href = "/login")}
           >
             <LogIn className="h-5 w-5 group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7 transition-all !shrink-0 !size-auto" />

@@ -1,6 +1,6 @@
 export interface PricingTier {
   name: string;
-  value: string;
+  plainId: string;
   icon: string;
   description: string;
   price: string;
@@ -15,7 +15,7 @@ export interface PricingTier {
 const pricingTiers: PricingTier[] = [
   {
     name: "Mầm Non",
-    value: "1",
+    plainId: "1",
     icon: "🌱",
     description: "Gieo mầm cho những câu chuyện đầu tiên của bạn.",
     price: "Miễn phí",
@@ -35,7 +35,7 @@ const pricingTiers: PricingTier[] = [
   },
   {
     name: "Nở Hoa",
-    value: "2",
+    plainId: "2",
     icon: "🌸",
     description:
       "Giúp câu chuyện của bạn nở hoa và chạm đến nhiều trái tim hơn.",
@@ -56,7 +56,7 @@ const pricingTiers: PricingTier[] = [
   },
   {
     name: "Thịnh Vượng",
-    value: "3",
+    plainId: "3",
     icon: "🌺",
     description: "Để sự sáng tạo của bạn phát triển mạnh mẽ không giới hạn.",
     price: "149.000đ",
@@ -79,7 +79,7 @@ const pricingTiers: PricingTier[] = [
   },
   {
     name: "Đồng Hành",
-    value: "4",
+    plainId: "4",
     icon: "👥",
     description: "Tạo kỷ niệm cùng nhau với nhóm của bạn.",
     price: "249.000đ",
