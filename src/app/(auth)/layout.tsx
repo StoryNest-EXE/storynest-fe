@@ -113,14 +113,21 @@ export default function AuthLayout({
           {children}
         </div>
         <div className="mt-auto flex w-full flex-col items-center justify-center gap-2 text-xs text-gray-400 md:flex-row md:justify-between md:text-sm">
-          <p onClick={() => router.push("/term-of-services")}>
-            © 2025 - Storynest
-          </p>
-          <p
-            className="text-center"
-            onClick={() => router.push("/privacy-policy")}
-          >
-            Chính sách bảo mật • Điều khoản & Điều kiện
+          <p>© 2025 - Storynest</p>
+          <p className="text-center space-x-2">
+            <span
+              className="cursor-pointer  hover:underline "
+              onClick={() => router.push("/privacy-policy")}
+            >
+              Chính sách bảo mật
+            </span>
+            •&nbsp;&nbsp;
+            <span
+              className="cursor-pointer  hover:underline"
+              onClick={() => router.push("/term-of-services")}
+            >
+              Điều khoản & Dịch vụ
+            </span>
           </p>
         </div>
       </section>
