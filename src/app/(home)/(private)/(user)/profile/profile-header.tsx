@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMeQuery } from "@/queries/user.queries";
+import { useState } from "react";
 
 export function ProfileHeader() {
+  const [modalOpen, setModalOpen] = useState(false);
   const { data } = useMeQuery();
-  console.log("Data nè", data);
+
   return (
     <div className="mb-6">
       <div className="flex items-start justify-between">
@@ -28,6 +30,8 @@ export function ProfileHeader() {
       <Button
         variant="outline"
         className="mt-4 w-full rounded-xl border-border bg-transparent text-foreground hover:bg-secondary"
+        onClick={() => setModalOpen(true)}
+        size="lg"
       >
         Edit Profile
       </Button>
