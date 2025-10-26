@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { StoryCardPreview } from "./story-card-preview";
 import {
   useMyAIStoriesQuery,
   useMyStoriesQuery,
 } from "@/queries/story.queries";
 import StoryNestLoader from "@/components/story-nest-loader/StoryNestLoader";
+import { StoryCardPreview } from "./story-card-preview";
 
 const tabs = ["Story", "Replies", "Media", "Story AI"];
 

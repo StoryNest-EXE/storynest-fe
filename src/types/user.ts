@@ -1,3 +1,22 @@
+import z from "zod";
+
+export const profileFormSchema = z.object({
+  userName: z.string().min(3, "Tên đăng nhập phải có ít nhất 3 kí tự"),
+  fullName: z.string().nullable().optional(),
+  bio: z
+    .string()
+    .max(200, "Tiểu sử không được quá 200 ký tự")
+    .nullable()
+    .optional(),
+  dateOfBirth: z.date().refine((val) => val, {
+    message: "Vui lòng chọn ngày sinh",
+  }),
+  gender: z.enum(["male", "female", "other"]).refine((val) => val, {
+    message: "Vui lòng chọn giới tính",
+  }),
+});
+
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 export interface UserProfileResponse {
   status: number;
   message: string;
@@ -16,4 +35,13 @@ export interface UserProfile {
   id: number;
   username: string;
   avatarUrl: string | null;
+}
+
+// Update Profile
+export interface UpdateUserProfileRequest {
+  userName: string;
+  fullName: string;
+  bio: string;
+  dateOfBirth: Date;
+  gender: string;
 }
