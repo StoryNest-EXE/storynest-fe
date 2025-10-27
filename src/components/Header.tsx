@@ -81,7 +81,7 @@ export function Header() {
 
       <div className="flex items-center gap-4">
         {/* Notification Bell */}
-        <NotificationComponent />
+        {token && <NotificationComponent />}
 
         {/* User Avatar */}
         {user && (

@@ -39,7 +39,7 @@ import { useEffect, useState } from "react";
 
 const items = [
   { title: "Trang chủ", url: "/home", icon: Home },
-  { title: "Gói đăng kí", url: "/home/subcription", icon: Inbox },
+  { title: "Gói đăng ký", url: "/home/subcription", icon: Inbox },
   { title: "Tạo câu chuyện", url: "/home/create-story", icon: Plus },
   {
     title: "Tạo câu chuyện cùng AI",
