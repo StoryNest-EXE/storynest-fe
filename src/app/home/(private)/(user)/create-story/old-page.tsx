@@ -162,7 +162,7 @@ function CreateStory() {
     createStoryMutation.mutate(storyReq, {
       onSuccess: () => {
         toast.success("Tạo bài viết thành công!");
-        router.push("/");
+        router.push("/home");
       },
     });
   };

@@ -38,12 +38,16 @@ import { getPlanIdFromLocalStorage } from "@/lib/localStorage";
 import { useEffect, useState } from "react";
 
 const items = [
-  { title: "Trang chủ", url: "/", icon: Home },
-  { title: "Gói đăng kí", url: "subcription", icon: Inbox },
-  { title: "Tạo câu chuyện", url: "/create-story", icon: Plus },
-  { title: "Tạo câu chuyện cùng AI", url: "/create-story-ai", icon: Sparkles },
+  { title: "Trang chủ", url: "/home", icon: Home },
+  { title: "Gói đăng ký", url: "/home/subcription", icon: Inbox },
+  { title: "Tạo câu chuyện", url: "/home/create-story", icon: Plus },
+  {
+    title: "Tạo câu chuyện cùng AI",
+    url: "/home/create-story-ai",
+    icon: Sparkles,
+  },
   // { title: "Thông báo", url: "#", icon: Bell },
-  { title: "Trang cá nhân", url: "/profile", icon: UserRoundPen },
+  { title: "Trang cá nhân", url: "/home/profile", icon: UserRoundPen },
 ];
 
 export function UserSidebar() {

@@ -26,7 +26,7 @@ export function TagInput({ value, onChange }: TagInputProps) {
   };
 
   return (
-    <div className="p-3 border rounded-md dark:bg-input/30">
+    <div className="p-3 border rounded-md text-card-foreground bg-card shadow-xl">
       <div className="flex flex-wrap gap-2 mb-2">
         {value.map((tag, idx) => (
           <span
@@ -47,7 +47,7 @@ export function TagInput({ value, onChange }: TagInputProps) {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Nhập tag và nhấn Enter..."
-        className="border-none focus:ring-0 bg-transparent text-white placeholder:text-slate-400"
+        className="border-none focus:ring-0 bg-transparent text-card-foreground placeholder:text-slate-400"
       />
     </div>
   );

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import VoicePlayer from "@/components/VoicePlayer";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   useDetailStoryQuery,
   useLikeMutation,
@@ -22,7 +22,7 @@ import {
 } from "@/queries/story.queries";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CommentSection } from "@/app/(home)/(public)/detail-story/[id]/CommentSection";
+import { CommentSection } from "@/app/home/(public)/detail-story/[id]/CommentSection";
 
 export default function StoryDetailPage() {
   const params = useParams();
@@ -37,6 +37,7 @@ export default function StoryDetailPage() {
   const [likeCount, setLikeCount] = useState(detailStory?.data.likeCount ?? 0);
   const likeMutation = useLikeMutation();
   const unlikeMutation = useUnlikeMutation();
+  const router = useRouter();
 
   const handleLike = () => {
     const prevLiked = isLiked;
@@ -73,12 +74,17 @@ export default function StoryDetailPage() {
     <div className="">
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Back Button */}
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="mb-4 -ml-2">
+        <div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-4 -ml-2"
+            onClick={() => router.back()}
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Quay lại
           </Button>
-        </Link>
+        </div>
 
         {/* Story Detail Card */}
         <Card className="bg-card border-border p-6 space-y-4">

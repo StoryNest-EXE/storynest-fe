@@ -46,6 +46,10 @@
   --color-bloom: var(--bloom);
   --color-flourish: var(--flourish);
   --color-ensemble: var(--ensemble);
+  /* Theme color for topic */
+  --color-theme-primary: var(--theme-color-primary);
+  --color-theme-secondary: var(--theme-color-secondary);
+  --color-theme-tertiary: var(--theme-color-tertiary);
 }
 
 :root {
@@ -58,6 +62,9 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
+  --theme-color-primary: oklch(0.7 0.2 280);
+  --theme-color-secondary: oklch(0.75 0.18 320);
+  --theme-color-tertiary: oklch(0.6 0.15 200);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
   --popover: oklch(1 0 0);

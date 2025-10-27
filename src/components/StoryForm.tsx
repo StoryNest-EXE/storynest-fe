@@ -225,7 +225,7 @@ export default function StoryForm({
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-semibold text-gray-200">
+        <h1 className="text-2xl font-semibold text-foreground">
           Chia sẻ câu chuyện của bạn
         </h1>
       </div>
@@ -237,25 +237,25 @@ export default function StoryForm({
             onToggle={setIsAnonymous}
           />
 
-          <div className="space-y-2">
-            <label className="text-sm text-gray-300">Tiêu đề *</label>
+          <div className="space-y-2 ">
+            <label className="text-sm text-foreground ">Tiêu đề *</label>
             <Textarea
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               spellCheck={false}
               maxLength={300}
-              className="!text-lg font-semibold"
+              className="!text-lg font-semibold !bg-card !text-card-foreground !border-input shadow-xl"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Tags</label>
+            <label className="text-sm text-foreground">Tags</label>
             <TagInput value={tags} onChange={setTags} />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Nội dung</label>
-            <div className="border border-slate-600 rounded-md bg-slate-800/50">
+            <label className="text-sm text-foreground">Nội dung</label>
+            <div className="border rounded-md bg-card text-card-foreground shadow-xl">
               <div className="flex items-center gap-1 p-3 border-b border-slate-600">
                 <Button
                   size="sm"

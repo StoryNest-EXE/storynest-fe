@@ -69,7 +69,7 @@ export function PostCard({ story }: PostCardProps) {
   };
 
   const handleComment = (slug: string) => {
-    router.push(`/detail-story/${slug}`);
+    router.push(`/home/detail-story/${slug}`);
   };
 
   return (

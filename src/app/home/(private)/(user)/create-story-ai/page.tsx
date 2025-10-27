@@ -171,7 +171,7 @@ function CreateStoryAI() {
 
       await createStoryMutation.mutateAsync(request);
       toast.success("Tạo bài viết thành công!");
-      router.push("/");
+      router.push("/home");
     } catch {
       toast.error("Đã có lỗi xảy ra khi tạo bài viết!");
     } finally {
