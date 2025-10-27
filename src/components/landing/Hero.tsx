@@ -45,7 +45,7 @@ function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button
               size="lg"
-              className="bg-theme-primary hover:bg-theme-primary/90 text-primary-foreground gap-2"
+              className="bg-theme-primary hover:bg-theme-primary/90 text-primary-foreground gap-2 cursor-pointer"
               onClick={() => router.push("/login")}
             >
               Bắt Đầu Chia Sẻ <ArrowRight className="w-4 h-4" />
@@ -53,6 +53,7 @@ function Hero() {
             <Button
               size="lg"
               variant="outline"
+              className="cursor-pointer"
               onClick={() => router.push("/home")}
             >
               Khám Phá Câu Chuyện
