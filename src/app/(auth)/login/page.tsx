@@ -83,7 +83,7 @@ const LoginPage = () => {
       setPlanIdToLocalStorage(response.data.planId ?? 1);
       setPlanNameFromLocalStorage(response.data.planName ?? "");
 
-      router.push("/");
+      router.push("/home");
     } catch (err) {
       // 🛑 Nếu server trả về lỗi 400: Invalid username or password
       if (isAxiosError(err) && err.response?.status === 400) {

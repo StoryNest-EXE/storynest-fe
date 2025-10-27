@@ -35,7 +35,7 @@
 
 //         if (res.data.status === 200) {
 //           login(res.data.data.accessToken);
-//           navigate("/");
+//           navigate("/home");
 //         } else {
 //           setError?.(
 //             res.data.message || "An error occurred during Google login"

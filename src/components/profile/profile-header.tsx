@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMeQuery } from "@/queries/user.queries";
 import { useState } from "react";
-import { EditProfileModal } from "@/app/(home)/(private)/(user)/profile/modals/EditProfileModal";
+import { EditProfileModal } from "@/app/home/(private)/(user)/profile/modals/EditProfileModal";
 
 export function ProfileHeader() {
   const [modalOpen, setModalOpen] = useState(false);

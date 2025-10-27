@@ -103,7 +103,7 @@ export function Header() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/10" />
               <DropdownMenuItem
-                onClick={() => router.push("/profile")}
+                onClick={() => router.push("/home/profile")}
                 className="hover:bg-white/10 text-white/90"
               >
                 <UserIcon className="mr-2 h-4 w-4" />

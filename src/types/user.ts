@@ -59,3 +59,5 @@ export const changePasswordFormSchema = z
   });
 
 export type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
+
+export const ChangePasswordRequest = z.object({});

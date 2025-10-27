@@ -41,7 +41,7 @@ export default function PaymentCheckoutClient() {
   useEffect(() => {
     if (checkPayment?.status === 200) {
       toast.success("Thanh toán thành công");
-      router.push("/");
+      router.push("/home");
     }
   }, [checkPayment, router]);
 
@@ -82,7 +82,7 @@ export default function PaymentCheckoutClient() {
 
   const handleCancelPayment = (orderCode: number) => {
     cancelPaymentMutation.mutate(orderCode);
-    router.push("/");
+    router.push("/home");
   };
 
   return (

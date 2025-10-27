@@ -22,7 +22,7 @@ function CreateStory() {
         </Avatar>
         <span
           className="opacity-40 ml-4 flex items-center"
-          onClick={() => router.push("/create-story")}
+          onClick={() => router.push("/home/create-story")}
         >
           Có chuyện gì hot!
         </span>
@@ -30,7 +30,7 @@ function CreateStory() {
           <Button
             className="cursor-pointer"
             onClick={() => {
-              router.push("/create-story");
+              router.push("/home/create-story");
             }}
           >
             Kể chuyện ngay

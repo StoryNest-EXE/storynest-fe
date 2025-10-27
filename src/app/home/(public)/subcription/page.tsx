@@ -12,10 +12,10 @@ export default function Subcription() {
   const router = useRouter();
   const handlePayment = (plainId: string) => {
     if (myPlainId === plainId) {
-      router.push("/create-story");
+      router.push("/home/create-story");
       return;
     }
-    router.push(`/payment?plan=${plainId}`);
+    router.push(`/home/payment?plan=${plainId}`);
   };
   return (
     <div className="container mx-auto px-4 py-16 ">

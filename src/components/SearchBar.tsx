@@ -12,7 +12,7 @@ export function SearchBar() {
 
   const handleSearch = () => {
     if (!keyword.trim()) return;
-    router.push(`/search?keyword=${keyword}`);
+    router.push(`/home/search?keyword=${keyword}`);
   };
 
   return (

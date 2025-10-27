@@ -30,9 +30,9 @@ export default function MoreOptionsButton({
 
   const handleUpdate = (storyId: number, isAI: boolean, slug: string) => {
     if (!isAI) {
-      router.push(`/update-story/${storyId}`);
+      router.push(`/home/update-story/${storyId}`);
     } else {
-      router.push(`/update-story-ai/${slug}`);
+      router.push(`/home/update-story-ai/${slug}`);
     }
   };
   return (

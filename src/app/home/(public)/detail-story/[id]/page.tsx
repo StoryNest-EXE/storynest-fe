@@ -22,7 +22,7 @@ import {
 } from "@/queries/story.queries";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CommentSection } from "@/app/(home)/(public)/detail-story/[id]/CommentSection";
+import { CommentSection } from "@/app/home/(public)/detail-story/[id]/CommentSection";
 
 export default function StoryDetailPage() {
   const params = useParams();

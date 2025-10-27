@@ -57,7 +57,7 @@ export default function UpdateStoryPage() {
 
     try {
       await updateStoryMutation.mutateAsync(payload);
-      router.push("/profile");
+      router.push("/home/profile");
     } catch (err) {
       console.error(err);
       toast.error("Cập nhật thất bại");

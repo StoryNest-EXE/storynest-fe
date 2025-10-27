@@ -52,7 +52,7 @@ export default function CreateStoryPage() {
       });
 
       toast.success("Tạo bài viết thành công!");
-      router.push("/");
+      router.push("/home");
     } catch (error: unknown) {
       // ⚠️ Nếu checkNLP trả lỗi 400 từ Axios thì nó sẽ bị catch ở đây
       const axiosError = error as AxiosError<CheckNLPResponse>;
