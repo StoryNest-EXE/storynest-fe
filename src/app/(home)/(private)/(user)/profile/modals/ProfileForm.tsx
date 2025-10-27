@@ -73,7 +73,6 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       dateOfBirth: data.dateOfBirth || "",
       gender: data.gender,
     };
-    console.log("Input", requestData);
     const res = await updateMeMutation(requestData, {
       onSuccess: () => {
         toast.success("Cập nhật hồ sơ thành công");
@@ -83,7 +82,6 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
         toast.error("Cập nhật thất bại, vui lòng thử lại!");
       },
     });
-    console.log("repsonse ", res);
   };
 
   return (

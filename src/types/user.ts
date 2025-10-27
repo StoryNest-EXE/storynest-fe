@@ -45,3 +45,17 @@ export interface UpdateUserProfileRequest {
   dateOfBirth: Date;
   gender: string;
 }
+
+//------------------------------------------------------ CHANGE PASSWORD ------------------------------------------------------
+export const changePasswordFormSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Vui lòng nhập mật khẩu cũ"),
+    newPassword: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+    confirmPassword: z.string().min(1, "Vui lòng xác nhận mật khẩu"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Mật khẩu không khớp",
+    path: ["confirmPassword"], // Đặt lỗi vào trường confirmPassword
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;

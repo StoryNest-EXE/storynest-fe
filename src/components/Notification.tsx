@@ -134,9 +134,9 @@ export function NotificationComponent() {
               {allNotifications.map((noti) => (
                 <DropdownMenuItem
                   key={noti.id}
-                  onClick={() =>
-                    router.push(`/detail-story/${noti.referenceId}`)
-                  }
+                  // onClick={() =>
+                  //   router.push(`/detail-story/${noti.referenceId}`)
+                  // }
                   className="flex items-start gap-2 hover:bg-white/10"
                 >
                   {!noti.isRead && (
