@@ -1,9 +1,13 @@
+"use client";
+
 import { ArrowRight, BookOpen } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import GradientText from "../GradientText";
+import { useRouter } from "next/navigation";
 
 function Hero() {
+  const router = useRouter();
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
       {/* Background gradient effect */}
@@ -42,10 +46,15 @@ function Hero() {
             <Button
               size="lg"
               className="bg-theme-primary hover:bg-theme-primary/90 text-primary-foreground gap-2"
+              onClick={() => router.push("/login")}
             >
               Bắt Đầu Chia Sẻ <ArrowRight className="w-4 h-4" />
             </Button>
-            <Button size="lg" variant="outline">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => router.push("/home")}
+            >
               Khám Phá Câu Chuyện
             </Button>
           </div>
