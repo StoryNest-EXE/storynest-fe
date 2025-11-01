@@ -27,7 +27,7 @@ export default function GoogleLoginButton() {
         ></path>
         <path d="M1 1h22v22H1z" fill="none"></path>
       </svg>
-      Continue with Google
+      Đăng nhập với Google
     </Button>
   );
 }
