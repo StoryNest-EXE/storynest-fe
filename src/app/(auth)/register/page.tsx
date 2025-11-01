@@ -71,228 +71,230 @@ export default function RegisterPage() {
 
   return (
     <Form {...form}>
-      <div className="w-full text-center">
-        <h1 className="text-2xl md:text-3xl font-semibold text-white">
-          Tạo tài khoản
-        </h1>
-        <GradientText
-          colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-          animationSpeed={3}
-          className="!text-5xl flex justify-center font-semibold leading-[1.2]"
+      <div className="flex flex-col items-center ">
+        <div className="w-full text-center">
+          <h1 className="text-2xl md:text-3xl font-semibold text-white">
+            Tạo tài khoản
+          </h1>
+          <GradientText
+            colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+            animationSpeed={3}
+            className="!text-5xl flex justify-center font-semibold leading-[1.2]"
+          >
+            StoryNest
+          </GradientText>
+        </div>
+
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mt-6 space-y-5 max-w-md w-full mx-auto px-4"
         >
-          StoryNest
-        </GradientText>
-      </div>
-
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-6 space-y-5 max-w-md mx-auto px-4 sm:px-6 md:px-8"
-      >
-        {/* Username */}
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormControl>
-                <input
-                  autoComplete="username"
-                  disabled={isPending}
-                  {...field}
-                  className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
-                  placeholder=" "
-                />
-              </FormControl>
-              <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
-                Tên đăng nhập
-              </FormLabel>
-              <FormMessage className="text-red-400 text-xs mt-1" />
-            </FormItem>
-          )}
-        />
-
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormControl>
-                <input
-                  type="email"
-                  autoComplete="email"
-                  disabled={isPending}
-                  {...field}
-                  className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
-                  placeholder=" "
-                />
-              </FormControl>
-              <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
-                Email
-              </FormLabel>
-              <FormMessage className="text-red-400 text-xs mt-1" />
-            </FormItem>
-          )}
-        />
-
-        {/* Full Name */}
-        <FormField
-          control={form.control}
-          name="fullName"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormControl>
-                <input
-                  autoComplete="name"
-                  disabled={isPending}
-                  {...field}
-                  className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
-                  placeholder=" "
-                />
-              </FormControl>
-              <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
-                Họ và tên
-              </FormLabel>
-              <FormMessage className="text-red-400 text-xs mt-1" />
-            </FormItem>
-          )}
-        />
-
-        {/* Password */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormControl>
-                <div className="relative">
+          {/* Username */}
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormControl>
                   <input
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
+                    autoComplete="username"
                     disabled={isPending}
                     {...field}
                     className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
                     placeholder=" "
                   />
-                  <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
-                    Mật khẩu
-                  </FormLabel>
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((p) => !p)}
-                    tabIndex={-1}
-                    className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
-                  >
-                    {showPassword ? (
-                      <GrFormView size={22} />
-                    ) : (
-                      <GrFormViewHide size={22} />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage className="text-red-400 text-xs mt-1" />
-            </FormItem>
-          )}
-        />
+                </FormControl>
+                <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
+                  Tên đăng nhập
+                </FormLabel>
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
 
-        {/* Confirm Password */}
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormControl>
-                <div className="relative">
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormControl>
                   <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    autoComplete="new-password"
+                    type="email"
+                    autoComplete="email"
                     disabled={isPending}
                     {...field}
                     className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
                     placeholder=" "
                   />
-                  <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
-                    Xác nhận mật khẩu
-                  </FormLabel>
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((p) => !p)}
-                    tabIndex={-1}
-                    className="absolute top-1/2 right-2 -translate-y-1/2"
+                </FormControl>
+                <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
+                  Email
+                </FormLabel>
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
+          {/* Full Name */}
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormControl>
+                  <input
+                    autoComplete="name"
+                    disabled={isPending}
+                    {...field}
+                    className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
+                    placeholder=" "
+                  />
+                </FormControl>
+                <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
+                  Họ và tên
+                </FormLabel>
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
+          {/* Password */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormControl>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      disabled={isPending}
+                      {...field}
+                      className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
+                      placeholder=" "
+                    />
+                    <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
+                      Mật khẩu
+                    </FormLabel>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((p) => !p)}
+                      tabIndex={-1}
+                      className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                    >
+                      {showPassword ? (
+                        <GrFormView size={22} />
+                      ) : (
+                        <GrFormViewHide size={22} />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
+          {/* Confirm Password */}
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormControl>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      disabled={isPending}
+                      {...field}
+                      className="peer block w-full border-b-2 border-gray-500 bg-transparent py-3 text-sm text-white focus:border-violet-500 focus:outline-none"
+                      placeholder=" "
+                    />
+                    <FormLabel className="absolute top-3 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-violet-400">
+                      Xác nhận mật khẩu
+                    </FormLabel>
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((p) => !p)}
+                      tabIndex={-1}
+                      className="absolute top-1/2 right-2 -translate-y-1/2"
+                    >
+                      {showConfirmPassword ? (
+                        <GrFormView size={22} />
+                      ) : (
+                        <GrFormViewHide size={22} />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
+          {/* Terms */}
+          <FormField
+            control={form.control}
+            name="termsAgreement"
+            render={({ field }) => (
+              <FormItem className="flex items-center mt-2 whitespace-nowrap">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className=""
+                  />
+                </FormControl>
+                <FormLabel className="text-sm text-gray-300 select-none">
+                  Tôi đồng ý với{" "}
+                  <Link
+                    href="/privacy-policy"
+                    className="text-violet-400 hover:text-violet-300 font-medium"
                   >
-                    {showConfirmPassword ? (
-                      <GrFormView size={22} />
-                    ) : (
-                      <GrFormViewHide size={22} />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage className="text-red-400 text-xs mt-1" />
-            </FormItem>
+                    Điều khoản dịch vụ
+                  </Link>{" "}
+                  và{" "}
+                  <Link
+                    href="/term-of-services"
+                    className="text-violet-400 hover:text-violet-300 font-medium"
+                  >
+                    Chính sách bảo mật
+                  </Link>
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+
+          {error && (
+            <FormDescription className="text-left text-sm text-red-500">
+              {error}
+            </FormDescription>
           )}
-        />
 
-        {/* Terms */}
-        <FormField
-          control={form.control}
-          name="termsAgreement"
-          render={({ field }) => (
-            <FormItem className="flex items-center mt-2 whitespace-nowrap">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className=""
-                />
-              </FormControl>
-              <FormLabel className="text-sm text-gray-300 select-none">
-                Tôi đồng ý với{" "}
-                <Link
-                  href="/privacy-policy"
-                  className="text-violet-400 hover:text-violet-300 font-medium"
-                >
-                  Điều khoản dịch vụ
-                </Link>{" "}
-                và{" "}
-                <Link
-                  href="/term-of-services"
-                  className="text-violet-400 hover:text-violet-300 font-medium"
-                >
-                  Chính sách bảo mật
-                </Link>
-              </FormLabel>
-            </FormItem>
-          )}
-        />
+          <RippleButton
+            type="submit"
+            disabled={isPending}
+            className="w-full bg-violet-600 text-white py-3 rounded-lg hover:bg-violet-700 transition-all text-sm sm:text-base"
+          >
+            {isPending ? (
+              <div className="flex items-center justify-center gap-2">
+                <Loader /> <span>Đang xử lý...</span>
+              </div>
+            ) : (
+              "Đăng ký"
+            )}
+          </RippleButton>
+        </form>
 
-        {error && (
-          <FormDescription className="text-left text-sm text-red-500">
-            {error}
-          </FormDescription>
-        )}
-
-        <RippleButton
-          type="submit"
-          disabled={isPending}
-          className="w-full bg-violet-600 text-white py-3 rounded-lg hover:bg-violet-700 transition-all text-sm sm:text-base"
-        >
-          {isPending ? (
-            <div className="flex items-center justify-center gap-2">
-              <Loader /> <span>Đang xử lý...</span>
-            </div>
-          ) : (
-            "Đăng ký"
-          )}
-        </RippleButton>
-      </form>
-
-      <div className="mt-4 text-center text-sm text-gray-400">
-        Đã có tài khoản?{" "}
-        <Link href="/login" className="text-violet-400 underline">
-          Đăng nhập
-        </Link>
+        <div className="mt-4 text-center text-sm text-gray-400">
+          Đã có tài khoản?{" "}
+          <Link href="/login" className="text-violet-400 underline">
+            Đăng nhập
+          </Link>
+        </div>
       </div>
     </Form>
   );
